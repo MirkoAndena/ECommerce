@@ -18,7 +18,7 @@ public class ServletTest extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath()).append("\nDate: ").append(new Date().toString());
+		response.getWriter().append("I'm Mirko");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
