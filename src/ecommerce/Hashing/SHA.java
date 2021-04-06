@@ -1,4 +1,4 @@
-package ecommerce.Hashing;
+package ecommerce.hashing;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
