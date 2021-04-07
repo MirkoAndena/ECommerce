@@ -1,58 +1,54 @@
-USE ecommerce;
-
-CREATE TABLE Users (
-	id integer auto_increment primary key,
-	name varchar(30),
-	surname varchar(30),
-	email varchar(30),
-	password varchar(30),
-	address varchar(30)
+CREATE TABLE 'ecommerce'.'user' (
+	'id' int not null auto_increment primary key,
+	'name' varchar(30) not null,
+	'surname' varchar(30) not null,
+	'email' varchar(30) not null,
+	'password' varchar(30) not null,
+	'address' varchar(30) not null
 );
 
-CREATE TABLE Sellers (
-	id integer auto_increment primary key,
-	name varchar(30),
-	rating integer,
-    free_shipping_threshold float,
-    min_articles integer,
-    max_articles integer,
-    price float
+CREATE TABLE 'ecommerce'.'seller' (
+	'id' int not null auto_increment primary key,
+	'name' varchar(30) not null,
+	'rating' int not null,
+    'free_shipping_threshold' float not null,
+    'min_articles' int not null,
+    'max_articles' int not null,
+    'price' float not null
 );
 
-CREATE TABLE Articles (
-	id integer auto_increment primary key,
-    name varchar(30),
-    description varchar(200),
-    image varchar(100),
-    category varchar(30)
+CREATE TABLE 'ecommerce'.'article' (
+	'id' int not null auto_increment primary key,
+    'name' varchar(30) not null,
+    'description' varchar(200) not null,
+    'image' varchar(100) not null,
+    'category' varchar(30) not null
 );
 
-CREATE TABLE Seles (
-	id integer auto_increment primary key,
-    seller integer,
-    article integer,
-    price float,
-    foreign key (seller) references Sellers(id),
-    foreign key (article) references Articles(id)
+CREATE TABLE 'ecommerce'.'seller_articles' (
+	'id' int not null auto_increment primary key,
+    'seller' int not null,
+    'article' int not null,
+    'price' float not null,
+    foreign key ('seller') references 'ecommerce'.'seller'('id'),
+    foreign key ('article') references 'ecommerce'.'article'('id')
 );
 
-CREATE TABLE Orders (
-	id integer auto_increment primary key,
-    total float,
-    shipment_date date,
-	seller integer,
-    user_address varchar(30),
-    user integer,
-    foreign key (seller) references Sellers(id),
-    foreign key (user) references Users(id)
+CREATE TABLE 'ecommerce'.'order' (
+	'id' int not null auto_increment primary key,
+    'total' float not null,
+    'shipment_date' date not null,
+	'seller' int not null,
+    'user_address' varchar(30) not null,
+    'user' int not null,
+    foreign key ('seller') references 'ecommerce'.'seller'('id'),
+    foreign key ('user') references 'ecommerce'.'user'('id')
 );
 
-CREATE TABLE OrderContainer (
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    order_id INTEGER,
-    article INTEGER,
-    FOREIGN KEY (order_id)
-        REFERENCES Orders (id),
-    FOREIGN KEY (article)
-        REFERENCES Articles (id)
+CREATE TABLE 'ecommerce'.'order_articles' (
+	'id' int not null auto_increment primary key,
+    'order' int not null,
+    'article' int not null,
+    foreign key ('order') references 'ecommerce'.'order'('id'),
+    foreign key ('article') references 'ecommerce'.'article'('id')
 );
