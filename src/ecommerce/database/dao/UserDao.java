@@ -2,24 +2,24 @@ package ecommerce.database.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import ecommerce.database.dto.User;
+import ecommerce.database.beans.User;
 import ecommerce.hashing.HashFunction;
 
 // Il digest della password dovrebbe essere creato lato client ma non si puÃ² senza javascript,
 // quindi viaggiano attraverso la rete in chiaro. Questo Ã¨ un livello di protezione minimo (e non sufficente)
 // in questo modo almeno sul database non vengono salvate direttamente le password
-public class UserDao extends Dao<User> {
+public class UserDao {
 
 	private Connection connection;
 	private HashFunction hashFunction;
 
 	public UserDao(Connection connection, HashFunction hashFunction) {
-		super(User.class);
 		this.connection = connection;
 		this.hashFunction = hashFunction;
 	}
@@ -40,17 +40,18 @@ public class UserDao extends Dao<User> {
 	}
 	
 	// SQL injection non funziona con email e password perchè sono sottoposti a verifica di integrità
-	public boolean checkEmailAndPassword(String email, String password) {
-		if (!isValidEmailAddress(email)) return false;
+	public Integer getUserIdFromLogin(String email, String password) {
+		if (!isValidEmailAddress(email)) return null;
 		String query = "SELECT id FROM User WHERE email LIKE ? AND password LIKE ?";
-		try {
-			PreparedStatement statement = connection.prepareStatement(query);
+		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setString(0, email.trim());
 			statement.setString(1, hashFunction.CreateDigest(password.trim()));
-			return statement.execute();
+			ResultSet set = statement.executeQuery();
+			if (set.isBeforeFirst()) return null;
+			return set.getInt("id");
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 	

@@ -1,6 +1,6 @@
-package ecommerce.database.dto;
+package ecommerce.database.beans;
 
-public class User implements Dto {
+public class User {
     public int id;
 	public String name;
 	public String surname;
