@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="ISO-8859-1">
+	<title>ECommerce</title>
+</head>
+<body>
+	<form action="Login" method="POST">
+		<h1>LOGIN</h1>
+		Email: <input type="email" name="username" required /> <br>
+		Password: <input type="password" name="password" required /> <br>
+		<input type="submit" value="Login" /> <br><br>
+		<p th:text="${message}"></p>
+	</form>
+</body>
+</html>

@@ -44,11 +44,11 @@ public class UserDao {
 		if (!isValidEmailAddress(email)) return null;
 		String query = "SELECT id FROM User WHERE email LIKE ? AND password LIKE ?";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
-			statement.setString(0, email.trim());
-			statement.setString(1, hashFunction.CreateDigest(password.trim()));
+			statement.setString(1, email.trim());
+			statement.setString(2, hashFunction.CreateDigest(password.trim()));
 			ResultSet set = statement.executeQuery();
-			if (set.isBeforeFirst()) return null;
-			return set.getInt("id");
+			if (set.next()) return set.getInt("id");
+			else return null;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -60,7 +60,7 @@ public class UserDao {
 		   try {
 		      InternetAddress emailAddr = new InternetAddress(email);
 		      emailAddr.validate();
-		   } catch (AddressException ex) {
+		   } catch (Exception ex) {
 		      result = false;
 		   }
 		   return result;
