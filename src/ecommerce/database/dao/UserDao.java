@@ -46,9 +46,11 @@ public class UserDao {
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setString(1, email.trim());
 			statement.setString(2, hashFunction.CreateDigest(password.trim()));
-			ResultSet set = statement.executeQuery();
-			if (set.next()) return set.getInt("id");
-			else return null;
+			try (ResultSet set = statement.executeQuery()) {
+				if (!set.isBeforeFirst()) return null;
+				if (set.next()) return set.getInt("id");
+				else return null;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
