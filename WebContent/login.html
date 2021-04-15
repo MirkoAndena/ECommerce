@@ -18,15 +18,18 @@
             	<div class="card-body">
             		<form action="Login" method="POST">
 						<div class="form-group">
-					    	<input type="email" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Email">
+					    	<input type="email" name="username" class="form-control" aria-describedby="emailHelp" placeholder="Email">
 					  	</div>
 					  	<br>
 					  	<div class="form-group">
-					    	<input type="password" class="form-control" id="password" placeholder="Password">
+					    	<input type="password" name="password" class="form-control" placeholder="Password">
 					  	</div>
 					  	<br>
 					  	<div class="text-center">
 					  		<button type="submit" class="btn btn-primary">Login</button>
+						</div>
+						<br>
+					  	<div th:if="${message != null}" class="alert alert-danger text-center" role="alert" th:text="${message}">
 						</div>
 					</form>
             	</div>

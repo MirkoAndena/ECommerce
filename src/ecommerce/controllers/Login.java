@@ -20,12 +20,9 @@ import ecommerce.database.dao.UserDao;
 import ecommerce.hashing.SHA;
 
 @WebServlet("/Login")
-public class Login extends HttpServlet {
-	
+public class Login extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private Connection connection;
-	private TemplateEngine templateEngine;
 	private UserDao userDao;
        
     public Login() {
@@ -33,18 +30,18 @@ public class Login extends HttpServlet {
     }
     
     @Override
-	public void init() throws ServletException {
-    	ServletContext context = getServletContext();
-		connection = ConnectionBuilder.create(context);
-		templateEngine = Utils.initTemplateEngine(context);
-		userDao = new UserDao(connection, new SHA());
+	protected void OnInit() {
+    	this.userDao = new UserDao(super.connection, new SHA());
 	}
     
     @Override
-    public void destroy() {
-    	ConnectionBuilder.close(connection);
-    }
-	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	// Necessario per mettere message null, cosi nella pagina non viene mostrato l'alert
+		WebContext context = new WebContext(request, response, getServletContext(), Locale.ITALY);
+		templateEngine.process("/login.html", context, response.getWriter());
+	}
+    
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
