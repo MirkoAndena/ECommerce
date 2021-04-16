@@ -5,18 +5,30 @@ CREATE TABLE `ecommerce`.`user` (
 	`name` varchar(30) not null,
 	`surname` varchar(30) not null,
 	`email` varchar(30) not null,
-	`password` varchar(30) not null,
+	`password` char(64) not null,
 	`address` varchar(30) not null
 );
 
 CREATE TABLE `ecommerce`.`seller` (
 	`id` int not null auto_increment primary key,
 	`name` varchar(30) not null,
-	`rating` int not null,
-    `free_shipping_threshold` float not null,
-    `min_articles` int not null,
-    `max_articles` int not null,
-    `price` float not null
+	`rating` int not null CHECK (`rating` >= 0 AND `rating` <= 5),
+    `free_shipping_threshold` float CHECK(`free_shipping_threshold` > 0) 
+    # Non ha senso indicare la consegna gratuita qua (free_shipping_threshold = 0) se poi
+    # ci sono delle entry in shipment_range (per consegna gratuita mettere range con max=null e price=0))
+);
+
+CREATE TABLE `ecommerce`.`shipment_range` (
+	`id` int not null auto_increment primary key,
+	`max_articles` int,
+    `price` float not null,
+    `seller` int not null,
+    foreign key (`seller`) references `ecommerce`.`seller`(`id`)
+);
+
+CREATE TABLE `ecommerce`.`category` (
+	`id` int not null auto_increment primary key,
+    `name` varchar(30) not null
 );
 
 CREATE TABLE `ecommerce`.`article` (
@@ -24,7 +36,8 @@ CREATE TABLE `ecommerce`.`article` (
     `name` varchar(30) not null,
     `description` varchar(200) not null,
     `image` varchar(100) not null,
-    `category` varchar(30) not null
+    `category` int not null,
+    foreign key (`category`) references `ecommerce`.`category`(`id`)
 );
 
 CREATE TABLE `ecommerce`.`seller_articles` (
