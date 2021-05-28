@@ -42,7 +42,7 @@ public class UserDao {
 	// SQL injection non funziona con email e password perchè sono sottoposti a verifica di integrità
 	public Integer getUserIdFromLogin(String email, String password) {
 		if (!isValidEmailAddress(email)) return null;
-		String query = "SELECT id FROM User WHERE email LIKE ? AND password LIKE ?";
+		String query = "SELECT `id` FROM `ecommerce`.`user` WHERE `email` LIKE ? AND `password` LIKE ?";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setString(1, email.trim());
 			statement.setString(2, hashFunction.CreateDigest(password.trim()));

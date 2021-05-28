@@ -3,7 +3,7 @@
   <display-name>ECommerce</display-name>
   <context-param>
     <param-name>dbUrl</param-name>
-    <param-value>jdbc:mysql://localhost:3306/ecommerce?serverTimezone=UTC</param-value>
+    <param-value>jdbc:mysql://localhost:3306/ecommerce?serverTimezone=UTC&amp;characterEncoding=UTF-8</param-value>
   </context-param>
   <context-param>
     <param-name>dbUser</param-name>
