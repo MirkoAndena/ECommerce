@@ -1,12 +1,10 @@
 package ecommerce.controllers;
 
 import java.io.IOException;
-import java.net.http.HttpRequest;
 import java.sql.Connection;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +21,7 @@ public abstract class BaseServlet extends HttpServlet {
 	protected ServletContext context;
 	protected Connection connection;
 	protected TemplateEngine templateEngine;
+	private Thymeleaf thymeleaf;
     
     public BaseServlet() {
         super();
@@ -61,5 +60,10 @@ public abstract class BaseServlet extends HttpServlet {
     	} catch (Exception e) {
     		return false;
     	}
+    }
+    
+    public Thymeleaf getThymeleaf() {
+    	this.thymeleaf = new Thymeleaf(context, templateEngine);
+    	return this.thymeleaf;
     }
 }
