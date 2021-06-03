@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import ecommerce.database.beans.Article;
 import ecommerce.database.dao.ArticleDao;
 
-@WebServlet("/Home")
-public class Home extends BaseServlet {
+@WebServlet("/Search")
+public class Search extends BaseServlet {
 	private static final long serialVersionUID = 1L;
 	private ArticleDao articleDao;
        
-    public Home() {
+    public Search() {
         super();
     }
     
@@ -31,10 +31,9 @@ public class Home extends BaseServlet {
 		if (this.articleDao == null)
 			this.articleDao = new ArticleDao(connection, super.getUserId(request));
 		
-		// Get last seen articles or from a default list
-		List<Article> articles = articleDao.getLastSeen();
-		if (articles == null || articles.isEmpty()) 
-			articles = articleDao.getSalesArticles();
+		// Search articles
+		String searched = request.getParameter("search_string");
+		List<Article> articles = articleDao.searchInNameAndDescription(searched);
 		
 		super.getThymeleaf().init(request, response)
 		.setVariable("articles", articles)

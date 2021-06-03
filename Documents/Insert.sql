@@ -18,6 +18,7 @@ INSERT INTO `ecommerce`.`shipment_range` VALUES (6, 2, 3.30, 3); # da 1 a 2 => â
 INSERT INTO `ecommerce`.`category` VALUES (1, 'Tecnology');
 INSERT INTO `ecommerce`.`category` VALUES (2, 'House');
 INSERT INTO `ecommerce`.`category` VALUES (3, 'Sport');
+INSERT INTO `ecommerce`.`category` VALUES (4, 'Sales');
 
 INSERT INTO `ecommerce`.`article` VALUES (1, 'Computer', 'A fantastic computer very fast and easy to use', 'computer.png', 1);
 INSERT INTO `ecommerce`.`article` VALUES (2, 'Tablet', 'Not the best but most beautiful', 'tablet.png', 1);
@@ -28,3 +29,6 @@ INSERT INTO `ecommerce`.`article` VALUES (6, 'Wooden chair', 'For indoors and ou
 INSERT INTO `ecommerce`.`article` VALUES (7, 'Ball', 'An amazing ball,\nsize: 4\"', 'ball.png', 3);
 INSERT INTO `ecommerce`.`article` VALUES (8, 'Barbell row', 'Muscles?? Go to workout!', 'barbellrow.png', 3);
 INSERT INTO `ecommerce`.`article` VALUES (9, 'Sport pants', 'For real men', 'pants.png', 3);
+INSERT INTO `ecommerce`.`article` VALUES (10, 'Water', 'Drink drink drink', 'water.png', 4);
+INSERT INTO `ecommerce`.`article` VALUES (11, 'Toilet papaer', "It\'s always necessary", 'toiletpaper.png', 4);
+INSERT INTO `ecommerce`.`article` VALUES (12, 'Deodorant', 'goodbye sweat stains', 'deodorant.png', 4);

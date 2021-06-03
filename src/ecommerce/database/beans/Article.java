@@ -14,7 +14,7 @@ public class Article {
 		this.id = set.getInt("id");
 		this.name = set.getString("name");
 		this.description = set.getString("description");
-		this.image = set.getString("image");
+		this.image = resolveImagePath(set.getString("image"));
 		this.category = set.getString("category");
 	}
 	
@@ -22,7 +22,11 @@ public class Article {
 		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.image = image;
+		this.image = resolveImagePath(image);
 		this.category = category;
+	}
+	
+	private String resolveImagePath(String imageFileName) {
+		return "images/" + imageFileName;
 	}
 }

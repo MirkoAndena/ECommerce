@@ -11,9 +11,9 @@
 	<!-- HEADER --> 
 	<nav class="navbar navbar-expand-sm navbar-dark bg-primary navbar-collapse collapse">
 	    <ul class="nav navbar-nav mx-3">
-	        <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+	        <li><a href="Home"><span class="glyphicon glyphicon-home"></span></a></li>
 	        <li>
-	            <form class="navbar-form" role="search" action="GET" method="SearchArticles">
+	            <form class="navbar-form" role="search" action="Search" method="GET">
 	                <div class="input-group">
 	                    <input type="text" class="form-control no-border" placeholder="Cerca articoli" name="search_string">
 	                    <div class="input-group-btn">
@@ -34,7 +34,7 @@
 		<div class="row" th:remove="all-but-first">
 			<div class="col-xs-6 col-md-2 col-lg-2 col-sm-3 bit" th:each="article : ${articles}">
 				<div class="card m-5">
-					<img class="card-img-top" src="${article.image}" alt="Card image cap">
+					<img class="card-img-top" th:src="${article.image}" alt="missing image">
 					<div class="card-body">
 				    	<h4 class="card-title" th:text="${article.name}">Card title</h4>
 				    	<p class="card-text" th:text="${article.description}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>

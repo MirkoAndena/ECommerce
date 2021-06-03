@@ -29,7 +29,7 @@ public abstract class BaseServlet extends HttpServlet {
 
     @Override
 	public void init() throws ServletException {
-    	ServletContext context = getServletContext();
+    	context = getServletContext();
 		connection = ConnectionBuilder.create(context);
 		templateEngine = Utils.initTemplateEngine(context);
 		OnInit();
@@ -42,21 +42,21 @@ public abstract class BaseServlet extends HttpServlet {
     	ConnectionBuilder.close(connection);
     }
     
-    protected void redirectIfNotLogged(HttpServletRequest request, HttpServletResponse response) {
+    protected boolean redirectIfNotLogged(HttpServletRequest request, HttpServletResponse response) {
     	if (!isUserAuthenticated(request)) {
     		try {
 				response.sendRedirect(request.getContextPath());
+				return true;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
     	}
+    	return false;
     }
     
     private boolean isUserAuthenticated(HttpServletRequest request) {
     	try {
-	    	HttpSession session = request.getSession(false);
-	    	Integer userId = (Integer) session.getAttribute(SessionKeys.User.toString());
-	    	return userId != null;
+	    	return getUserId(request) != null;
     	} catch (Exception e) {
     		return false;
     	}
@@ -65,5 +65,20 @@ public abstract class BaseServlet extends HttpServlet {
     public Thymeleaf getThymeleaf() {
     	this.thymeleaf = new Thymeleaf(context, templateEngine);
     	return this.thymeleaf;
+    }
+    
+    @SuppressWarnings("unchecked")
+	public <T> T getAttribute(HttpServletRequest request, SessionKeys key) {
+    	try {
+	    	HttpSession session = request.getSession(false);
+	    	return (T) session.getAttribute(key.toString());
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
+    
+    public Integer getUserId(HttpServletRequest request) {
+    	return getAttribute(request, SessionKeys.User);
     }
 }
