@@ -40,6 +40,15 @@ CREATE TABLE `ecommerce`.`article` (
     foreign key (`category`) references `ecommerce`.`category`(`id`)
 );
 
+CREATE TABLE `ecommerce`.`articles_seen` (
+	`id` int not null auto_increment primary key,
+    `user` int not null,
+    `article` int not null,
+    `datetime` bigint not null,
+    foreign key (`article`) references `ecommerce`.`article`(`id`),
+    foreign key (`user`) references `ecommerce`.`user`(`id`)
+);
+
 CREATE TABLE `ecommerce`.`seller_articles` (
 	`id` int not null auto_increment primary key,
     `seller` int not null,
