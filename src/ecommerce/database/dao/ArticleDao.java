@@ -74,8 +74,9 @@ public class ArticleDao {
 	public List<Article> searchInNameAndDescription(String text) {
 		List<Article> articles = new ArrayList<Article>();
 		if (text == null) return articles;		
-		String query = "SELECT * FROM `ecommerce`.`article` WHERE `name` REGEXP CONCAT('%', ?, '%') OR `description` REGEXP CONCAT('%', ?, '%')";
+		String query = "SELECT * FROM `ecommerce`.`article` WHERE `name` LIKE ? OR `description` LIKE ?";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
+			text = "%" + text + "%";
 			statement.setString(1, text);
 			statement.setString(2, text);
 			try (ResultSet set = statement.executeQuery()) {
