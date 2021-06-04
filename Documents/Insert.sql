@@ -32,3 +32,23 @@ INSERT INTO `ecommerce`.`article` VALUES (9, 'Sport pants', 'For real men', 'pan
 INSERT INTO `ecommerce`.`article` VALUES (10, 'Water', 'Drink drink drink', 'water.png', 4);
 INSERT INTO `ecommerce`.`article` VALUES (11, 'Toilet papaer', "It\'s always necessary", 'toiletpaper.png', 4);
 INSERT INTO `ecommerce`.`article` VALUES (12, 'Deodorant', 'goodbye sweat stains', 'deodorant.png', 4);
+
+INSERT INTO `ecommerce`.`seller_articles` VALUES (1, 1, 1, 399.99);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (2, 2, 1, 419.99);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (3, 1, 2, 349.90);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (4, 3, 3, 9.40);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (5, 3, 5, 70.0);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (6, 2, 7, 4.90);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (7, 2, 8, 20.0);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (8, 1, 9, 15.0);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (9, 3, 9, 13.90);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (10, 1, 4, 7.20);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (11, 2, 4, 4.80);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (12, 1, 6, 30.0);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (13, 1, 3, 8.30);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (14, 3, 10, 0.70);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (15, 3, 11, 1.20);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (16, 2, 11, 1.60);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (17, 1, 12, 2.70);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (18, 2, 12, 3.70);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (19, 3, 12, 2.90);
