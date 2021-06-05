@@ -35,6 +35,10 @@ public class Search extends BaseServlet {
 		String searched = request.getParameter("search_string");
 		List<Article> articles = articleDao.searchInNameAndDescription(searched);
 		
+		// Update last seen articles
+		for (Article article : articles)
+			articleDao.setArticleSeen(article.id);
+		
 		super.getThymeleaf().init(request, response)
 		.setVariable("articles", articles)
 		.process("/home.html");

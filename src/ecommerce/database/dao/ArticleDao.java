@@ -11,12 +11,13 @@ import java.util.List;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import ecommerce.database.IBeanBuilder;
 import ecommerce.database.beans.Article;
 import ecommerce.database.beans.Article.Range;
 import ecommerce.database.beans.User;
 import ecommerce.hashing.HashFunction;
 
-public class ArticleDao {
+public class ArticleDao implements IBeanBuilder<Article>{
 	
 	private Connection connection;
 	private int user;
@@ -24,6 +25,20 @@ public class ArticleDao {
 	public ArticleDao(Connection connection, Integer user) {
 		this.connection = connection;
 		this.user = user;
+	}
+	
+	public Article build(ResultSet set) throws SQLException {
+		return new Article(
+		set.getInt("id"),
+		set.getString("name"),
+		set.getString("description"),
+		set.getString("image"),
+		set.getString("category"),
+		set.getInt("seller_id"),
+		set.getString("seller"),
+		set.getInt("rating"),
+		set.getFloat("free_shipping_threshold"),
+		set.getFloat("price"));
 	}
 	
 	public void setArticleSeen(int articleId) {
@@ -43,12 +58,12 @@ public class ArticleDao {
 		List<Article> articles = new ArrayList<Article>();
 		String query = """
 			SELECT a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
-			FROM `article` a, `seller` s, `category` c, `shipment_range` sr, `seller_articles` sa, `articles_seen` as
+			FROM `article` a, `seller` s, `category` c, `shipment_range` sr, `seller_articles` sa, `articles_seen` ase
 			WHERE a.id = sa.article AND
 				s.id = sa.seller AND 
 				a.category = c.id AND
 			    sr.seller = s.id AND
-			    as.`user` = ?
+			    ase.`user` = ?
 			    ORDER BY `datetime` DESC LIMIT 5
 			""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -56,8 +71,9 @@ public class ArticleDao {
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return null;
 				while (set.next()) {
-					Article article = new Article(set);
-					getShipmentRange(article);
+					Article article = build(set);
+					List<Range> ranges = getShipmentRange(article.sellerId);
+					if (ranges != null) article.setShipmentRange(ranges);
 					articles.add(article);
 				}
 			}
@@ -83,8 +99,9 @@ public class ArticleDao {
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return null;
 				while (set.next()) {
-					Article article = new Article(set);
-					getShipmentRange(article);
+					Article article = build(set);
+					List<Range> ranges = getShipmentRange(article.sellerId);
+					if (ranges != null) article.setShipmentRange(ranges);
 					articles.add(article);
 				}
 			}
@@ -114,8 +131,9 @@ public class ArticleDao {
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return null;
 				while (set.next()) {
-					Article article = new Article(set);
-					getShipmentRange(article);
+					Article article = build(set);
+					List<Range> ranges = getShipmentRange(article.sellerId);
+					if (ranges != null) article.setShipmentRange(ranges);
 					articles.add(article);
 				}
 			}
@@ -126,7 +144,7 @@ public class ArticleDao {
 		return articles;
 	}
 	
-	private void getShipmentRange(Article article) {
+	private List<Range> getShipmentRange(int sellerId) {
 		String query = """
 			SELECT `max_articles`, `price`
 			FROM `shipment_range`
@@ -135,9 +153,9 @@ public class ArticleDao {
 			""";
 		List<Range> ranges = new ArrayList<Article.Range>();
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
-			statement.setInt(1, article.sellerId);
+			statement.setInt(1, sellerId);
 			try (ResultSet set = statement.executeQuery()) {
-				if (!set.isBeforeFirst()) return;
+				if (!set.isBeforeFirst()) return null;
 				while (set.next()) {
 					Integer max = set.getInt("max_articles");
 					float price = set.getFloat("price");
@@ -146,8 +164,8 @@ public class ArticleDao {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return;
+			return null;
 		}
-		article.setShipmentRange(ranges);
+		return ranges;
 	}
 }

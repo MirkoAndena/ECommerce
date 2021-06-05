@@ -32,17 +32,18 @@ public class Article {
 	public float price;
 	public String shipmentRange;
 
-	public Article(ResultSet set) throws SQLException {
-		this.id = set.getInt("id");
-		this.name = set.getString("name");
-		this.description = set.getString("description");
-		this.image = resolveImagePath(set.getString("image"));
-		this.category = set.getString("category");
-		this.sellerId = set.getInt("seller_id");
-		this.seller = set.getString("seller");
-		this.rating = set.getInt("rating");
-		this.freeShippingThreshold = set.getFloat("free_shipping_threshold");
-		this.price = set.getFloat("price");
+	public Article(int id, String name, String description, String image, String category, int sellerId,
+					String seller, int rating, float freeShippingThreshold, float price) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.image = resolveImagePath(image);
+		this.category = category;
+		this.sellerId = sellerId;
+		this.seller = seller;
+		this.rating = rating;
+		this.freeShippingThreshold = freeShippingThreshold;
+		this.price = price;
 	}
 	
 	private String resolveImagePath(String imageFileName) {
