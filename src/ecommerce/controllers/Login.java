@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
+import ecommerce.SessionContext;
 import ecommerce.SessionKeys;
 import ecommerce.database.ConnectionBuilder;
 import ecommerce.database.dao.UserDao;
@@ -47,6 +48,7 @@ public class Login extends BaseServlet {
 		String password = request.getParameter("password");
 		Integer userId = authenticate(username, password);
 		if (userId != null) {
+			SessionContext.removeSessionContext(userId);
 			HttpSession session = request.getSession(true);
 			session.setAttribute(SessionKeys.User.toString(), userId);
 			response.sendRedirect(getServletContext().getContextPath() + "/Home");
@@ -57,6 +59,7 @@ public class Login extends BaseServlet {
 		}
 	}
 	
+	// Autenticazione, in caso positivo ritorno dell id utente
 	private Integer authenticate(String username, String password) {
 		if (username == null || username == "" || password == null || password == "") return null;
 		return userDao.getUserIdFromLogin(username, password);
