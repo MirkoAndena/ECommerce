@@ -86,14 +86,13 @@ public class ArticleDao implements IBeanBuilder<Article>{
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, user);
 			try (ResultSet set = statement.executeQuery()) {
-				if (!set.isBeforeFirst()) return null;
+				if (!set.isBeforeFirst()) return articles;
 				while (set.next()) {
 					buildArticle(articles, set);
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
 		}
 		return articles;
 	}
@@ -112,14 +111,13 @@ public class ArticleDao implements IBeanBuilder<Article>{
 				""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			try (ResultSet set = statement.executeQuery()) {
-				if (!set.isBeforeFirst()) return null;
+				if (!set.isBeforeFirst()) return articles;
 				while (set.next()) {
 					buildArticle(articles, set);
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
 		}
 		return articles;
 	}
@@ -135,21 +133,20 @@ public class ArticleDao implements IBeanBuilder<Article>{
 					s.id = sa.seller AND 
 					a.category = c.id AND
 				    sr.seller = s.id AND
-				    a.`name` LIKE ? AND a.`description` LIKE ?
+				    a.`name` LIKE ? OR a.`description` LIKE ?
 				""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			text = "%" + text + "%";
 			statement.setString(1, text);
 			statement.setString(2, text);
 			try (ResultSet set = statement.executeQuery()) {
-				if (!set.isBeforeFirst()) return null;
+				if (!set.isBeforeFirst()) return articles;
 				while (set.next()) {
 					buildArticle(articles, set);
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return articles;
 		}
 		return articles;
 	}
