@@ -68,9 +68,10 @@ public abstract class BaseServlet extends HttpServlet {
     }
     
     @SuppressWarnings("unchecked")
-	public <T> T getAttribute(HttpServletRequest request, SessionKeys key) {
+	public <T> T getAttribute(HttpServletRequest request, SessionKeys key) {	
     	try {
 	    	HttpSession session = request.getSession(false);
+	    	if (session == null) return null;    
 	    	return (T) session.getAttribute(key.toString());
     	} catch (Exception e) {
     		e.printStackTrace();

@@ -1,6 +1,7 @@
 package ecommerce.controllers;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -40,6 +41,9 @@ public class Search extends BaseServlet {
 			articleDao.setArticleSeen(article.id);
 			System.out.println(article.name);
 		}
+		
+		// Visualizzazione del carattere euro (€)
+		response.setCharacterEncoding("UTF-8");
 		
 		super.getThymeleaf().init(request, response)
 		.setVariable("articles", articles)

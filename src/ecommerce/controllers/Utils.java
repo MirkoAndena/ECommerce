@@ -10,6 +10,7 @@ public class Utils {
 	public static TemplateEngine initTemplateEngine(ServletContext servletContext) {
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
+		templateResolver.setCharacterEncoding("UTF-8");
 		TemplateEngine engine = new TemplateEngine();
 		engine.setTemplateResolver(templateResolver);
 		templateResolver.setSuffix(".html");
