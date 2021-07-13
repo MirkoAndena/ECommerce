@@ -30,7 +30,7 @@ INSERT INTO `ecommerce`.`article` VALUES (7, 'Ball', 'An amazing ball,\nsize: 4\
 INSERT INTO `ecommerce`.`article` VALUES (8, 'Barbell row', 'Muscles?? Go to workout!', 'barbellrow.png', 3);
 INSERT INTO `ecommerce`.`article` VALUES (9, 'Sport pants', 'For real men', 'pants.png', 3);
 INSERT INTO `ecommerce`.`article` VALUES (10, 'Water', 'Drink drink drink', 'water.png', 4);
-INSERT INTO `ecommerce`.`article` VALUES (11, 'Toilet papaer', "It\'s always necessary", 'toiletpaper.png', 4);
+INSERT INTO `ecommerce`.`article` VALUES (11, 'Toilet paper', "It\'s always necessary", 'toiletpaper.png', 4);
 INSERT INTO `ecommerce`.`article` VALUES (12, 'Deodorant', 'goodbye sweat stains', 'deodorant.png', 4);
 
 INSERT INTO `ecommerce`.`seller_articles` VALUES (1, 1, 1, 399.99);

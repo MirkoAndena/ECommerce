@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ecommerce.Config;
 import ecommerce.SessionContext;
 import ecommerce.database.IBeanBuilder;
 import ecommerce.database.beans.Article;
@@ -74,14 +75,14 @@ public class ArticleDao implements IBeanBuilder<Article>{
 	public List<Article> getLastSeen() {
 		List<Article> articles = new ArrayList<Article>();
 		String query = """
-			SELECT distinct a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
-			FROM `article` a, `seller` s, `category` c, `shipment_range` sr, `seller_articles` sa, `articles_seen` ase
-			WHERE a.id = sa.article AND
-				s.id = sa.seller AND 
-				a.category = c.id AND
-			    sr.seller = s.id AND
-			    ase.`user` = ?
-			    ORDER BY `datetime` DESC LIMIT 5
+		    SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
+			FROM `article` a
+			INNER JOIN `seller_articles` sa ON a.id = sa.article
+			INNER JOIN `seller` s ON s.id = sa.seller
+			INNER JOIN `category` c ON a.category = c.id
+			INNER JOIN `articles_seen` ase ON ase.article = a.id
+			WHERE ase.`user` = ?
+			ORDER BY `datetime` DESC LIMIT 5
 			""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, user);
@@ -101,15 +102,15 @@ public class ArticleDao implements IBeanBuilder<Article>{
 	public List<Article> getSalesArticles() {
 		List<Article> articles = new ArrayList<Article>();
 		String query = """
-			SELECT distinct a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
-				FROM `article` a, `seller` s, `category` c, `shipment_range` sr, `seller_articles` sa
-				WHERE a.id = sa.article AND
-					s.id = sa.seller AND 
-					a.category = c.id AND
-				    sr.seller = s.id AND
-				    c.id = 4
+			SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
+			FROM `article` a
+			INNER JOIN `seller_articles` sa ON a.id = sa.article
+			INNER JOIN `seller` s ON s.id = sa.seller
+			INNER JOIN `category` c ON a.category = c.id
+			WHERE c.id = ?
 				""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setInt(1, Config.DefaultCategory);
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return articles;
 				while (set.next()) {
@@ -127,13 +128,12 @@ public class ArticleDao implements IBeanBuilder<Article>{
 		List<Article> articles = new ArrayList<Article>();
 		if (text == null) return articles;	
 		String query = """
-			SELECT distinct a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
-				FROM `article` a, `seller` s, `category` c, `shipment_range` sr, `seller_articles` sa
-				WHERE a.id = sa.article AND
-					s.id = sa.seller AND 
-					a.category = c.id AND
-				    sr.seller = s.id AND
-				    a.`name` LIKE ? OR a.`description` LIKE ?
+			SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
+			FROM `article` a
+			INNER JOIN `seller_articles` sa ON a.id = sa.article
+			INNER JOIN `seller` s ON s.id = sa.seller
+			INNER JOIN `category` c ON a.category = c.id
+			WHERE a.`name` LIKE ? OR a.`description` LIKE ?
 				""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			text = "%" + text + "%";
