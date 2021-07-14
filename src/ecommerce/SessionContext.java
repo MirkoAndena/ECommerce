@@ -3,7 +3,7 @@ package ecommerce;
 import java.util.HashMap;
 import java.util.Map;
 
-import ecommerce.database.beans.Cart;
+import ecommerce.database.dto.Cart;
 
 // Dati (per utente) salvati sul server, possono essere cancellati con politiche diverse ad esempio quando c'è un nuovo accesso
 public class SessionContext {

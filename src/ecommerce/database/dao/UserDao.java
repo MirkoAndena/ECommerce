@@ -5,10 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import ecommerce.database.beans.User;
+import ecommerce.database.dto.User;
 import ecommerce.hashing.HashFunction;
 
 // Il digest della password dovrebbe essere creato lato client ma non si può senza javascript,

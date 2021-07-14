@@ -31,20 +31,21 @@
 	<!-- BODY -->       
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-lg-4 col-md-6 col-sm-12" th:each="article : ${articles}">
+			<div class="col-lg-4 col-md-6 col-sm-12" th:each="exposedArticle : ${exposedArticles}">
 				<div class="card m-5">
-					<img class="card-img-top" th:src="${article.image}" alt="missing image">
+					<img class="card-img-top fixedratio" th:src="${exposedArticle.article.image}" alt="missing image">
 					<div class="card-body">
-				    	<h4 class="card-title" th:text="${article.name}">Card title</h4>
-				    	<p class="card-text" th:text="${article.description}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				    	<div th:each="seller : ${article.sellers}" th:if="${article.sellers.size() > 0}">
+				    	<h4 class="card-title" th:text="${exposedArticle.article.name}">Card title</h4>
+				    	<p class="card-text" th:text="${exposedArticle.article.description}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+				    	<div th:each="exposedSeller : ${exposedArticle.sellers}" th:if="${exposedArticle.sellers.size() > 0}">
 				    		<hr/>
-				    		<p class="card-text" th:text="${seller.name + ' - valutazione ' + seller.rating + ' su 5'}">Mario Bianchi - 3 su 5</p>
-				    		<p class="card-text" th:text="${'Prezzo: €' + seller.price}">Prezzo: €28</p>
-				    		<p class="card-text" th:text="${seller.freeShippingThreshold == 0} ? 'Spedizione gratuita' : ${'Spedizione gratuita con spesa superiore a €' + seller.freeShippingThreshold}">aa</p>
-				    		<p class="card-text" th:text="${'Spese di spedizione: ' + seller.shipmentRange}" th:if="${seller.shipmentRange != null}">--</p>
-				    		<p class="card-text" th:text="${'Numero articoli nel carrello ' + seller.articlesAddedToCart + ' per un totale di €' + seller.totalValue}">Numero articoli nel carrello 5 per un totale di €56</p>
+				    		<p class="card-text" th:text="${exposedSeller.seller.name + ' - valutazione ' + exposedSeller.seller.rating + ' su 5'}">Mario Bianchi - valutazione 3 su 5</p>
+				    		<p class="card-text" th:text="${'Prezzo: ' + exposedSeller.price + ' €'}">Prezzo: 28 €</p>
+				    		<p class="card-text" th:text="${exposedSeller.seller.freeShippingThreshold == 0} ? 'Spedizione gratuita' : ${'Spedizione gratuita con spesa superiore a ' + exposedSeller.seller.freeShippingThreshold + ' €'}">Spedizione gratuita con spesa superiore a 249.99 €</p>
+				    		<p class="card-text" th:text="${'Spese di spedizione: ' + exposedSeller.seller.getVerboseShippingRanges()}" th:if="${exposedSeller.seller.shipmentRanges.size() > 0}">Spese di spedizione: da 1 a 3 articoli 5 €, da 4 in su 10 €</p>
+				    		<p class="card-text" th:text="${'Numero articoli nel carrello ' + exposedSeller.articlesAddedToCart + ' per un totale di ' + exposedSeller.totalValue + ' €'}">Numero articoli nel carrello 5 per un totale di €56</p>
 				    		
+				    		<br>
 				    		<form class="form-inline text-center">
 							  <div class="form-group mx-sm-3 mb-2">
 					    		<input type="number" class="form-control" placeholder="Quantità" min="0" max="1000">

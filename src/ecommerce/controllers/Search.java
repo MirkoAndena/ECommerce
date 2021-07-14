@@ -1,7 +1,6 @@
 package ecommerce.controllers;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,7 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ecommerce.database.beans.Article;
+import ecommerce.beans.ExposedArticle;
 import ecommerce.database.dao.ArticleDao;
 
 @WebServlet("/Search")
@@ -34,23 +33,23 @@ public class Search extends BaseServlet {
 		
 		// Search articles
 		String searched = request.getParameter("search_string");
-		List<Article> articles = articleDao.searchInNameAndDescription(searched);
+		List<ExposedArticle> exposedArticles = articleDao.searchInNameAndDescription(searched);
 		
 		// Update last seen articles
-		for (Article article : articles) {
-			articleDao.setArticleSeen(article.id);
-			System.out.println(article.name);
+		for (ExposedArticle exposedArticle : exposedArticles) {
+			articleDao.setArticleSeen(exposedArticle.article.id);
+			System.out.println(exposedArticle.article.name);
 		}
 		
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
 		
 		super.getThymeleaf().init(request, response)
-		.setVariable("articles", articles)
+		.setVariable("exposedArticles", exposedArticles)
 		.process("/home.html");
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		// Unused
 	}
 }

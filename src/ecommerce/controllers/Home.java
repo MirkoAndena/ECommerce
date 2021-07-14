@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ecommerce.database.beans.Article;
+import ecommerce.beans.ExposedArticle;
 import ecommerce.database.dao.ArticleDao;
 
 @WebServlet("/Home")
@@ -32,19 +32,19 @@ public class Home extends BaseServlet {
 			this.articleDao = new ArticleDao(connection, super.getUserId(request));
 		
 		// Get last seen articles or from a default list
-		List<Article> articles = articleDao.getLastSeen();
-		if (articles == null || articles.isEmpty()) 
-			articles = articleDao.getSalesArticles();
+		List<ExposedArticle> exposedArticles = articleDao.getLastSeen();
+		if (exposedArticles == null || exposedArticles.isEmpty()) 
+			exposedArticles = articleDao.getSalesArticles();
 		
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
 		
 		super.getThymeleaf().init(request, response)
-		.setVariable("articles", articles)
+		.setVariable("exposedArticles", exposedArticles)
 		.process("/home.html");
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		// Unused
 	}
 }

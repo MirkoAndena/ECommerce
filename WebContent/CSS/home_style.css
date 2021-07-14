@@ -19,3 +19,7 @@ a {
 	max-width: 400px;
     height: auto;
 }
+
+.fixedratio {
+	max-height: 450px;
+}

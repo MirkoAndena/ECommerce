@@ -10,10 +10,12 @@ import java.util.List;
 
 import ecommerce.Config;
 import ecommerce.SessionContext;
+import ecommerce.beans.ExposedArticle;
+import ecommerce.beans.ExposedSeller;
 import ecommerce.database.IBeanBuilder;
-import ecommerce.database.beans.Article;
-import ecommerce.database.beans.Range;
-import ecommerce.database.beans.Seller;
+import ecommerce.database.dto.Article;
+import ecommerce.database.dto.Range;
+import ecommerce.database.dto.Seller;
 
 public class ArticleDao implements IBeanBuilder<Article>{
 	
@@ -39,23 +41,22 @@ public class ArticleDao implements IBeanBuilder<Article>{
 			set.getInt("seller_id"),
 			set.getString("seller"),
 			set.getInt("rating"),
-			set.getFloat("free_shipping_threshold"),
-			set.getFloat("price"));
+			set.getFloat("free_shipping_threshold"));
 		
 		// Setting shipment range
 		List<Range> ranges = getShipmentRange(seller.id);
 		if (ranges != null && seller.freeShippingThreshold > 0) seller.setShipmentRange(ranges);
 		
-		// Setting cart infos
-		seller.setTotalOfCart(SessionContext.getInstance(user).getCart());
-		
 		return seller;
 	}
 	
-	private Article buildArticle(List<Article> articles, ResultSet set) throws SQLException {
+	private void buildArticle(List<ExposedArticle> articles, ResultSet set) throws SQLException {
 		Article article = build(set);
 		Seller seller = buildSeller(set);
-		return Article.addOrCreate(articles, article, seller);
+		
+		ExposedSeller exposedSeller = new ExposedSeller(seller, set.getFloat("price"));
+		exposedSeller.setTotalOfCart(SessionContext.getInstance(user).getCart());
+		ExposedArticle.addSellerToArticleList(articles, article, exposedSeller);
 	}
 	
 	public void setArticleSeen(int articleId) {
@@ -72,8 +73,8 @@ public class ArticleDao implements IBeanBuilder<Article>{
 	}
 	
 	// Ultimi articoli visti
-	public List<Article> getLastSeen() {
-		List<Article> articles = new ArrayList<Article>();
+	public List<ExposedArticle> getLastSeen() {
+		List<ExposedArticle> articles = new ArrayList<ExposedArticle>();
 		String query = """
 		    SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
 			FROM `article` a
@@ -99,8 +100,8 @@ public class ArticleDao implements IBeanBuilder<Article>{
 	}
 	
 	// Articoli nella categoria default
-	public List<Article> getSalesArticles() {
-		List<Article> articles = new ArrayList<Article>();
+	public List<ExposedArticle> getSalesArticles() {
+		List<ExposedArticle> articles = new ArrayList<ExposedArticle>();
 		String query = """
 			SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
 			FROM `article` a
@@ -124,8 +125,8 @@ public class ArticleDao implements IBeanBuilder<Article>{
 	}
 	
 	// Articoli cercati
-	public List<Article> searchInNameAndDescription(String text) {
-		List<Article> articles = new ArrayList<Article>();
+	public List<ExposedArticle> searchInNameAndDescription(String text) {
+		List<ExposedArticle> articles = new ArrayList<ExposedArticle>();
 		if (text == null) return articles;	
 		String query = """
 			SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
@@ -163,11 +164,13 @@ public class ArticleDao implements IBeanBuilder<Article>{
 			statement.setInt(1, sellerId);
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return null;
+				Integer last = 1;
 				while (set.next()) {
 					Integer max = set.getInt("max_articles");
 					if (set.wasNull()) max = null;
 					float price = set.getFloat("price");
-					ranges.add(new Range(max, price));
+					ranges.add(new Range(last, max, price));
+					last = max;
 				}
 			}
 		} catch (SQLException e) {

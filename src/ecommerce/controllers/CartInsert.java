@@ -9,8 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ecommerce.database.beans.Article;
 import ecommerce.database.dao.ArticleDao;
+import ecommerce.database.dto.Article;
 
 @WebServlet("/CartInsert")
 public class CartInsert extends BaseServlet {

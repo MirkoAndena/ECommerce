@@ -1,4 +1,4 @@
-package ecommerce.database.beans;
+package ecommerce.database.dto;
 
 public class User {
     public int id;
