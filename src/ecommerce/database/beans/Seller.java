@@ -31,4 +31,8 @@ public class Seller {
 		this.articlesAddedToCart = (int)result[0];
 		this.totalValue = result[1];
 	}
+	
+	public float calculateShippingPrice(float articlesPrice, int count) {
+		return 0; // TODO
+	}
 }
