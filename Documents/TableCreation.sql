@@ -13,14 +13,12 @@ CREATE TABLE `ecommerce`.`seller` (
 	`id` int not null auto_increment primary key,
 	`name` varchar(30) not null,
 	`rating` int not null CHECK (`rating` >= 0 AND `rating` <= 5),
-    `free_shipping_threshold` float CHECK(`free_shipping_threshold` > 0) 
-    # Non ha senso indicare la consegna gratuita qua (free_shipping_threshold = 0) se poi
-    # ci sono delle entry in shipment_range (per consegna gratuita mettere range con max=null e price=0))
+    `free_shipping_threshold` float not null# 0: Consegna gratuita
 );
 
 CREATE TABLE `ecommerce`.`shipment_range` (
 	`id` int not null auto_increment primary key,
-	`max_articles` int,
+	`max_articles` int, # se nullo: dal precendente in su oppure prezzo fisso
     `price` float not null,
     `seller` int not null,
     foreign key (`seller`) references `ecommerce`.`seller`(`id`)
