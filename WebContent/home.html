@@ -31,7 +31,7 @@
 	<!-- BODY -->       
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-xs-6 col-md-2 col-lg-2 col-sm-3 bit" th:each="article : ${articles}">
+			<div class="col-lg-4 col-md-6 col-sm-12" th:each="article : ${articles}">
 				<div class="card m-5">
 					<img class="card-img-top" th:src="${article.image}" alt="missing image">
 					<div class="card-body">
@@ -39,14 +39,18 @@
 				    	<p class="card-text" th:text="${article.description}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
 				    	<div th:each="seller : ${article.sellers}" th:if="${article.sellers.size() > 0}">
 				    		<hr/>
-				    		<p class="card-text" th:text="${seller.name + ' - ' + seller.rating + ' su 5'}">Mario Bianchi - 3 su 5</p>
+				    		<p class="card-text" th:text="${seller.name + ' - valutazione ' + seller.rating + ' su 5'}">Mario Bianchi - 3 su 5</p>
 				    		<p class="card-text" th:text="${'Prezzo: €' + seller.price}">Prezzo: €28</p>
-				    		<p class="card-text" th:text="${'Spedizione gratuita con spesa superiore a €' + seller.freeShippingThreshold}">Spedizione gratuita con spesa superiore a €12</p>
-				    		<p class="card-text" th:text="${'Spese di spedizione: ' + seller.shipmentRange}">--</p>
+				    		<p class="card-text" th:text="${seller.freeShippingThreshold == 0} ? 'Spedizione gratuita' : ${'Spedizione gratuita con spesa superiore a €' + seller.freeShippingThreshold}">aa</p>
+				    		<p class="card-text" th:text="${'Spese di spedizione: ' + seller.shipmentRange}" th:if="${seller.shipmentRange != null}">--</p>
 				    		<p class="card-text" th:text="${'Numero articoli nel carrello ' + seller.articlesAddedToCart + ' per un totale di €' + seller.totalValue}">Numero articoli nel carrello 5 per un totale di €56</p>
 				    		
-				    		<!-- INPUT NUMERICO -->
-				    		<a href="#" class="btn btn-primary">Metti nel carrello</a>
+				    		<form class="form-inline text-center">
+							  <div class="form-group mx-sm-3 mb-2">
+					    		<input type="number" class="form-control" placeholder="Quantità" min="0" max="1000">
+							  </div>
+							  <button type="submit" class="btn btn-primary mb-2">Metti nel carrello</button>
+							</form>
 				    	</div>
 				  	</div>
 				</div>

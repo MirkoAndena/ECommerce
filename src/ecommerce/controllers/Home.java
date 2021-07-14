@@ -36,6 +36,9 @@ public class Home extends BaseServlet {
 		if (articles == null || articles.isEmpty()) 
 			articles = articleDao.getSalesArticles();
 		
+		// Visualizzazione del carattere euro (€)
+		response.setCharacterEncoding("UTF-8");
+		
 		super.getThymeleaf().init(request, response)
 		.setVariable("articles", articles)
 		.process("/home.html");

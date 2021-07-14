@@ -1,4 +1,4 @@
-package ecommerce.controllers;
+package ecommerce.controllers.support;
 
 import javax.servlet.ServletContext;
 

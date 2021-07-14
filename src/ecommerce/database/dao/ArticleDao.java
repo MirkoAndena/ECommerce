@@ -44,7 +44,7 @@ public class ArticleDao implements IBeanBuilder<Article>{
 		
 		// Setting shipment range
 		List<Range> ranges = getShipmentRange(seller.id);
-		if (ranges != null) seller.setShipmentRange(ranges);
+		if (ranges != null && seller.freeShippingThreshold > 0) seller.setShipmentRange(ranges);
 		
 		// Setting cart infos
 		seller.setTotalOfCart(SessionContext.getInstance(user).getCart());
@@ -156,7 +156,7 @@ public class ArticleDao implements IBeanBuilder<Article>{
 			SELECT `max_articles`, `price`
 			FROM `shipment_range`
 			WHERE `seller` = ?
-			ORDER BY `max_articles`
+			ORDER BY -`max_articles` DESC
 			""";
 		List<Range> ranges = new ArrayList<Range>();
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -165,6 +165,7 @@ public class ArticleDao implements IBeanBuilder<Article>{
 				if (!set.isBeforeFirst()) return null;
 				while (set.next()) {
 					Integer max = set.getInt("max_articles");
+					if (set.wasNull()) max = null;
 					float price = set.getFloat("price");
 					ranges.add(new Range(max, price));
 				}

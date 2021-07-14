@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 import org.thymeleaf.TemplateEngine;
 
 import ecommerce.SessionKeys;
+import ecommerce.controllers.support.Thymeleaf;
+import ecommerce.controllers.support.Utils;
 import ecommerce.database.ConnectionBuilder;
 
 public abstract class BaseServlet extends HttpServlet {

@@ -1,5 +1,7 @@
 package ecommerce.database.beans;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Range {
@@ -11,32 +13,30 @@ public class Range {
 		this.price = price;
 	}
 
-	private String compile(int last) { 
-		return "da " + last + " a " + this.max + " €" + this.price;
+	private String compile(int first) { 
+		return "da " + first + " a " + this.max + " articoli €" + this.price;
 	}
 	
 	public static String compileRangeList(List<Range> ranges) {
-		if (ranges.size() == 0) return "ERROR";
-		int last = 1;
-		float maxPrice = -1;
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(ranges.get(0).compile(last));
 		
-		for (int i = 0; i < ranges.size(); i++) {
-			if (ranges.get(i).max == null)
-				maxPrice = ranges.get(i).price;
+		if (ranges.size() == 0) 
+			return "gratuita";
+		
+		if (ranges.size() == 1 && ranges.get(0).max == null)
+			return "€" + ranges.get(0).price;
+		
+		int lastOfLast = 1;
+		List<String> list = new ArrayList<String>();
+		for (Range range : ranges) {
+			if (range.max != null) {
+				list.add(range.compile(lastOfLast));
+				lastOfLast = range.max + 1;
+			}
 			else {
-				stringBuilder.append(", " + ranges.get(i).compile(last));
-				last = ranges.get(i).max;
+				list.add("da " + lastOfLast + " in su €" + range.price);
 			}
 		}
 		
-		if (maxPrice > -1)
-			if (ranges.size() == 1)
-				return "Spedizione sempre a €" + maxPrice;
-			else
-				return "Spedizione " + stringBuilder.toString() + ", da " + last + " in su €" + maxPrice;
-		else
-			return "ERROR";
+		return String.join(", ", list);
 	}
 }

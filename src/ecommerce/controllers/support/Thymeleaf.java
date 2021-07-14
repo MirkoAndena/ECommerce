@@ -1,4 +1,4 @@
-package ecommerce.controllers;
+package ecommerce.controllers.support;
 
 import java.io.IOException;
 import java.io.PrintWriter;

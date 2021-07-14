@@ -19,6 +19,7 @@ public class Seller {
 		this.rating = rating;
 		this.freeShippingThreshold = freeShippingThreshold;
 		this.price = price;
+		this.shipmentRange = null;
 	}
 	
 	public void setShipmentRange(List<Range> ranges) {
