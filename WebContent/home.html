@@ -46,9 +46,12 @@
 				    		<p class="card-text" th:text="${'Numero articoli nel carrello ' + exposedSeller.articlesAddedToCart + ' per un totale di ' + exposedSeller.totalValue + ' €'}">Numero articoli nel carrello 5 per un totale di €56</p>
 				    		
 				    		<br>
-				    		<form class="form-inline text-center">
+				    		<form action="CartInsert" method="POST" class="form-inline text-center">
 							  <div class="form-group mx-sm-3 mb-2">
-					    		<input type="number" class="form-control" placeholder="Quantità" min="0" max="1000">
+							  	<input type="hidden" name="article" th:value="${exposedArticle.article.id}" th:attr="name='article'"/>
+							  	<input type="hidden" name="seller" th:value="${exposedSeller.seller.id}" th:attr="name='seller'"/>
+							  	<input type="hidden" name="price" th:value="${exposedSeller.price}" th:attr="name='price'"/>
+					    		<input type="number" name="quantity" class="form-control" placeholder="Quantità" min="1" max="1000">
 							  </div>
 							  <button type="submit" class="btn btn-primary mb-2">Metti nel carrello</button>
 							</form>

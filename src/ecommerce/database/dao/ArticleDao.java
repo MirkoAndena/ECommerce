@@ -16,6 +16,7 @@ import ecommerce.database.IBeanBuilder;
 import ecommerce.database.dto.Article;
 import ecommerce.database.dto.Range;
 import ecommerce.database.dto.Seller;
+import ecommerce.utils.Pair;
 
 public class ArticleDao implements IBeanBuilder<Article>{
 	
@@ -57,6 +58,30 @@ public class ArticleDao implements IBeanBuilder<Article>{
 		ExposedSeller exposedSeller = new ExposedSeller(seller, set.getFloat("price"));
 		exposedSeller.setTotalOfCart(SessionContext.getInstance(user).getCart());
 		ExposedArticle.addSellerToArticleList(articles, article, exposedSeller);
+	}
+	
+	public Pair<Article, Seller> getArticleAndSellerById(int articleId, int sellerId) {
+		String query = """
+		    SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
+			FROM `article` a
+			INNER JOIN `seller_articles` sa ON a.id = sa.article
+			INNER JOIN `seller` s ON s.id = sa.seller
+			INNER JOIN `category` c ON a.category = c.id
+			WHERE a.`id` = ? AND s.`id` = ?
+			""";
+		try (PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setInt(1, articleId);
+			statement.setInt(2, sellerId);
+			try (ResultSet set = statement.executeQuery()) {
+				if (!set.isBeforeFirst()) return null;
+				if (set.next()) {
+					return new Pair<Article, Seller>(build(set), buildSeller(set));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void setArticleSeen(int articleId) {
