@@ -32,13 +32,18 @@ public class Login extends BaseServlet {
     
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	// Necessario per mettere message null, cosi nella pagina non viene mostrato l'alert
-		WebContext context = new WebContext(request, response, getServletContext(), Locale.ITALY);
-		templateEngine.process("/login.html", context, response.getWriter());
+    	if (super.isUserAuthenticated(request)) {
+			response.sendRedirect(getServletContext().getContextPath() + "/Home");
+    	}
+    	else {
+	    	// Necessario per mettere message null, cosi nella pagina non viene mostrato l'alert
+			WebContext context = new WebContext(request, response, getServletContext(), Locale.ITALY);
+			templateEngine.process("/login.html", context, response.getWriter());
+    	}
 	}
     
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		Integer userId = authenticate(username, password);

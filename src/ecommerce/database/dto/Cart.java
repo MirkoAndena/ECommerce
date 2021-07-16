@@ -3,6 +3,7 @@ package ecommerce.database.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import ecommerce.frontendDto.SellerCart;
 import ecommerce.utils.Pair;
 
 public class Cart {
@@ -30,7 +31,7 @@ public class Cart {
 	public Pair<Integer, Float> getTotalOfSeller(Seller seller) {
 		for (SellerCart sellerCart : sellerCarts)
 			if (sellerCart.seller.id == seller.id)
-				return new Pair<Integer, Float>(sellerCart.purchases.size(), sellerCart.calculateTotal());
+				return new Pair<Integer, Float>(sellerCart.purchases.size(), sellerCart.calculatePurchaseTotal());
 		return new Pair<Integer, Float>(0, 0f);
 	}
 }

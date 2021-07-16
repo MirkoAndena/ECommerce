@@ -56,7 +56,7 @@ public abstract class BaseServlet extends HttpServlet {
     	return false;
     }
     
-    private boolean isUserAuthenticated(HttpServletRequest request) {
+    protected boolean isUserAuthenticated(HttpServletRequest request) {
     	try {
 	    	return getUserId(request) != null;
     	} catch (Exception e) {
