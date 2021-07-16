@@ -8,8 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ecommerce.beans.ExposedArticle;
 import ecommerce.database.dao.ArticleDao;
+import ecommerce.frontendDto.ExposedArticle;
 
 @WebServlet("/Search")
 public class Search extends BaseServlet {

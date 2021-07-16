@@ -10,15 +10,15 @@ import java.util.List;
 
 import ecommerce.Config;
 import ecommerce.SessionContext;
-import ecommerce.beans.ExposedArticle;
-import ecommerce.beans.ExposedSeller;
-import ecommerce.database.IBeanBuilder;
+import ecommerce.database.IDTOBuilder;
 import ecommerce.database.dto.Article;
 import ecommerce.database.dto.Range;
 import ecommerce.database.dto.Seller;
+import ecommerce.frontendDto.ExposedArticle;
+import ecommerce.frontendDto.ExposedSeller;
 import ecommerce.utils.Pair;
 
-public class ArticleDao implements IBeanBuilder<Article>{
+public class ArticleDao implements IDTOBuilder<Article>{
 	
 	private Connection connection;
 	private int user;

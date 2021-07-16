@@ -1,4 +1,4 @@
-package ecommerce.beans;
+package ecommerce.frontendDto;
 
 import ecommerce.database.dto.Cart;
 import ecommerce.database.dto.Seller;

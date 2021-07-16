@@ -1,4 +1,4 @@
-package ecommerce.beans;
+package ecommerce.frontendDto;
 
 import java.util.ArrayList;
 import java.util.List;
