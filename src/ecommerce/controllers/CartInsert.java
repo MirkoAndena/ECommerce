@@ -54,8 +54,8 @@ public class CartInsert extends BaseServlet {
 		Cart cart = SessionContext.getInstance(super.getUserId(request)).getCart();
 		cart.add(elements.second, elements.first, quantity, price);
 		
-		// FORWARD TO HOME
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/HOME");
+		// FORWARD TO CART PAGE
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/CART");
 	    dispatcher.forward(request, response);
 	}
 }

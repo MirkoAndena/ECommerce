@@ -109,6 +109,7 @@ public class ArticleDao implements IDTOBuilder<Article>{
 			INNER JOIN `articles_seen` ase ON ase.article = a.id
 			WHERE ase.`user` = ?
 			ORDER BY `datetime` DESC LIMIT 5
+			ORDER BY sa.`price`
 			""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, user);
@@ -134,6 +135,7 @@ public class ArticleDao implements IDTOBuilder<Article>{
 			INNER JOIN `seller` s ON s.id = sa.seller
 			INNER JOIN `category` c ON a.category = c.id
 			WHERE c.id = ?
+			ORDER BY sa.`price`
 				""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, Config.DefaultCategory);
@@ -160,6 +162,7 @@ public class ArticleDao implements IDTOBuilder<Article>{
 			INNER JOIN `seller` s ON s.id = sa.seller
 			INNER JOIN `category` c ON a.category = c.id
 			WHERE a.`name` LIKE ? OR a.`description` LIKE ?
+			ORDER BY sa.`price`
 				""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			text = "%" + text + "%";
