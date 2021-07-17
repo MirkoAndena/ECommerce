@@ -31,7 +31,7 @@
 	<!-- BODY -->       
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-lg-4 col-md-6 col-sm-12" th:each="sellerCart : ${cart}">
+			<div class="col-lg-4 col-md-6 col-sm-12" th:each="sellerCart : ${cart.sellerCarts}">
 				<div class="card m-5">
 					<div class="card-body">
 				    	<h4 class="card-title" th:text="${sellerCart.seller.name}">Franco Rossi</h4>
@@ -40,7 +40,6 @@
 			    		<form action="Order" method="POST" class="form-inline text-center">
 						  <button type="submit" class="btn btn-primary mb-2">Ordina</button>
 						</form>
-						<br>
 				    	<div th:each="purchase : ${sellerCart.purchases}">
 				    		<hr/>
 				    		<p class="card-text" th:text="${purchase.article.name}">Deodorante</p>

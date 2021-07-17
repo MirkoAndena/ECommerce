@@ -18,10 +18,12 @@ public class ExposedArticle {
 			
 		// Cerco l'articolo nella lista
 		ExposedArticle found = null;
-		for (ExposedArticle a : exposedArticles) {
-			if (a.article.id == article.id)
+		for (ExposedArticle a : exposedArticles)
+			if (a.article.id == article.id) {
 				found = a;
-		}
+				break;
+			}
+		
 		
 		if (found != null) {
 			// Se trovato aggiungo il venditore

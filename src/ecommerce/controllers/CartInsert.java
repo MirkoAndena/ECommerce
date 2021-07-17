@@ -1,7 +1,6 @@
 package ecommerce.controllers;
 
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -54,8 +53,8 @@ public class CartInsert extends BaseServlet {
 		Cart cart = SessionContext.getInstance(super.getUserId(request)).getCart();
 		cart.add(elements.second, elements.first, quantity, price);
 		
-		// FORWARD TO CART PAGE
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Cart");
-	    dispatcher.forward(request, response);
+		// REDIRECT TO CART PAGE
+		String page = quantity > 0 ? "/Cart" : "/Home";
+		response.sendRedirect(getServletContext().getContextPath() + page);
 	}
 }

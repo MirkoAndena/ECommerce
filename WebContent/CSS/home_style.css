@@ -20,6 +20,7 @@ a {
     height: auto;
 }
 
-.fixedratio {
-	max-height: 450px;
+.thumbnail {
+	max-width: 200px;
+	max-height: 200px;
 }

@@ -18,8 +18,21 @@ public class SellerCart {
 	}
 	
 	public void addPurchase(Article article, int quantity, float price) {
-		Purchase purchase = new Purchase(article, price, quantity);
-		purchases.add(purchase);
+		
+		// Find same article
+		Purchase found = null;
+		for (Purchase purchase : purchases)
+			if (purchase.article.id == article.id) {
+				found = purchase;
+				break;
+			}
+		
+		if (found != null)
+			found.quantity += quantity;
+		else {
+			Purchase purchase = new Purchase(article, price, quantity);
+			purchases.add(purchase);
+		}
 	}
 	
 	public float calculatePurchaseTotal() {
@@ -44,6 +57,7 @@ public class SellerCart {
 	public String getStringPrice() {
 		float total = calculatePurchaseTotal();
 		float shipment = calculateShippingPrice(total);
-		return "Totale: " + (total + shipment) + " € (" + total + " € + spedizione " + shipment + " €)";
+		String shipmentString = shipment == 0 ? "gratuita" : (shipment + " €");
+		return String.format("Totale: %.2f € (%.2f € + spedizione %s)", (total + shipment), total, shipmentString);
 	}
 }

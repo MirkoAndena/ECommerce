@@ -108,8 +108,7 @@ public class ArticleDao implements IDTOBuilder<Article>{
 			INNER JOIN `category` c ON a.category = c.id
 			INNER JOIN `articles_seen` ase ON ase.article = a.id
 			WHERE ase.`user` = ?
-			ORDER BY `datetime` DESC LIMIT 5
-			ORDER BY sa.`price`
+			ORDER BY `datetime` DESC, sa.`price` LIMIT 5
 			""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, user);

@@ -17,8 +17,10 @@ public class Cart {
 	public void add(Seller seller, Article article, int quantity, float price) {
 		SellerCart found = null;
 		for (SellerCart sellerCart : sellerCarts)
-			if (sellerCart.seller.id == seller.id)
+			if (sellerCart.seller.id == seller.id) {
 				found = sellerCart;
+				break;
+			}
 		
 		if (found == null) {
 			found = new SellerCart(seller);

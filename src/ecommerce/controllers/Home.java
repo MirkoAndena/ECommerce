@@ -33,8 +33,10 @@ public class Home extends BaseServlet {
 		
 		// Get last seen articles or from a default list
 		List<ExposedArticle> exposedArticles = articleDao.getLastSeen();
-		if (exposedArticles == null || exposedArticles.size() < 5) 
-			exposedArticles = articleDao.getSalesArticles();
+		List<ExposedArticle> defaultArticles = articleDao.getSalesArticles();
+		
+		for (int i = 0; i < 5 - exposedArticles.size(); i++)
+			exposedArticles.add(defaultArticles.get(i));
 		
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
