@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ecommerce.database.dao.ArticleDao;
+import ecommerce.frontendDto.ArticleFound;
 import ecommerce.frontendDto.ExposedArticle;
 
 @WebServlet("/Search")
@@ -33,20 +34,30 @@ public class Search extends BaseServlet {
 		
 		// Search articles
 		String searched = request.getParameter("search_string");
-		List<ExposedArticle> exposedArticles = articleDao.searchInNameAndDescription(searched);
+		List<ArticleFound> articlesFound = articleDao.searchInNameAndDescription(searched);
+		
+		// Selected article
+		ExposedArticle selectedArticle = null;
+		String selected = request.getParameter("selected");
+		if (selected != null) {
+			int id = -1;
+			try { id = Integer.parseInt(selected); }
+			catch (NumberFormatException e) { System.err.println("Integer value not parsable"); }
+			selectedArticle = articleDao.getArticleById(id);
+		}
 		
 		// Update last seen articles
-		for (ExposedArticle exposedArticle : exposedArticles) {
-			articleDao.setArticleSeen(exposedArticle.article.id);
-			System.out.println(exposedArticle.article.name);
-		}
+		if (selectedArticle != null)
+			articleDao.setArticleSeen(selectedArticle.article.id);
 		
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
 		
 		super.getThymeleaf().init(request, response)
-		.setVariable("exposedArticles", exposedArticles)
-		.process("/home.html");
+		.setVariable("articlesFound", articlesFound)
+		.setVariable("selected", selectedArticle)
+		.setVariable("searched", searched)
+		.process("/results.html");
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

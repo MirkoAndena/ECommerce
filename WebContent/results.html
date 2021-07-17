@@ -32,44 +32,43 @@
 	<div class="container-fluid">
 		<div class="row">
 		    <div class="col-sm text-center">
-		    	<div class="card text-center">
-				  <div class="card-header">Risultati per 'acqua'</div>
+		    	<div class="card text-center mx-auto">
+				  <div class="card-header" th:text="${'Risultati per \'' + searched + '\''}" >Risultati per 'acqua'</div>
 				  <div class="card-body">
-    				<h5 class="card-title">Articoli</h5>
-				      	<ul class="list-group" th:each="article : ${exposedArticles}">
-						  <li class="list-group-item d-flex flex-row justify-content-between align-items-center">
-				    		<div class="p-2 bd-highlight">12</div>
-						  	<div class="p-2 bd-highlight">Water</div>
-						  	<div class="p-2 bd-highlight">0.24 €</div>
-						    <span class="badge badge-pill badge-primary">4</span>
-						  </li>
-						</ul>
-					</div>
+			      	<ul class="list-group" th:each="article : ${articlesFound}">
+					  <li class="list-group-item d-flex flex-row justify-content-between align-items-center">
+			    		<div class="p-2 bd-highlight" th:text="${article.id}">12</div>
+					  	<a href="#" class="p-2 bd-highlight" th:text="${article.name}">Water</a>
+					  	<div class="p-2 bd-highlight" th:text="${article.minPrice}">0.24 €</div>
+					    <span class="badge badge-pill badge-primary" th:text="${article.sellerCount}">4</span>
+					  </li>
+					</ul>
+				  </div>
 				</div>
 		    </div>
-		    <div class="col-sm">
-		      <div class="card text-center">
+		    <div class="col-sm text-center" th:if="${selected != null}">
+		      <div class="card text-center mx-auto">
 				  <div class="card-header">
 				    Articolo selezionato
 				  </div>
 				  <div class="card-body">
-				    <h5 class="card-title">Water</h5>
+				    <h5 class="card-title" th:text="${selected.name}">Water</h5>
 				    <br>
 				    <div class="text-center">
-					  <img src="https://www.gattolicesimo.it/wp-content/uploads/2020/08/svezzamento-gattini.jpg" class="rounded thumbnail" alt="impossibile caricare l'immagine">
+					  <img th:src="${selected.image}" src="https://www.gattolicesimo.it/wp-content/uploads/2020/08/svezzamento-gattini.jpg" class="rounded thumbnail" alt="impossibile caricare l'immagine">
 					</div>
 				    <br>
 				    <div class="input-group mb-3">
 					  <span class="input-group-text" id="basic-addon1">ID</span>
-					  <span class="form-control">12</span>
+					  <span class="form-control" th:text="${selected.id}">12</span>
 					</div>
 					<div class="input-group mb-3">
 					  <span class="input-group-text" id="basic-addon1">Categoria</span>
-					  <span class="form-control">prima necessità</span>
+					  <span class="form-control" th:text="${selected.category}">prima necessità</span>
 					</div>
 					<div class="input-group mb-3">
 					  <span class="input-group-text" id="basic-addon1">Descrizione</span>
-					  <span class="form-control">L'acqua è un composto chimico di formula molecolare H2O, in cui i due atomi di idrogeno sono legati all'atomo di ossigeno con legame covalente polare. In condizioni di temperatura e pressione normali[9] si presenta come un sistema bifase, costituito da un liquido incolore[2] e insapore (che viene chiamato "acqua" in senso stretto) e da un vapore incolore (detto vapore acqueo). Si presenta allo stato solido (detto ghiaccio) nel caso in cui la temperatura sia uguale o inferiore alla temperatura di congelamento.[10]
+					  <span class="form-control" th:text="${selected.description}">L'acqua è un composto chimico di formula molecolare H2O, in cui i due atomi di idrogeno sono legati all'atomo di ossigeno con legame covalente polare. In condizioni di temperatura e pressione normali[9] si presenta come un sistema bifase, costituito da un liquido incolore[2] e insapore (che viene chiamato "acqua" in senso stretto) e da un vapore incolore (detto vapore acqueo). Si presenta allo stato solido (detto ghiaccio) nel caso in cui la temperatura sia uguale o inferiore alla temperatura di congelamento.[10]
 Essendo l'acqua un ottimo solvente, le acque naturali contengono disciolte moltissime altre sostanze, ed è per questo motivo che con il termine "acqua" si intende comunemente sia il composto chimico puro di formula H2O, sia la miscela (liquida) formata dallo stesso, con altre sostanze disciolte al suo interno.</span>
 					</div>
 				  </div>

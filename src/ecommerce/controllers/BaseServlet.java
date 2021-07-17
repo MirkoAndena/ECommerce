@@ -11,10 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import ecommerce.SessionKeys;
 import ecommerce.controllers.support.Thymeleaf;
-import ecommerce.controllers.support.Utils;
 import ecommerce.database.ConnectionBuilder;
 
 public abstract class BaseServlet extends HttpServlet {
@@ -33,8 +34,18 @@ public abstract class BaseServlet extends HttpServlet {
 	public void init() throws ServletException {
     	context = getServletContext();
 		connection = ConnectionBuilder.create(context);
-		templateEngine = Utils.initTemplateEngine(context);
+		templateEngine = initTemplateEngine(context);
 		OnInit();
+	}
+    
+    private static TemplateEngine initTemplateEngine(ServletContext servletContext) {
+		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
+		templateResolver.setTemplateMode(TemplateMode.HTML);
+		templateResolver.setCharacterEncoding("UTF-8");
+		TemplateEngine engine = new TemplateEngine();
+		engine.setTemplateResolver(templateResolver);
+		templateResolver.setSuffix(".html");
+		return engine;
 	}
     
     protected abstract void OnInit();

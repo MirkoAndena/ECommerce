@@ -14,6 +14,7 @@ import ecommerce.database.IDTOBuilder;
 import ecommerce.database.dto.Article;
 import ecommerce.database.dto.Range;
 import ecommerce.database.dto.Seller;
+import ecommerce.frontendDto.ArticleFound;
 import ecommerce.frontendDto.ExposedArticle;
 import ecommerce.frontendDto.ExposedSeller;
 import ecommerce.utils.Pair;
@@ -84,6 +85,30 @@ public class ArticleDao implements IDTOBuilder<Article>{
 		return null;
 	}
 	
+	public ExposedArticle getArticleById(int articleId) {
+		List<ExposedArticle> articles = new ArrayList<ExposedArticle>();
+		String query = """
+		    SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
+			FROM `article` a
+			INNER JOIN `seller_articles` sa ON a.id = sa.article
+			INNER JOIN `seller` s ON s.id = sa.seller
+			INNER JOIN `category` c ON a.category = c.id
+			WHERE a.`id` = ?
+			""";
+		try (PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setInt(1, articleId);
+			try (ResultSet set = statement.executeQuery()) {
+				if (!set.isBeforeFirst()) return null;
+				while (set.next()) {
+					buildArticle(articles, set);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return articles.size() > 0 ? articles.get(0) : null;
+	}
+	
 	public void setArticleSeen(int articleId) {
 		String query = "INSERT INTO `ecommerce`.`articles_seen` (`article`, `user`, `datetime`) VALUES (?,?,?)";
 		try {
@@ -151,8 +176,8 @@ public class ArticleDao implements IDTOBuilder<Article>{
 	}
 	
 	// Articoli cercati
-	public List<ExposedArticle> searchInNameAndDescription(String text) {
-		List<ExposedArticle> articles = new ArrayList<ExposedArticle>();
+	public List<ArticleFound> searchInNameAndDescription(String text) {
+		List<ArticleFound> articles = new ArrayList<ArticleFound>();
 		if (text == null) return articles;	
 		String query = """
 			SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
@@ -170,7 +195,8 @@ public class ArticleDao implements IDTOBuilder<Article>{
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return articles;
 				while (set.next()) {
-					buildArticle(articles, set);
+					Article article = build(set);
+					ArticleFound.updateList(articles, article, set.getFloat("price"));
 				}
 			}
 		} catch (SQLException e) {

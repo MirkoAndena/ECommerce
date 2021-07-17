@@ -2,6 +2,7 @@ package ecommerce.controllers;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,8 +36,17 @@ public class Home extends BaseServlet {
 		List<ExposedArticle> exposedArticles = articleDao.getLastSeen();
 		List<ExposedArticle> defaultArticles = articleDao.getSalesArticles();
 		
-		for (int i = 0; i < 5 - exposedArticles.size(); i++)
-			exposedArticles.add(defaultArticles.get(i));
+		if (exposedArticles.size() < 5) {
+			// Remove articles duplicated from default list
+			for (ExposedArticle a : exposedArticles)
+				defaultArticles.removeIf(b -> a.article.id == a.article.id);
+			
+			// Adding casual elements from default
+			Random random = new Random();
+			while (exposedArticles.size() >= 5) {
+				exposedArticles.add(defaultArticles.get(random.nextInt(defaultArticles.size())));
+			}
+		}
 		
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
