@@ -43,8 +43,10 @@ public class Home extends BaseServlet {
 			
 			// Adding casual elements from default
 			Random random = new Random();
-			while (exposedArticles.size() >= 5) {
-				exposedArticles.add(defaultArticles.get(random.nextInt(defaultArticles.size())));
+			while (exposedArticles.size() < 5) {
+				int index = random.nextInt(defaultArticles.size());
+				exposedArticles.add(defaultArticles.get(index));
+				defaultArticles.remove(index);
 			}
 		}
 		
