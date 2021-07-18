@@ -1,6 +1,7 @@
 package ecommerce.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -34,6 +35,12 @@ public class Search extends BaseServlet {
 		
 		// Search articles
 		String searched = request.getParameter("search_string");
+		
+		if (searched.trim().isEmpty()) {
+			response.sendRedirect(getServletContext().getContextPath() + "/Home");
+			return;
+		}
+		
 		List<ArticleFound> articlesFound = articleDao.searchInNameAndDescription(searched);
 		
 		// Selected article
