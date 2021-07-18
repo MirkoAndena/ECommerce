@@ -15,23 +15,25 @@ INSERT INTO `ecommerce`.`shipment_range` VALUES (3, 5, 4.50, 2); # da 1 a 5 => �
 INSERT INTO `ecommerce`.`shipment_range` VALUES (4, 7, 6.25, 2); # da 6 a 7 => €6.25
 INSERT INTO `ecommerce`.`shipment_range` VALUES (5, null, 8.90, 2); # da 8 in su => €8.90
 
-INSERT INTO `ecommerce`.`category` VALUES (1, 'Tecnology');
-INSERT INTO `ecommerce`.`category` VALUES (2, 'House');
+INSERT INTO `ecommerce`.`category` VALUES (1, 'Tecnologia');
+INSERT INTO `ecommerce`.`category` VALUES (2, 'Casa');
 INSERT INTO `ecommerce`.`category` VALUES (3, 'Sport');
-INSERT INTO `ecommerce`.`category` VALUES (4, 'Sales');
+INSERT INTO `ecommerce`.`category` VALUES (4, 'Default');
 
-INSERT INTO `ecommerce`.`article` VALUES (1, 'Computer', 'A fantastic computer very fast and easy to use', 'computer.png', 1);
-INSERT INTO `ecommerce`.`article` VALUES (2, 'Tablet', 'Not the best but the most beautiful', 'tablet.png', 1);
-INSERT INTO `ecommerce`.`article` VALUES (3, 'Usb cable', 'The strongest cable in the world', 'usb.png', 1);
-INSERT INTO `ecommerce`.`article` VALUES (4, 'The italian pot', 'Now you can cook the real Carbonara', 'pot.png', 2);
-INSERT INTO `ecommerce`.`article` VALUES (5, 'Iron', 'For always being elegant', 'iron.png', 2);
-INSERT INTO `ecommerce`.`article` VALUES (6, 'Wooden chair', 'For indoors and outdoors, it might break under the rain', 'chair.png', 2);
-INSERT INTO `ecommerce`.`article` VALUES (7, 'Ball', 'An amazing ball,\nsize: 4\"', 'ball.png', 3);
-INSERT INTO `ecommerce`.`article` VALUES (8, 'Barbell row', 'Muscles?? Go to workout!', 'barbellrow.png', 3);
-INSERT INTO `ecommerce`.`article` VALUES (9, 'Sport pants', 'For real men', 'pants.png', 3);
-INSERT INTO `ecommerce`.`article` VALUES (10, 'Water', 'Drink drink drink', 'water.png', 4);
-INSERT INTO `ecommerce`.`article` VALUES (11, 'Toilet paper', "It\'s always necessary", 'toiletpaper.png', 4);
-INSERT INTO `ecommerce`.`article` VALUES (12, 'Deodorant', 'goodbye sweat stains', 'deodorant.png', 4);
+INSERT INTO `ecommerce`.`article` VALUES (1, 'Computer', 'Un fantastico computer velocissimo e facile da utilizzare', 'computer.png', 1);
+INSERT INTO `ecommerce`.`article` VALUES (2, 'Tablet', 'Design compatto e maneggevole, ottima qualità', 'tablet.png', 1);
+INSERT INTO `ecommerce`.`article` VALUES (3, 'Cavo USB', 'Cavo molto resistente, da avere sempre con se', 'usb.png', 1);
+INSERT INTO `ecommerce`.`article` VALUES (4, 'Pentola', 'Pentola in alluminio per cuocere pasta e verdure', 'pot.png', 2);
+INSERT INTO `ecommerce`.`article` VALUES (5, 'Ferro da stiro', 'Nessuno vuole le pieghe sulle proprie camicie', 'iron.png', 2);
+INSERT INTO `ecommerce`.`article` VALUES (6, 'Sedia di legno', 'Sedia in legno per interni ed esterni', 'chair.png', 2);
+INSERT INTO `ecommerce`.`article` VALUES (7, 'Palla', 'Fantastica palla da calcio di dimensione 4\"', 'ball.png', 3);
+INSERT INTO `ecommerce`.`article` VALUES (8, 'Asta per piegamenti', 'Asta in acciaio per palestra, supporta fino a 500Kg', 'barbellrow.png', 3);
+INSERT INTO `ecommerce`.`article` VALUES (9, 'Pantaloni sportivi', 'Economici ma molto resistente agli strappi', 'pants.png', 3);
+INSERT INTO `ecommerce`.`article` VALUES (10, 'Acqua', 'Acqua naturale dalle piu alte sorgenti italiane', 'water.png', 4);
+INSERT INTO `ecommerce`.`article` VALUES (11, 'Carta igienica', "Soffice e resistente", 'toiletpaper.png', 4);
+INSERT INTO `ecommerce`.`article` VALUES (12, 'Deodorante', 'Di addio ai cattivi odori', 'deodorant.png', 4);
+INSERT INTO `ecommerce`.`article` VALUES (13, 'Pasta', 'La miglio pasta in circolazione', 'pasta.png', 4);
+INSERT INTO `ecommerce`.`article` VALUES (14, 'Olio', 'Olio delle migliori olive del piemonte', 'oil.png', 4);
 
 INSERT INTO `ecommerce`.`seller_articles` VALUES (1, 1, 1, 399.99);
 INSERT INTO `ecommerce`.`seller_articles` VALUES (2, 2, 1, 419.99);
@@ -52,3 +54,6 @@ INSERT INTO `ecommerce`.`seller_articles` VALUES (16, 2, 11, 1.60);
 INSERT INTO `ecommerce`.`seller_articles` VALUES (17, 1, 12, 2.70);
 INSERT INTO `ecommerce`.`seller_articles` VALUES (18, 2, 12, 3.70);
 INSERT INTO `ecommerce`.`seller_articles` VALUES (19, 3, 12, 2.90);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (20, 2, 13, 0.92);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (21, 1, 13, 1.24);
+INSERT INTO `ecommerce`.`seller_articles` VALUES (22, 2, 14, 3.81);
