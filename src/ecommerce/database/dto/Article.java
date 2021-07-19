@@ -19,4 +19,9 @@ public class Article {
 	private String resolveImagePath(String imageFileName) {
 		return "images/" + imageFileName;
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

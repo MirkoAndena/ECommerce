@@ -3,11 +3,11 @@
 	max-height: 200px;
 }
 
-.badge {
-	background-color: #0d6efd;
+.autoheight {
+	height: auto !important;
 }
 
 .card {
-	max-width: 400px;
+	max-width: 80%;
     height: auto;
 }

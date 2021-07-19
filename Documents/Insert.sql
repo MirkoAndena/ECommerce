@@ -32,7 +32,7 @@ INSERT INTO `ecommerce`.`article` VALUES (9, 'Pantaloni sportivi', 'Economici ma
 INSERT INTO `ecommerce`.`article` VALUES (10, 'Acqua', 'Acqua naturale dalle piu alte sorgenti italiane', 'water.png', 4);
 INSERT INTO `ecommerce`.`article` VALUES (11, 'Carta igienica', "Soffice e resistente", 'toiletpaper.png', 4);
 INSERT INTO `ecommerce`.`article` VALUES (12, 'Deodorante', 'Di addio ai cattivi odori', 'deodorant.png', 4);
-INSERT INTO `ecommerce`.`article` VALUES (13, 'Pasta', 'La miglio pasta in circolazione', 'pasta.png', 4);
+INSERT INTO `ecommerce`.`article` VALUES (13, 'Pasta', 'La miglior pasta in circolazione', 'pasta.png', 4);
 INSERT INTO `ecommerce`.`article` VALUES (14, 'Olio', 'Olio delle migliori olive del piemonte', 'oil.png', 4);
 
 INSERT INTO `ecommerce`.`seller_articles` VALUES (1, 1, 1, 399.99);

@@ -15,13 +15,3 @@ a:hover {
     border-radius: 0;
     padding-top: 0px !important;
 }
-
-.no-border {
-    border: 0;
-    box-shadow: none;
-}
-
-.card {
-	max-width: 400px;
-    height: auto;
-}

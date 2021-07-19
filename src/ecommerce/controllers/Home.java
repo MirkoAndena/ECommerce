@@ -39,11 +39,11 @@ public class Home extends BaseServlet {
 		if (exposedArticles.size() < 5) {
 			// Remove articles duplicated from default list
 			for (ExposedArticle a : exposedArticles)
-				defaultArticles.removeIf(b -> a.article.id == a.article.id);
+				defaultArticles.removeIf(b -> b.article.id == a.article.id);
 			
 			// Adding casual elements from default
 			Random random = new Random();
-			while (exposedArticles.size() < 5) {
+			while (exposedArticles.size() < 5 && defaultArticles.size() > 0) {
 				int index = random.nextInt(defaultArticles.size());
 				exposedArticles.add(defaultArticles.get(index));
 				defaultArticles.remove(index);

@@ -14,4 +14,9 @@ public class Purchase {
 	public float calculateTotal() {
 		return price * quantity;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s %.2f € (count: %d)", article, price, quantity);
+	}
 }

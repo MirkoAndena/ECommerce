@@ -1,7 +1,6 @@
 package ecommerce.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -36,7 +35,7 @@ public class Search extends BaseServlet {
 		// Search articles
 		String searched = request.getParameter("search_string");
 		
-		if (searched.trim().isEmpty()) {
+		if (searched == null || searched.trim().isEmpty()) {
 			response.sendRedirect(getServletContext().getContextPath() + "/Home");
 			return;
 		}
@@ -45,7 +44,7 @@ public class Search extends BaseServlet {
 		
 		// Selected article
 		ExposedArticle selectedArticle = null;
-		String selected = request.getParameter("selected");
+		String selected = request.getParameter("selected_article");
 		if (selected != null) {
 			int id = -1;
 			try { id = Integer.parseInt(selected); }

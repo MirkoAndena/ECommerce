@@ -40,4 +40,9 @@ public class Seller {
 		
 		return String.join(", ", list);
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }
