@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ecommerce.SessionContext;
+import ecommerce.controllers.support.AuthenticatedServlet;
+import ecommerce.controllers.support.FatalException;
 
 @WebServlet("/Cart")
-public class Cart extends BaseServlet {
+public class Cart extends AuthenticatedServlet {
 	private static final long serialVersionUID = 1L;
        
     public Cart() {
@@ -19,12 +21,12 @@ public class Cart extends BaseServlet {
 	@Override
 	protected void OnInit() {
 
-	}
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (super.redirectIfNotLogged(request, response)) return;
+	}	
+
+	@Override
+	public void Get(HttpServletRequest request, HttpServletResponse response, int user) throws ServletException, IOException, FatalException {
 		
-		ecommerce.database.dto.Cart cart = SessionContext.getInstance(super.getUserId(request)).getCart();
+		ecommerce.database.dto.Cart cart = SessionContext.getInstance(user).getCart();
 		
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
@@ -33,8 +35,9 @@ public class Cart extends BaseServlet {
 		.setVariable("cart", cart)
 		.process("/cart.html");
 	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Unused
+
+	@Override
+	public void Post(HttpServletRequest request, HttpServletResponse response, int user) throws ServletException, IOException, FatalException {
+		// TODO Auto-generated method stub
 	}
 }

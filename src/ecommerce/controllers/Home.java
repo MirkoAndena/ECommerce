@@ -9,13 +9,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ecommerce.controllers.support.AuthenticatedServlet;
+import ecommerce.controllers.support.FatalException;
 import ecommerce.database.dao.ArticleDao;
+import ecommerce.database.dao.SellerDao;
 import ecommerce.frontendDto.ExposedArticle;
 
 @WebServlet("/Home")
-public class Home extends BaseServlet {
+public class Home extends AuthenticatedServlet {
 	private static final long serialVersionUID = 1L;
 	private ArticleDao articleDao;
+	private SellerDao sellerDao;
        
     public Home() {
         super();
@@ -23,18 +27,18 @@ public class Home extends BaseServlet {
     
 	@Override
 	protected void OnInit() {
-
+		this.articleDao = new ArticleDao(connection);
+		this.sellerDao = new SellerDao(connection);
 	}
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (super.redirectIfNotLogged(request, response)) return;
-		
-		if (this.articleDao == null)
-			this.articleDao = new ArticleDao(connection, super.getUserId(request));
-		
+
+	@Override
+	public void Get(HttpServletRequest request, HttpServletResponse response, int user) throws ServletException, IOException, FatalException {		
 		// Get last seen articles or from a default list
-		List<ExposedArticle> exposedArticles = articleDao.getLastSeen();
-		List<ExposedArticle> defaultArticles = articleDao.getSalesArticles();
+		List<ExposedArticle> exposedArticles = articleDao.getLastSeen(sellerDao, user);
+		List<ExposedArticle> defaultArticles = articleDao.getSalesArticles(sellerDao, user);
+		
+		if (exposedArticles.size() + defaultArticles.size() < 5)
+			throw new FatalException("Da specifica devono esserci almeno 5 elementi");
 		
 		if (exposedArticles.size() < 5) {
 			// Remove articles duplicated from default list
@@ -57,8 +61,9 @@ public class Home extends BaseServlet {
 		.setVariable("exposedArticles", exposedArticles)
 		.process("/home.html");
 	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Unused
+
+	@Override
+	public void Post(HttpServletRequest request, HttpServletResponse response, int user) throws ServletException, IOException, FatalException {
+		// TODO Auto-generated method stub
 	}
 }

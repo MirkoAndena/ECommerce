@@ -23,7 +23,7 @@ public class Cart {
 			}
 		
 		if (found == null) {
-			found = new SellerCart(seller);
+			found = new SellerCart(sellerCarts.size(), seller);
 			sellerCarts.add(found);
 		}
 			

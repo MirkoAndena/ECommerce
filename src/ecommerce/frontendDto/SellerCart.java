@@ -9,10 +9,12 @@ import ecommerce.database.dto.Range;
 import ecommerce.database.dto.Seller;
 
 public class SellerCart {
+	public int id;
 	public Seller seller;
 	public List<Purchase> purchases;
 	
-	public SellerCart(Seller seller) {
+	public SellerCart(int id, Seller seller) {
+		this.id = id;
 		this.seller = seller;
 		this.purchases = new ArrayList<Purchase>();
 	}
@@ -54,10 +56,15 @@ public class SellerCart {
 		return endPrice;
 	}
 	
+	public float calculateTotal() {
+		float total = calculatePurchaseTotal();
+		return total + calculateShippingPrice(total);
+	}
+	
 	public String getStringPrice() {
 		float total = calculatePurchaseTotal();
 		float shipment = calculateShippingPrice(total);
-		String shipmentString = shipment == 0 ? "gratuita" : (shipment + " €");
+		String shipmentString = shipment == 0 ? "gratuita" : String.format("%.2f €", shipment);
 		return String.format("Totale: %.2f € (%.2f € + spedizione %s)", (total + shipment), total, shipmentString);
 	}
 }

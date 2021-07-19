@@ -10,23 +10,19 @@ import java.util.List;
 
 import ecommerce.Config;
 import ecommerce.SessionContext;
-import ecommerce.database.IDTOBuilder;
 import ecommerce.database.dto.Article;
-import ecommerce.database.dto.Range;
 import ecommerce.database.dto.Seller;
 import ecommerce.frontendDto.ArticleFound;
 import ecommerce.frontendDto.ExposedArticle;
 import ecommerce.frontendDto.ExposedSeller;
 import ecommerce.utils.Pair;
 
-public class ArticleDao implements IDTOBuilder<Article>{
+public class ArticleDao {
 	
 	private Connection connection;
-	private int user;
 
-	public ArticleDao(Connection connection, Integer user) {
+	public ArticleDao(Connection connection) {
 		this.connection = connection;
-		this.user = user;
 	}
 	
 	public Article build(ResultSet set) throws SQLException {
@@ -38,30 +34,14 @@ public class ArticleDao implements IDTOBuilder<Article>{
 		set.getString("category"));
 	}
 	
-	private Seller buildSeller(ResultSet set) throws SQLException {
-		Seller seller = new Seller(
-			set.getInt("seller_id"),
-			set.getString("seller"),
-			set.getInt("rating"),
-			set.getFloat("free_shipping_threshold"));
-		
-		// Setting shipment range
-		List<Range> ranges = getShipmentRange(seller.id);
-		if (ranges != null && seller.freeShippingThreshold > 0) seller.setShipmentRange(ranges);
-		
-		return seller;
-	}
-	
-	private void buildArticle(List<ExposedArticle> articles, ResultSet set) throws SQLException {
-		Article article = build(set);
-		Seller seller = buildSeller(set);
-		
+	private void buildArticle(Seller seller, List<ExposedArticle> articles, int user, ResultSet set) throws SQLException {
+		Article article = build(set);		
 		ExposedSeller exposedSeller = new ExposedSeller(seller, set.getFloat("price"));
 		exposedSeller.setTotalOfCart(SessionContext.getInstance(user).getCart());
 		ExposedArticle.addSellerToArticleList(articles, article, exposedSeller);
 	}
 	
-	public Pair<Article, Seller> getArticleAndSellerById(int articleId, int sellerId) {
+	public Pair<Article, Seller> getArticleAndSellerById(SellerDao sellerDao, int articleId, int sellerId) {
 		String query = """
 		    SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
 			FROM `article` a
@@ -76,7 +56,7 @@ public class ArticleDao implements IDTOBuilder<Article>{
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return null;
 				if (set.next()) {
-					return new Pair<Article, Seller>(build(set), buildSeller(set));
+					return new Pair<Article, Seller>(build(set), sellerDao.build(set, "seller_id"));
 				}
 			}
 		} catch (SQLException e) {
@@ -85,7 +65,7 @@ public class ArticleDao implements IDTOBuilder<Article>{
 		return null;
 	}
 	
-	public ExposedArticle getArticleById(int articleId) {
+	public ExposedArticle getArticleById(SellerDao sellerDao, int articleId, int user) {
 		List<ExposedArticle> articles = new ArrayList<ExposedArticle>();
 		String query = """
 		    SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
@@ -100,7 +80,7 @@ public class ArticleDao implements IDTOBuilder<Article>{
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return null;
 				while (set.next()) {
-					buildArticle(articles, set);
+					buildArticle(sellerDao.build(set, "seller_id"), articles, user, set);
 				}
 			}
 		} catch (SQLException e) {
@@ -109,7 +89,7 @@ public class ArticleDao implements IDTOBuilder<Article>{
 		return articles.size() > 0 ? articles.get(0) : null;
 	}
 	
-	public void setArticleSeen(int articleId) {
+	public void setArticleSeen(int articleId, int user) {
 		String query = "INSERT INTO `ecommerce`.`articles_seen` (`article`, `user`, `datetime`) VALUES (?,?,?)";
 		try {
 			PreparedStatement statement = connection.prepareStatement(query);
@@ -123,7 +103,7 @@ public class ArticleDao implements IDTOBuilder<Article>{
 	}
 	
 	// Ultimi articoli visti
-	public List<ExposedArticle> getLastSeen() {
+	public List<ExposedArticle> getLastSeen(SellerDao sellerDao, int user) {
 		List<ExposedArticle> articles = new ArrayList<ExposedArticle>();
 		String query = """
 		    SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
@@ -140,7 +120,7 @@ public class ArticleDao implements IDTOBuilder<Article>{
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return articles;
 				while (set.next()) {
-					buildArticle(articles, set);
+					buildArticle(sellerDao.build(set, "seller_id"), articles, user, set);
 				}
 			}
 		} catch (SQLException e) {
@@ -150,7 +130,7 @@ public class ArticleDao implements IDTOBuilder<Article>{
 	}
 	
 	// Articoli nella categoria default
-	public List<ExposedArticle> getSalesArticles() {
+	public List<ExposedArticle> getSalesArticles(SellerDao sellerDao, int user) {
 		List<ExposedArticle> articles = new ArrayList<ExposedArticle>();
 		String query = """
 			SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
@@ -166,7 +146,7 @@ public class ArticleDao implements IDTOBuilder<Article>{
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return articles;
 				while (set.next()) {
-					buildArticle(articles, set);
+					buildArticle(sellerDao.build(set, "seller_id"), articles, user, set);
 				}
 			}
 		} catch (SQLException e) {
@@ -203,33 +183,5 @@ public class ArticleDao implements IDTOBuilder<Article>{
 			e.printStackTrace();
 		}
 		return articles;
-	}
-	
-	private List<Range> getShipmentRange(int sellerId) {
-		String query = """
-			SELECT `max_articles`, `price`
-			FROM `shipment_range`
-			WHERE `seller` = ?
-			ORDER BY -`max_articles` DESC
-			""";
-		List<Range> ranges = new ArrayList<Range>();
-		try (PreparedStatement statement = connection.prepareStatement(query)) {
-			statement.setInt(1, sellerId);
-			try (ResultSet set = statement.executeQuery()) {
-				if (!set.isBeforeFirst()) return null;
-				Integer last = 1;
-				while (set.next()) {
-					Integer max = set.getInt("max_articles");
-					if (set.wasNull()) max = null;
-					float price = set.getFloat("price");
-					ranges.add(new Range(last, max, price));
-					last = max;
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return ranges;
 	}
 }

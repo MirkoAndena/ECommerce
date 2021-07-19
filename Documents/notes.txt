@@ -1,5 +1,8 @@
 Hash: per non salvare sul DB la password in chiaro (che viene mandata su internet in chiaro)
 Cart non in sessione: cosi ogni utente dispone del carrello da ogni browser e su ogni dispositivo
 
+Ordine non contiene il nome del venditore ma il riferimento in tabella per poter risalire facilmente a lui, a differenza dell'utente.
+l'indirizzo di spedizione può essere cambiato ma deve rimanere quello utilizzato mentre il nome del venditore deve essere aggiornato se cambia.
+
 redirect: dico al client di richiedere un altra pagina
 forward: la servlet inoltra la richiesta del client ad un altro componente

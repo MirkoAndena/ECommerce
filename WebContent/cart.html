@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +11,7 @@
 	<!-- HEADER --> 
 	<nav class="navbar navbar-expand-sm navbar-dark bg-primary navbar-collapse collapse">
 	    <ul class="nav navbar-nav mx-3">
-	        <li><a href="Home"><span class="glyphicon glyphicon-home"></span></a></li>
+	        <li><a href="Home"><span class="glyphicon glyphicon-home whiteicon"></span></a></li>
 	        <li>
 	            <form class="navbar-form" role="search" action="Search" method="GET">
 	                <div class="input-group">
@@ -23,8 +24,8 @@
 	        </li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right mx-3">
-	       <li><a href="Cart"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
-	       <li><a href="#"><span class="glyphicon glyphicon-user"></span></a></li>
+	       <li><a href="Cart"><span class="glyphicon glyphicon-shopping-cart whiteicon"></span></a></li>
+	       <li><a href="#"><span class="glyphicon glyphicon-user whiteicon"></span></a></li>
 	   </ul>
 	</nav>
 	
@@ -36,18 +37,21 @@
 					<div class="card-body">
 					    <div class="row align-items-center mx-auto">
 					        <div class="col">
-					            <h4 class="card-title">Marco Rossi</h4>
-					            <p class="card-text">Totale: 13,50 € (4,60 € + spedizione 8.9 €)</p>
+					            <h4 class="card-title" th:text="${sellerCart.seller.name}">Marco Rossi</h4>
+					            <p class="card-text" th:text="${sellerCart.getStringPrice()}">Totale: 13,50 € (4,60 € + spedizione 8.9 €)</p>
 					        </div>
 					        <div class="col-md-auto">
 					            <form action="Order" method="POST" class="text-center">
-					              <button type="submit" class="btn btn-primary mb-2">Ordina</button>
+					            	<input type="hidden" name="cartId" th:value="${sellerCart.id}" th:attr="name='cartId'"/>
+					              	<button type="submit" class="btn btn-primary mb-2">Ordina</button>
 					            </form>
 					        </div>
 					</div>
-					<hr>
-					<p class="card-text">Pasta 0.92 € per 5 = 4.6 €</p></div>
+					<div th:each="purchase : ${sellerCart.purchases}">
+						<hr>
+						<p class="card-text" th:text="${purchase.toString()}">Pasta 0.92 € per 5 = 4.6 €</p></div>
 					</div>
+				</div>
 		  	</div>
 		</div>
     </div>

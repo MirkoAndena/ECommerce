@@ -7,16 +7,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ecommerce.SessionContext;
+import ecommerce.controllers.support.AuthenticatedServlet;
+import ecommerce.controllers.support.FatalException;
 import ecommerce.database.dao.ArticleDao;
+import ecommerce.database.dao.SellerDao;
 import ecommerce.database.dto.Article;
 import ecommerce.database.dto.Cart;
 import ecommerce.database.dto.Seller;
 import ecommerce.utils.Pair;
 
 @WebServlet("/CartInsert")
-public class CartInsert extends BaseServlet {
+public class CartInsert extends AuthenticatedServlet {
 	private static final long serialVersionUID = 1L;
 	private ArticleDao articleDao;
+	private SellerDao sellerDao;
        
     public CartInsert() {
         super();
@@ -24,19 +28,17 @@ public class CartInsert extends BaseServlet {
     
 	@Override
 	protected void OnInit() {
-
+		this.articleDao = new ArticleDao(connection);
+		this.sellerDao = new SellerDao(connection);
 	}
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (super.redirectIfNotLogged(request, response)) return;
 
-		if (this.articleDao == null)
-			this.articleDao = new ArticleDao(connection, super.getUserId(request));
-		
+	@Override
+	public void Get(HttpServletRequest request, HttpServletResponse response, int user) throws ServletException, IOException, FatalException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void Post(HttpServletRequest request, HttpServletResponse response, int user) throws ServletException, IOException, FatalException {
 		int articleId = -1, sellerId = -1, quantity = -1;
 		float price = -1;
 		try {
@@ -45,16 +47,17 @@ public class CartInsert extends BaseServlet {
 			price = Float.parseFloat(request.getParameter("price"));
 			quantity = Integer.parseInt(request.getParameter("quantity"));
 		} catch (NumberFormatException e) {
-			System.err.println("Integer value not parsable");
+			throw new FatalException("Valori passati non corretti");
 		}
+		
+		if (quantity <= 0) throw new FatalException("Quantità non corretta");
 	
-		Pair<Article, Seller> elements = articleDao.getArticleAndSellerById(articleId, sellerId);
-		if (elements == null) System.err.println("Articolo e/o Seller non trovati nel DB");
+		Pair<Article, Seller> elements = articleDao.getArticleAndSellerById(sellerDao, articleId, sellerId);
+		if (elements == null) throw new FatalException("Articolo e/o Seller non trovati nel DB");
 		Cart cart = SessionContext.getInstance(super.getUserId(request)).getCart();
 		cart.add(elements.second, elements.first, quantity, price);
 		
 		// REDIRECT TO CART PAGE
-		String page = quantity > 0 ? "/Cart" : "/Home";
-		response.sendRedirect(getServletContext().getContextPath() + page);
+		response.sendRedirect(getServletContext().getContextPath() + "/Cart");
 	}
 }

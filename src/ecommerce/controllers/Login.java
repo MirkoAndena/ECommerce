@@ -12,6 +12,8 @@ import org.thymeleaf.context.WebContext;
 
 import ecommerce.SessionContext;
 import ecommerce.SessionKeys;
+import ecommerce.controllers.support.BaseServlet;
+import ecommerce.controllers.support.FatalException;
 import ecommerce.database.dao.UserDao;
 import ecommerce.hashing.SHA;
 
@@ -27,12 +29,19 @@ public class Login extends BaseServlet {
     
     @Override
 	protected void OnInit() {
-    	this.userDao = new UserDao(super.connection, new SHA());
+    	this.userDao = new UserDao(super.connection);
 	}
-    
-    @Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	if (super.isUserAuthenticated(request)) {
+	
+	// Autenticazione, in caso positivo ritorno dell id utente
+	private Integer authenticate(String username, String password) {
+		if (username == null || username == "" || password == null || password == "") return null;
+		return userDao.getUserIdFromLogin(username, password, new SHA());
+	}
+
+	@Override
+	public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FatalException {
+		if (super.getUserId(request) != null) {
+			// Utente già autenticato
 			response.sendRedirect(getServletContext().getContextPath() + "/Home");
     	}
     	else {
@@ -41,9 +50,9 @@ public class Login extends BaseServlet {
 			templateEngine.process("/login.html", context, response.getWriter());
     	}
 	}
-    
+
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+	public void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FatalException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		Integer userId = authenticate(username, password);
@@ -57,11 +66,5 @@ public class Login extends BaseServlet {
 			context.setVariable("message", "Username o Password errati");
 			templateEngine.process("/login.html", context, response.getWriter());
 		}
-	}
-	
-	// Autenticazione, in caso positivo ritorno dell id utente
-	private Integer authenticate(String username, String password) {
-		if (username == null || username == "" || password == null || password == "") return null;
-		return userDao.getUserIdFromLogin(username, password);
 	}
 }

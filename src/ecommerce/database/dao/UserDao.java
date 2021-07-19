@@ -16,14 +16,12 @@ import ecommerce.hashing.HashFunction;
 public class UserDao {
 
 	private Connection connection;
-	private HashFunction hashFunction;
 
-	public UserDao(Connection connection, HashFunction hashFunction) {
+	public UserDao(Connection connection) {
 		this.connection = connection;
-		this.hashFunction = hashFunction;
 	}
 	
-	public void store(User user) {
+	public void store(User user, HashFunction hashFunction) {
 		String query = "INSERT INTO User (name, surname, address, email, password) VALUES (?,?,?,?,?)";
 		try {
 			PreparedStatement statement = connection.prepareStatement(query);
@@ -39,7 +37,7 @@ public class UserDao {
 	}
 	
 	// SQL injection non funziona con email e password perchè sono sottoposti a verifica di integrità
-	public Integer getUserIdFromLogin(String email, String password) {
+	public Integer getUserIdFromLogin(String email, String password, HashFunction hashFunction) {
 		if (!isValidEmailAddress(email)) return null;
 		String query = "SELECT `id` FROM `ecommerce`.`user` WHERE `email` LIKE ? AND `password` LIKE ?";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -65,5 +63,28 @@ public class UserDao {
 		      result = false;
 		   }
 		   return result;
+	}
+	
+	public User getUserById(int id) {
+		String query = "SELECT * FROM `ecommerce`.`user` WHERE `id` LIKE ?";
+		try (PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setInt(1, id);
+			try (ResultSet set = statement.executeQuery()) {
+				if (!set.isBeforeFirst()) return null;
+				if (set.next()) {
+					return new User(
+							set.getInt("id"),
+							set.getString("name"),
+							set.getString("surname"),
+							set.getString("address"),
+							set.getString("email")
+					);
+				}
+				else return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
 		}
+	}
 }

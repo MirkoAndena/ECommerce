@@ -71,6 +71,8 @@ CREATE TABLE `ecommerce`.`order_articles` (
 	`id` int not null auto_increment primary key,
     `order` int not null,
     `article` int not null,
+    `price` float not null,
+    `quantity` int not null,
     foreign key (`order`) references `ecommerce`.`order`(`id`),
     foreign key (`article`) references `ecommerce`.`article`(`id`)
 );

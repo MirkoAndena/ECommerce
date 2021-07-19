@@ -1,4 +1,4 @@
-package ecommerce.controllers;
+package ecommerce.controllers.support;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -15,7 +15,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import ecommerce.SessionKeys;
-import ecommerce.controllers.support.Thymeleaf;
 import ecommerce.database.ConnectionBuilder;
 
 public abstract class BaseServlet extends HttpServlet {
@@ -55,24 +54,34 @@ public abstract class BaseServlet extends HttpServlet {
     	ConnectionBuilder.close(connection);
     }
     
-    protected boolean redirectIfNotLogged(HttpServletRequest request, HttpServletResponse response) {
-    	if (!isUserAuthenticated(request)) {
-    		try {
-				response.sendRedirect(request.getContextPath());
-				return true;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-    	}
-    	return false;
-    }
+    @Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try { get(request, response); }
+		catch (FatalException e) {
+			System.err.println(e.toString());
+			redirectToLogin(request, response);
+		}
+	}
     
-    protected boolean isUserAuthenticated(HttpServletRequest request) {
+    public abstract void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FatalException;
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try { post(request, response); }
+		catch (FatalException e) {
+			System.err.println(e.toString());
+			redirectToLogin(request, response);
+		}
+	}
+	
+    public abstract void post(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FatalException;
+
+	protected void redirectToLogin(HttpServletRequest request, HttpServletResponse response) {
     	try {
-	    	return getUserId(request) != null;
-    	} catch (Exception e) {
-    		return false;
-    	}
+			response.sendRedirect(request.getContextPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
     public Thymeleaf getThymeleaf() {
