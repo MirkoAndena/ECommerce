@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>ECommerce - Carrello</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-	<link rel="stylesheet" href="CSS/home_style.css">
+	<link rel="stylesheet" href="CSS/header_style.css">
 </head>
 <body>
 	<!-- HEADER --> 
@@ -23,7 +23,7 @@
 	        </li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right mx-3">
-	       <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+	       <li><a href="Cart"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
 	       <li><a href="#"><span class="glyphicon glyphicon-user"></span></a></li>
 	   </ul>
 	</nav>
@@ -34,21 +34,22 @@
 			<div class="col-lg-4 col-md-6 col-sm-12" th:each="sellerCart : ${cart.sellerCarts}">
 				<div class="card m-5">
 					<div class="card-body">
-				    	<h4 class="card-title" th:text="${sellerCart.seller.name}">Franco Rossi</h4>
-				    	<p class="card-text" th:text="${sellerCart.getStringPrice()}">Totale: 32 € + 12 € (Spese di spedizione)</p>
-				    	<br>
-			    		<form action="Order" method="POST" class="form-inline text-center">
-						  <button type="submit" class="btn btn-primary mb-2">Ordina</button>
-						</form>
-				    	<div th:each="purchase : ${sellerCart.purchases}">
-				    		<hr/>
-				    		<p class="card-text" th:text="${purchase.article.name}">Deodorante</p>
-				    		<p class="card-text" th:text="${purchase.price + ' € X ' + purchase.quantity}">28 € X 1</p>
-				    	</div>
-				  	</div>
-				</div>
-		    </div>
-	    </div>
-	</div>
+					    <div class="row align-items-center mx-auto">
+					        <div class="col">
+					            <h4 class="card-title">Marco Rossi</h4>
+					            <p class="card-text">Totale: 13,50 € (4,60 € + spedizione 8.9 €)</p>
+					        </div>
+					        <div class="col-md-auto">
+					            <form action="Order" method="POST" class="text-center">
+					              <button type="submit" class="btn btn-primary mb-2">Ordina</button>
+					            </form>
+					        </div>
+					</div>
+					<hr>
+					<p class="card-text">Pasta 0.92 € per 5 = 4.6 €</p></div>
+					</div>
+		  	</div>
+		</div>
+    </div>
 </body>
 </html>

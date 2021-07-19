@@ -24,7 +24,7 @@
 	        </li>
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right mx-3">
-	       <li><a href="#"><span class="glyphicon glyphicon-shopping-cart whiteicon"></span></a></li>
+	       <li><a href="Cart"><span class="glyphicon glyphicon-shopping-cart whiteicon"></span></a></li>
 	       <li><a href="#"><span class="glyphicon glyphicon-user whiteicon"></span></a></li>
 	   </ul>
 	</nav>
@@ -110,7 +110,7 @@ Essendo l'acqua un ottimo solvente, le acque naturali contengono disciolte molti
 					  	</div>
 					  	<div class="row" th:if="${exposedSeller.articlesAddedToCart > 0}">
 					    	<div class="col-sm font-weight-bold">Suoi articoli nel carrello:</div>
-						    <div class="col-sm" th:text="${exposedSeller.articlesAddedToCar}">3</div>
+						    <div class="col-sm" th:text="${exposedSeller.articlesAddedToCart}">3</div>
 					  	</div>
 					  	<div class="row" th:if="${exposedSeller.totalValue > 0}">
 					    	<div class="col-sm font-weight-bold">Totale prezzo suoi articoli nel carrello:</div>
@@ -121,14 +121,19 @@ Essendo l'acqua un ottimo solvente, le acque naturali contengono disciolte molti
 					  		<input type="hidden" name="article" th:value="${selected.article.id}" th:attr="name='article'"/>
 						  	<input type="hidden" name="seller" th:value="${exposedSeller.seller.id}" th:attr="name='seller'"/>
 						  	<input type="hidden" name="price" th:value="${exposedSeller.price}" th:attr="name='price'"/>
-						  	<div class="row mb5">
-			    				<input type="number" name="quantity" class="form-control" placeholder="Quantità" min="1" max="1000" value="1">
-							    <button type="submit" class="btn btn-primary mb-2">Metti nel carrello</button>
+						    <div class="row justify-content-md-center">
+						       <div class="col-xs-2">
+						           <input type="number" name="quantity" class="form-control" placeholder="Quantità" min="1" max="1000" value="1">
+						       </div>
+						       <div class="col-xs-2">
+						           <button type="submit" class="btn btn-primary mb-2">Metti nel carrello</button>
+						       </div>
 						    </div>
-					    </form>
+						</form>
 					</div>
 			    </div>
 		    </div>
+	    </div>
 	  </div>
 	</div>
 </body>

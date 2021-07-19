@@ -7,7 +7,7 @@
 	background-color: #0d6efd;
 }
 
-.card {
-	max-width: 400px;
+.article-card {
+	max-width: 90%;
     height: auto;
 }
