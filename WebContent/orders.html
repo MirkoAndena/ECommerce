@@ -47,7 +47,7 @@
 	                    </div>
 	                    <br>
 	                    <div th:each="order : ${orders}" class="card mb-5">
-					      	<ul class="mt-5">
+					      	<ul class="card-header">
 							  <li class="d-flex justify-content-around">
 					    		<div class="p-2 bd-highlight" th:text="${order.id}">12</div>
 							  	<div class="p-2 bd-highlight" th:text="${order.userAddress}">Via Roma 15, Torino</div>
@@ -56,12 +56,12 @@
 							  	<div class="p-2 bd-highlight" th:text="${order.total}">54 €</div>
 							  </li>
 							</ul>
-							<hr>
-							<div th:each="purchase : ${order.purchases}" class="d-flex flex-row">
+							<ul class="list-group list-group-flush">
+							<li th:each="purchase : ${order.purchases}" class="list-group-item d-flex flex-row card-body">
 								<img th:src="${purchase.article.image}" src="https://www.gattolicesimo.it/wp-content/uploads/2020/08/svezzamento-gattini.jpg" class="rounded img200 p-2" alt="impossibile caricare l'immagine">
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<div class="p-2">
-							  		<div class="row mb5">
+							  		<div class="row">
 								    	<div class="col-sm font-weight-bold">Nome:</div>
 									    <div class="col-sm" th:text="${purchase.article.name}">Acqua</div>
 								    </div>
@@ -83,7 +83,8 @@
 									    <div class="col-sm" th:text="${purchase.price + ' € per ' + purchase.quantity}">0.4 € per 3</div>
 								    </div>
 						  		</div>
-							</div>
+							</li>
+							</ul>
 						</div>
 					</div>
 				  </div>
