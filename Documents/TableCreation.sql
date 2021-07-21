@@ -59,7 +59,7 @@ CREATE TABLE `ecommerce`.`seller_articles` (
 CREATE TABLE `ecommerce`.`order` (
 	`id` int not null auto_increment primary key,
     `total` float not null,
-    `shipment_date` date not null,
+    `shipment_date` bigint not null,
 	`seller` int not null,
     `user_address` varchar(30) not null,
     `user` int not null,
