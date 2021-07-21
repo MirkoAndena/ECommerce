@@ -1,0 +1,13 @@
+.img200 {
+	max-width: 200px;
+	max-height: 200px;
+}
+
+.autoheight {
+	height: auto !important;
+}
+
+.card {
+	max-width: 80%;
+    height: auto;
+}

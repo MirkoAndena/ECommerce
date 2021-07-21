@@ -1,0 +1,13 @@
+.img200 {
+	max-width: 200px;
+	max-height: 200px;
+}
+
+.badge {
+	background-color: #0d6efd;
+}
+
+.article-card {
+	max-width: 90%;
+    height: auto;
+}
