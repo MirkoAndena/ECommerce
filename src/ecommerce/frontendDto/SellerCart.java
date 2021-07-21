@@ -45,12 +45,13 @@ public class SellerCart {
 	}
 	
 	public float calculateShippingPrice(float total) {
+		int articleCount = calculateTotalArticles();
 		if (seller.freeShippingThreshold == 0 || total >= seller.freeShippingThreshold)
 			return 0;
 		float endPrice = -1;
 		for (Range range : seller.shipmentRanges) {
 			if (range.end == null) endPrice = range.price;				
-			else if (purchases.size() > range.start && purchases.size() <= range.end)
+			else if (articleCount > range.start && articleCount <= range.end)
 				return range.price;
 		}
 		return endPrice;
@@ -59,6 +60,13 @@ public class SellerCart {
 	public float calculateTotal() {
 		float total = calculatePurchaseTotal();
 		return total + calculateShippingPrice(total);
+	}
+	
+	public int calculateTotalArticles() {
+		int sum = 0;
+		for (Purchase purchase : purchases)
+			sum += purchase.quantity;
+		return sum;
 	}
 	
 	public String getStringPrice() {

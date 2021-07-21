@@ -55,7 +55,7 @@ public class OrderInsert extends AuthenticatedServlet {
 		
 		// Creazione ordine
 		Order order = new Order(userDto, sellerCart);
-		boolean stored = orderDao.storeOrder(order);
+		boolean stored = orderDao.storeOrder(order, sellerCart.purchases);
 		
 		// Eliminazione dal carrello
 		if (stored) SessionContext.getInstance(user).getCart().sellerCarts.remove(cartId);

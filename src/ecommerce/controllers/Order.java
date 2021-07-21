@@ -1,6 +1,8 @@
 package ecommerce.controllers;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +15,7 @@ import ecommerce.database.dao.OrderDao;
 import ecommerce.database.dao.SellerDao;
 import ecommerce.database.dao.UserDao;
 import ecommerce.database.dto.User;
+import ecommerce.frontendDto.ExposedOrder;
 
 @WebServlet("/Order")
 public class Order extends AuthenticatedServlet {
@@ -39,12 +42,15 @@ public class Order extends AuthenticatedServlet {
 		
 		User userDto = userDao.getUserById(user);
 		
+		List<ExposedOrder> orderList = orderDao.getOrders(userDto, articleDao, sellerDao);
+		System.out.println("orders: " + orderList.size());
+		
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
 		
 		super.getThymeleaf().init(request, response)
-		.setVariable("orders", orderDao.getOrders(userDto, articleDao, sellerDao))
-		.process("/home.html");
+		.setVariable("orders", orderList)
+		.process("/orders.html");
 	}
 
 	@Override

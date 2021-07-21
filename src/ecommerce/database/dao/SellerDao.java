@@ -18,8 +18,22 @@ public class SellerDao {
 		this.connection = connection;
 	}
 	
-	public Seller build(ResultSet set) throws SQLException {
-		return build(set, "id");
+	private Seller build(ResultSet set) throws SQLException {
+		return build(set, "id", "name");
+	}
+	
+	public Seller build(ResultSet set, String idColumn, String nameColumn) throws SQLException {
+		Seller seller = new Seller(
+			set.getInt(idColumn),
+			set.getString(nameColumn),
+			set.getInt("rating"),
+			set.getFloat("free_shipping_threshold"));
+		
+		// Setting shipment range
+		List<Range> ranges = getShipmentRange(seller.id);
+		if (ranges != null && seller.freeShippingThreshold > 0) seller.setShipmentRange(ranges);
+		
+		return seller;
 	}
 	
 	public Seller getSellerById(int id) {
@@ -40,20 +54,6 @@ public class SellerDao {
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	public Seller build(ResultSet set, String idColumn) throws SQLException {
-		Seller seller = new Seller(
-			set.getInt("seller_id"),
-			set.getString("seller"),
-			set.getInt("rating"),
-			set.getFloat("free_shipping_threshold"));
-		
-		// Setting shipment range
-		List<Range> ranges = getShipmentRange(seller.id);
-		if (ranges != null && seller.freeShippingThreshold > 0) seller.setShipmentRange(ranges);
-		
-		return seller;
 	}
 	
 	private List<Range> getShipmentRange(int sellerId) {

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,9 @@ import java.util.List;
 import ecommerce.database.dto.Article;
 import ecommerce.database.dto.Order;
 import ecommerce.database.dto.Purchase;
+import ecommerce.database.dto.Seller;
 import ecommerce.database.dto.User;
+import ecommerce.frontendDto.ExposedOrder;
 
 public class OrderDao {
 
@@ -22,10 +25,10 @@ public class OrderDao {
 	}
 	
 	// TODO andrebbe fatto a batch con rollback se fallisce qualcosa
-	public boolean storeOrder(Order order) {
+	public boolean storeOrder(Order order, List<Purchase> purchases) {
 		String query = "INSERT INTO `ecommerce`.`order` (`user`, `seller`, `user_address`, `shipment_date`, `total`) VALUES (?,?,?,?,?)";
 		try {
-			PreparedStatement statement = connection.prepareStatement(query);
+			PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			statement.setInt(1, order.user.id);
 			statement.setInt(2, order.seller.id);
 			statement.setString(3, order.user.address);
@@ -45,7 +48,7 @@ public class OrderDao {
 	        }
 	        
 	        // Insert all articles
-	        return insertArticles(order, orderId);
+	        return insertArticles(purchases, orderId);
 	        
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -53,14 +56,15 @@ public class OrderDao {
 		}
 	}
 	
-	private boolean insertArticles(Order order, long id) {
-		for (Purchase purchase : order.purchases) {
-			String query = "INSERT INTO `ecommerce`.`order_articles` (`order`, `article`, `quantity`) VALUES (?,?,?)";
+	private boolean insertArticles(List<Purchase> purchases, long id) {
+		for (Purchase purchase : purchases) {
+			String query = "INSERT INTO `ecommerce`.`order_articles` (`order`, `article`, `price`, `quantity`) VALUES (?,?,?,?)";
 			try {
 				PreparedStatement statement = connection.prepareStatement(query);
 				statement.setLong(1, id);
 				statement.setInt(2, purchase.article.id);
-				statement.setInt(3, purchase.quantity);
+				statement.setFloat(3, purchase.price);
+				statement.setInt(4, purchase.quantity);
 				int affectedRows = statement.executeUpdate();
 				if (affectedRows == 0) return false;
 			} catch (SQLException e) {
@@ -71,12 +75,13 @@ public class OrderDao {
 		return true;
 	}
 	
-	public List<Order> getOrders(User user, ArticleDao articleDao, SellerDao sellerDao) {
-		List<Order> orders = new ArrayList<Order>();
+	public List<ExposedOrder> getOrders(User user, ArticleDao articleDao, SellerDao sellerDao) {
+		List<ExposedOrder> orders = new ArrayList<ExposedOrder>();
 		String query = """
 		    SELECT *
-			FROM `order` a
-			WHERE oa.`user` = ?
+			FROM `order` o
+			WHERE o.`user` = ?
+			ORDER BY `shipment_date` DESC
 			""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, user.id);
@@ -92,15 +97,18 @@ public class OrderDao {
 		return orders;
 	}
 	
-	private Order build(User user, ArticleDao articleDao, SellerDao sellerDao, ResultSet set) throws SQLException {
-		return new Order(
+	private ExposedOrder build(User user, ArticleDao articleDao, SellerDao sellerDao, ResultSet set) throws SQLException {
+		int id = set.getInt("id");
+		Seller seller = sellerDao.getSellerById(set.getInt("seller"));
+		Order order = new Order(
+				id,
 				user,
-				sellerDao.getSellerById(set.getInt("seller")),
+				seller,
 				user.address,
 				new Date(set.getLong("shipment_date")),
-				set.getFloat("total"),
-				getPurchasesOfOrder(set.getInt("id"), articleDao)
+				set.getFloat("total")
 			);
+		return new ExposedOrder(order, getPurchasesOfOrder(id, articleDao));
 	}
 	
 	private List<Purchase> getPurchasesOfOrder(int order, ArticleDao articleDao) {

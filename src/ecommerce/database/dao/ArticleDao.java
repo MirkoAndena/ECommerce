@@ -56,7 +56,7 @@ public class ArticleDao {
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return null;
 				if (set.next()) {
-					return new Pair<Article, Seller>(build(set), sellerDao.build(set, "seller_id"));
+					return new Pair<Article, Seller>(build(set), sellerDao.build(set, "seller_id", "seller"));
 				}
 			}
 		} catch (SQLException e) {
@@ -74,13 +74,14 @@ public class ArticleDao {
 			INNER JOIN `seller` s ON s.id = sa.seller
 			INNER JOIN `category` c ON a.category = c.id
 			WHERE a.`id` = ?
+			ORDER BY sa.`price`
 			""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, articleId);
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return null;
 				while (set.next()) {
-					buildArticle(sellerDao.build(set, "seller_id"), articles, user, set);
+					buildArticle(sellerDao.build(set, "seller_id", "seller"), articles, user, set);
 				}
 			}
 		} catch (SQLException e) {
@@ -120,7 +121,7 @@ public class ArticleDao {
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return articles;
 				while (set.next()) {
-					buildArticle(sellerDao.build(set, "seller_id"), articles, user, set);
+					buildArticle(sellerDao.build(set, "seller_id", "seller"), articles, user, set);
 				}
 			}
 		} catch (SQLException e) {
@@ -146,7 +147,7 @@ public class ArticleDao {
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return articles;
 				while (set.next()) {
-					buildArticle(sellerDao.build(set, "seller_id"), articles, user, set);
+					buildArticle(sellerDao.build(set, "seller_id", "seller"), articles, user, set);
 				}
 			}
 		} catch (SQLException e) {
@@ -160,11 +161,9 @@ public class ArticleDao {
 		List<ArticleFound> articles = new ArrayList<ArticleFound>();
 		if (text == null) return articles;	
 		String query = """
-			SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
+			SELECT DISTINCT a.`id`, a.`name`, sa.`price`
 			FROM `article` a
 			INNER JOIN `seller_articles` sa ON a.id = sa.article
-			INNER JOIN `seller` s ON s.id = sa.seller
-			INNER JOIN `category` c ON a.category = c.id
 			WHERE a.`name` LIKE ? OR a.`description` LIKE ?
 			ORDER BY sa.`price`
 				""";
@@ -175,7 +174,11 @@ public class ArticleDao {
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return articles;
 				while (set.next()) {
-					Article article = build(set);
+					ArticleFound article = new ArticleFound(
+							set.getInt("id"),
+							set.getString("name"),
+							set.getFloat("price")
+						);
 					ArticleFound.updateList(articles, article, set.getFloat("price"));
 				}
 			}

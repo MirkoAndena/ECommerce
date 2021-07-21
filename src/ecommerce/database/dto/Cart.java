@@ -33,7 +33,7 @@ public class Cart {
 	public Pair<Integer, Float> getTotalOfSeller(Seller seller) {
 		for (SellerCart sellerCart : sellerCarts)
 			if (sellerCart.seller.id == seller.id)
-				return new Pair<Integer, Float>(sellerCart.purchases.size(), sellerCart.calculatePurchaseTotal());
+				return new Pair<Integer, Float>(sellerCart.calculateTotalArticles(), sellerCart.calculatePurchaseTotal());
 		return new Pair<Integer, Float>(0, 0f);
 	}
 }
