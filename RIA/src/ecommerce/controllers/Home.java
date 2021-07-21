@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import ecommerce.database.dao.SellerDao;
 import ecommerce.frontendDto.ExposedArticle;
 
 @WebServlet("/Home")
+@MultipartConfig
 public class Home extends AuthenticatedServlet {
 	private static final long serialVersionUID = 1L;
 	private ArticleDao articleDao;

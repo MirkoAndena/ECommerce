@@ -12,14 +12,12 @@ function login_main() {
 
         if (form.checkValidity() && username.length > 0 && password.length > 0) {
             let callback = response => {
-                console.log(response);
-                if (response.success)
-                	window.location.href = "home.html";
+                if (response == "true")
+                	window.location.href = "Home";
             	else
                     onNotLogged("Credenziali non valide");
             };
             httpPostRequest('Login', form, callback, onNotLogged);
-            console.log("sent");
         }
         else onNotLogged("Username o password mancante");
     });
