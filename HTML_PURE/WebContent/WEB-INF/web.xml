@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
-  <display-name>ECommerce</display-name>
+  <display-name>ECommerce_HTML_PURE</display-name>
   <context-param>
     <param-name>dbUrl</param-name>
     <param-value>jdbc:mysql://localhost:3306/ecommerce?serverTimezone=UTC&amp;characterEncoding=UTF-8</param-value>
@@ -18,7 +18,7 @@
     <param-value>com.mysql.cj.jdbc.Driver</param-value>
   </context-param>
   <session-config>
-  	<session-timeout>30</session-timeout>
+    <session-timeout>30</session-timeout>
   </session-config>
   <welcome-file-list>
     <welcome-file>Login</welcome-file>

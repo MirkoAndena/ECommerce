@@ -1,14 +1,12 @@
 package ecommerce.controllers;
 
 import java.io.IOException;
-import java.util.Locale;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.thymeleaf.context.WebContext;
+import com.google.gson.Gson;
 
 import ecommerce.SessionContext;
 import ecommerce.SessionKeys;
@@ -44,11 +42,8 @@ public class Login extends BaseServlet {
 			// Utente già autenticato
 			response.sendRedirect(getServletContext().getContextPath() + "/Home");
     	}
-    	else {
-	    	// Necessario per mettere message null, cosi nella pagina non viene mostrato l'alert
-			WebContext context = new WebContext(request, response, getServletContext(), Locale.ITALY);
-			templateEngine.process("/login.html", context, response.getWriter());
-    	}
+		else
+			request.getRequestDispatcher("/login.html").forward(request, response);
 	}
 
 	@Override
@@ -56,15 +51,16 @@ public class Login extends BaseServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		Integer userId = authenticate(username, password);
+	
 		if (userId != null) {
 			SessionContext.removeSessionContext(userId);
 			HttpSession session = request.getSession(true);
 			session.setAttribute(SessionKeys.User.toString(), userId);
-			response.sendRedirect(getServletContext().getContextPath() + "/Home");
-		} else {
-			WebContext context = new WebContext(request, response, getServletContext(), Locale.ITALY);
-			context.setVariable("message", "Username o Password errati");
-			templateEngine.process("/login.html", context, response.getWriter());
-		}
+		} 
+		
+		String json = (new Gson()).toJson(userId != null);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 	}
 }
