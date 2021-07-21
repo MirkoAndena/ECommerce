@@ -14,6 +14,7 @@ import ecommerce.database.dao.OrderDao;
 import ecommerce.database.dto.Order;
 import ecommerce.database.dto.User;
 import ecommerce.frontendDto.SellerCart;
+import ecommerce.utils.ListUtils;
 
 @WebServlet("/OrderInsert")
 public class OrderInsert extends AuthenticatedServlet {
@@ -40,15 +41,10 @@ public class OrderInsert extends AuthenticatedServlet {
 	public void Post(HttpServletRequest request, HttpServletResponse response, int user) throws ServletException, IOException, FatalException {
 		
 		// Ottenimento id del carrello ordinato
-		int cartId = -1;
-		try {
-			cartId = Integer.parseInt(request.getParameter("cartId"));
-		} catch (NumberFormatException e) {
-			throw new FatalException("Non è stato passato un valore corrispondente ad un id");
-		}
-				
-		if (cartId > SessionContext.getInstance(user).getCart().sellerCarts.size() - 1) throw new FatalException("Id carrello non valido");
-		SellerCart sellerCart = SessionContext.getInstance(user).getCart().sellerCarts.get(cartId);
+		int cartId = getCartId(request);		
+		
+		// Recupero dei dati del carrello ordinato
+		SellerCart sellerCart = ListUtils.find(SessionContext.getInstance(user).getCart().sellerCarts, cart -> cart.id == cartId);
 		User userDto = userDao.getUserById(user);
 		
 		if (userDto == null) throw new FatalException("Nessun utente trovato con id " + user);
@@ -58,10 +54,20 @@ public class OrderInsert extends AuthenticatedServlet {
 		boolean stored = orderDao.storeOrder(order, sellerCart.purchases);
 		
 		// Eliminazione dal carrello
-		if (stored) SessionContext.getInstance(user).getCart().sellerCarts.remove(cartId);
+		if (stored) SessionContext.getInstance(user).getCart().sellerCarts.remove(sellerCart);
 		else throw new FatalException("Impossibile salvare l'ordine");
 		
 		// REDIRECT TO CART PAGE
 		response.sendRedirect(getServletContext().getContextPath() + "/Cart");
+	}
+	
+	private int getCartId(HttpServletRequest request) throws FatalException {
+		int cartId = -1;
+		try {
+			cartId = Integer.parseInt(request.getParameter("cartId"));
+		} catch (NumberFormatException e) {
+			throw new FatalException("Non è stato passato un valore corrispondente ad un id");
+		}
+		return cartId;
 	}
 }

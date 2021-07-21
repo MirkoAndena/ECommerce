@@ -32,7 +32,7 @@
 	<!-- BODY -->       
 	<div class="container-fluid">
 		<div class="row">
-			<p th:if="${cart.sellerCarts.size() == 0}">Carrello vuoto</p>
+			<h3 class="text-center mt-5" th:if="${cart.sellerCarts.size() == 0}">Carrello vuoto</h3>
 			<div class="col-lg-4 col-md-6 col-sm-12" th:each="sellerCart : ${cart.sellerCarts}">
 				<div class="card m-5">
 					<div class="card-body">

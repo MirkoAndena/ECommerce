@@ -25,12 +25,19 @@ public class SessionContext {
 	// Context
 	
 	private Cart cart;
+	private int lastCartId;
 	
 	private SessionContext() {
 		cart = new Cart();
+		lastCartId = 0;
 	}
 	
 	public Cart getCart() {
 		return cart;
+	}
+	
+	public int newCartId() {
+		lastCartId++;
+		return lastCartId;
 	}
 }

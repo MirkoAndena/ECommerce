@@ -2,7 +2,6 @@ package ecommerce.frontendDto;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import ecommerce.database.dto.Article;
 import ecommerce.database.dto.Purchase;
 import ecommerce.database.dto.Range;

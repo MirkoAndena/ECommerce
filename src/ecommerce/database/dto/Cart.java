@@ -3,6 +3,7 @@ package ecommerce.database.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import ecommerce.SessionContext;
 import ecommerce.frontendDto.SellerCart;
 import ecommerce.utils.Pair;
 
@@ -14,7 +15,7 @@ public class Cart {
 		this.sellerCarts = new ArrayList<SellerCart>();
 	}
 	
-	public void add(Seller seller, Article article, int quantity, float price) {
+	public void add(SessionContext sessionContext, Seller seller, Article article, int quantity, float price) {
 		SellerCart found = null;
 		for (SellerCart sellerCart : sellerCarts)
 			if (sellerCart.seller.id == seller.id) {
@@ -23,7 +24,7 @@ public class Cart {
 			}
 		
 		if (found == null) {
-			found = new SellerCart(sellerCarts.size(), seller);
+			found = new SellerCart(sessionContext.newCartId(), seller);
 			sellerCarts.add(found);
 		}
 			

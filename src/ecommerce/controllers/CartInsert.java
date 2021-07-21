@@ -55,7 +55,7 @@ public class CartInsert extends AuthenticatedServlet {
 		Pair<Article, Seller> elements = articleDao.getArticleAndSellerById(sellerDao, articleId, sellerId);
 		if (elements == null) throw new FatalException("Articolo e/o Seller non trovati nel DB");
 		Cart cart = SessionContext.getInstance(super.getUserId(request)).getCart();
-		cart.add(elements.second, elements.first, quantity, price);
+		cart.add(SessionContext.getInstance(user), elements.second, elements.first, quantity, price);
 		
 		// REDIRECT TO CART PAGE
 		response.sendRedirect(getServletContext().getContextPath() + "/Cart");

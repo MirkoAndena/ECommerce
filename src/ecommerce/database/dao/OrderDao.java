@@ -105,7 +105,7 @@ public class OrderDao {
 				user,
 				seller,
 				user.address,
-				new Date(set.getLong("shipment_date")),
+				new Date(set.getLong("shipment_date") * 1000),
 				set.getFloat("total")
 			);
 		return new ExposedOrder(order, getPurchasesOfOrder(id, articleDao));
