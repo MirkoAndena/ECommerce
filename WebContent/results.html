@@ -9,25 +9,7 @@
 </head>
 <body>
 	<!-- HEADER --> 
-	<nav class="navbar navbar-expand-sm navbar-dark bg-primary navbar-collapse collapse">
-	    <ul class="nav navbar-nav mx-3">
-	        <li><a href="Home"><span class="glyphicon glyphicon-home whiteicon"></span></a></li>
-	        <li>
-	            <form class="navbar-form" role="search" action="Search" method="GET">
-	                <div class="input-group">
-	                    <input type="text" class="form-control no-border" placeholder="Cerca articoli" name="search_string">
-	                    <div class="input-group-btn">
-	                        <button class="btn btn-light" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-	                    </div>
-	                </div>
-	            </form>
-	        </li>
-	    </ul>
-	    <ul class="nav navbar-nav navbar-right mx-3">
-	       <li><a href="Cart"><span class="glyphicon glyphicon-shopping-cart whiteicon"></span></a></li>
-	       <li><a href="Order"><span class="glyphicon glyphicon-user whiteicon"></span></a></li>
-	   </ul>
-	</nav>
+	<div th:insert="@{WEB-INF/header.html}"></div>
 	
 	<!-- BODY -->       
 	<div class="container-fluid">

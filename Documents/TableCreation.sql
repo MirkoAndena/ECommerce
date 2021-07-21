@@ -1,4 +1,5 @@
 CREATE SCHEMA `ecommerce`;
+USE `ecommerce`;
 
 CREATE TABLE `ecommerce`.`user` (
 	`id` int not null auto_increment primary key,
