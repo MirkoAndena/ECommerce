@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.google.gson.Gson;
 
 import ecommerce.SessionContext;
 import ecommerce.SessionKeys;
@@ -15,6 +14,8 @@ import ecommerce.controllers.support.BaseServlet;
 import ecommerce.controllers.support.FatalException;
 import ecommerce.database.dao.UserDao;
 import ecommerce.hashing.SHA;
+import ecommerce.utils.ClientPages;
+import ecommerce.utils.Json;
 
 @WebServlet("/Login")
 @MultipartConfig
@@ -60,9 +61,7 @@ public class Login extends BaseServlet {
 			session.setAttribute(SessionKeys.User.toString(), userId);
 		} 
 		
-		String json = (new Gson()).toJson(userId != null);
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(json);
+		Json json = Json.build(ClientPages.Login).add("logged", userId != null);
+		super.sendResult(response, json);
 	}
 }

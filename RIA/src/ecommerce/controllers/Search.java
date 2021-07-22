@@ -55,7 +55,7 @@ public class Search extends AuthenticatedServlet {
 		
 		// Update last seen articles
 		if (selectedArticle != null)
-			articleDao.setArticleSeen(selectedArticle.article.id, user);
+			articleDao.setArticleSeen(selectedArticle.id, user);
 		
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");

@@ -1,0 +1,48 @@
+<template>
+<br>
+<div class="card text-center mx-auto" >
+  <div class="card-header" id="sellerName"></div>
+  <div class="card-body">
+    <br>
+	<div class="row mb5">
+    	<div class="col-sm font-weight-bold">ID:</div>
+	    <div class="col-sm" id="sellerId"></div>
+    </div>
+    <div class="row mb5">
+    	<div class="col-sm font-weight-bold">Valutazione:</div>
+	    <div class="col-sm" id="sellerRating"></div>
+    </div>
+    <div class="row">
+    	<div class="col-sm font-weight-bold">Prezzo:</div>
+	    <div class="col-sm" id="sellerPrice"></div>
+    </div>
+    <div class="row">
+    	<div class="col-sm font-weight-bold">Spedizione:</div>
+	    <div class="col-sm" id="sellerFreeShippingThreshold"></div>
+    </div>
+    <div class="row" id="sellerShipmentRangesRow">
+    	<div class="col-sm font-weight-bold">Fasce di spesa:</div>
+	    <div class="col-sm" id="sellerShipmentRanges"></div>
+  	</div>
+  	<div class="row" id="sellerArticlesAddedToCartRow">
+    	<div class="col-sm font-weight-bold">Suoi articoli nel carrello:</div>
+	    <div class="col-sm" id="sellerArticlesAddedToCart">3</div>
+  	</div>
+  	<div class="row" id="sellerTotalValueRow">
+    	<div class="col-sm font-weight-bold">Totale prezzo suoi articoli nel carrello:</div>
+	    <div class="col-sm" id="sellerTotalValue"></div>
+  	</div>
+  	<br>
+  	<form action="#">
+	    <div class="row justify-content-md-center">
+	       <div class="col-xs-2">
+	           <input type="number" id="quantity" name="quantity" class="form-control" placeholder="Quantit�" min="1" max="1000" value="1">
+	       </div>
+	       <div class="col-xs-2">
+	           <button id="addToCart" type="button" class="btn btn-primary mb-2">Metti nel carrello</button>
+	       </div>
+	    </div>
+	</form>
+</div>
+ </div>
+ </template>

@@ -6,11 +6,19 @@ import java.util.List;
 import ecommerce.database.dto.Article;
 
 public class ExposedArticle {
-	public Article article;
+	public int id;
+	public String name;
+	public String description;
+	public String image;
+	public String category;
 	public List<ExposedSeller> sellers;
 	
 	public ExposedArticle(Article article) {
-		this.article = article;
+		this.id = article.id;
+		this.name = article.name;
+		this.description = article.description;
+		this.image = article.image;
+		this.category = article.category;
 		this.sellers = new ArrayList<ExposedSeller>();
 	}
 	
@@ -19,7 +27,7 @@ public class ExposedArticle {
 		// Cerco l'articolo nella lista
 		ExposedArticle found = null;
 		for (ExposedArticle a : exposedArticles)
-			if (a.article.id == article.id) {
+			if (a.id == article.id) {
 				found = a;
 				break;
 			}

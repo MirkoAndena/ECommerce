@@ -2,6 +2,7 @@ package ecommerce.controllers;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,9 +15,13 @@ import ecommerce.database.dao.SellerDao;
 import ecommerce.database.dto.Article;
 import ecommerce.database.dto.Cart;
 import ecommerce.database.dto.Seller;
+import ecommerce.utils.ClientPages;
+import ecommerce.utils.FileReader;
+import ecommerce.utils.Json;
 import ecommerce.utils.Pair;
 
 @WebServlet("/CartInsert")
+@MultipartConfig
 public class CartInsert extends AuthenticatedServlet {
 	private static final long serialVersionUID = 1L;
 	private ArticleDao articleDao;
@@ -39,6 +44,7 @@ public class CartInsert extends AuthenticatedServlet {
 
 	@Override
 	public void Post(HttpServletRequest request, HttpServletResponse response, int user) throws ServletException, IOException, FatalException {
+		String result = null;
 		int articleId = -1, sellerId = -1, quantity = -1;
 		float price = -1;
 		try {
@@ -47,7 +53,8 @@ public class CartInsert extends AuthenticatedServlet {
 			price = Float.parseFloat(request.getParameter("price"));
 			quantity = Integer.parseInt(request.getParameter("quantity"));
 		} catch (NumberFormatException e) {
-			throw new FatalException("Valori passati non corretti");
+			//throw new FatalException("Valori passati non corretti");
+			result = "Valori passati non corretti";
 		}
 		
 		if (quantity <= 0) throw new FatalException("Quantità non corretta");
@@ -56,8 +63,11 @@ public class CartInsert extends AuthenticatedServlet {
 		if (elements == null) throw new FatalException("Articolo e/o Seller non trovati nel DB");
 		Cart cart = SessionContext.getInstance(super.getUserId(request)).getCart();
 		cart.add(SessionContext.getInstance(user), elements.second, elements.first, quantity, price);
+		result = cart.toString();
 		
-		// REDIRECT TO CART PAGE
-		response.sendRedirect(getServletContext().getContextPath() + "/Cart");
+		Json json = Json.build(ClientPages.Carrello)
+				.add("result", result);
+			
+		super.sendResult(response, json);
 	}
 }

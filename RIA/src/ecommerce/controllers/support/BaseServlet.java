@@ -2,6 +2,7 @@ package ecommerce.controllers.support;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -14,8 +15,12 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import com.google.gson.Gson;
+
 import ecommerce.SessionKeys;
 import ecommerce.database.ConnectionBuilder;
+import ecommerce.utils.Json;
+import ecommerce.utils.JsonResponse;
 
 public abstract class BaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -56,6 +61,7 @@ public abstract class BaseServlet extends HttpServlet {
     
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	displayParameters(request);
 		try { get(request, response); }
 		catch (FatalException e) {
 			System.err.println(e.toString());
@@ -67,6 +73,7 @@ public abstract class BaseServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	displayParameters(request);
 		try { post(request, response); }
 		catch (FatalException e) {
 			System.err.println(e.toString());
@@ -103,5 +110,25 @@ public abstract class BaseServlet extends HttpServlet {
     
     public Integer getUserId(HttpServletRequest request) {
     	return getAttribute(request, SessionKeys.User);
+    }
+    
+    protected void sendResult(HttpServletResponse response, Json json) throws IOException {
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json.toString());
+		System.out.println("<results:" + System.lineSeparator() + json.toString() + System.lineSeparator() + ">");
+    }
+    
+    protected void sendResult(HttpServletResponse response, JsonResponse json) throws IOException {
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json.toString());
+    }
+    
+    private void displayParameters(HttpServletRequest request) {
+    	StringBuilder stringBuilder = new StringBuilder();
+    	Map<String, String[]> map = request.getParameterMap();
+    	map.forEach((key, value) -> { stringBuilder.append(key + ": " + String.join(", ", value) + System.lineSeparator());});
+    	System.out.println("<params:" + System.lineSeparator() + stringBuilder.toString() + System.lineSeparator() + ">");
     }
 }

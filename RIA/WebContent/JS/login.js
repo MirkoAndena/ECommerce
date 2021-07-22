@@ -10,10 +10,10 @@ function login_main() {
         let username = document.getElementById("username").value;
         let password = document.getElementById("password").value;
 
-        if (form.checkValidity() && username.length > 0 && password.length > 0) {
+        if (form.checkValidity() && notEmpty(username) && notEmpty(password)) {
             let callback = response => {
-                if (response == "true")
-                	window.location.href = "Home";
+                if (response["logged"] == true)
+                	window.location.href = "Index";
             	else
                     onNotLogged("Credenziali non valide");
             };

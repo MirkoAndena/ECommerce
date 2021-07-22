@@ -1,7 +1,10 @@
 package ecommerce.controllers;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.ServletException;
@@ -15,6 +18,11 @@ import ecommerce.controllers.support.FatalException;
 import ecommerce.database.dao.ArticleDao;
 import ecommerce.database.dao.SellerDao;
 import ecommerce.frontendDto.ExposedArticle;
+import ecommerce.utils.ClientPages;
+import ecommerce.utils.FileReader;
+import ecommerce.utils.Json;
+import ecommerce.utils.JsonResponse;
+import ecommerce.utils.JsonResponse.Pages;
 
 @WebServlet("/Home")
 @MultipartConfig
@@ -45,7 +53,7 @@ public class Home extends AuthenticatedServlet {
 		if (exposedArticles.size() < 5) {
 			// Remove articles duplicated from default list
 			for (ExposedArticle a : exposedArticles)
-				defaultArticles.removeIf(b -> b.article.id == a.article.id);
+				defaultArticles.removeIf(b -> b.id == a.id);
 			
 			// Adding casual elements from default
 			Random random = new Random();
@@ -59,9 +67,12 @@ public class Home extends AuthenticatedServlet {
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
 		
-		super.getThymeleaf().init(request, response)
-		.setVariable("exposedArticles", exposedArticles)
-		.process("/home.html");
+		Json json = Json.build(ClientPages.Home)
+			.add("articleTemplate", FileReader.read(this, "article_template.html"))
+			.add("sellerTemplate", FileReader.read(this, "seller_template.html"))
+			.add("content", exposedArticles);
+		
+		super.sendResult(response, json);
 	}
 
 	@Override
