@@ -16,7 +16,6 @@ import ecommerce.database.dto.Article;
 import ecommerce.database.dto.Cart;
 import ecommerce.database.dto.Seller;
 import ecommerce.utils.ClientPages;
-import ecommerce.utils.FileReader;
 import ecommerce.utils.Json;
 import ecommerce.utils.Pair;
 
@@ -44,7 +43,6 @@ public class CartInsert extends AuthenticatedServlet {
 
 	@Override
 	public void Post(HttpServletRequest request, HttpServletResponse response, int user) throws ServletException, IOException, FatalException {
-		String errorString = null;
 		int articleId = -1, sellerId = -1, quantity = -1;
 		float price = -1;
 		try {
@@ -53,8 +51,7 @@ public class CartInsert extends AuthenticatedServlet {
 			price = Float.parseFloat(request.getParameter("price"));
 			quantity = Integer.parseInt(request.getParameter("quantity"));
 		} catch (NumberFormatException e) {
-			//throw new FatalException("Valori passati non corretti");
-			errorString = "Valori passati non corretti";
+			throw new FatalException("Valori passati non corretti");
 		}
 		
 		if (quantity <= 0) throw new FatalException("Quantità non corretta");
@@ -64,9 +61,8 @@ public class CartInsert extends AuthenticatedServlet {
 		Cart cart = SessionContext.getInstance(super.getUserId(request)).getCart();
 		cart.add(SessionContext.getInstance(user), elements.second, elements.first, quantity, price);
 		
-		Json json = Json.build(ClientPages.Carrello);
-		if (errorString != null) json.add("error", errorString);
-		else json.add("cart", cart);
+		Json json = Json.build(ClientPages.Carrello)
+				.add("inserted", true);
 			
 		super.sendResult(response, json);
 	}

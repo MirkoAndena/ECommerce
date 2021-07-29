@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 
 import ecommerce.SessionKeys;
 import ecommerce.database.ConnectionBuilder;
+import ecommerce.utils.ClientPages;
 import ecommerce.utils.Json;
 import ecommerce.utils.JsonResponse;
 
@@ -65,7 +66,8 @@ public abstract class BaseServlet extends HttpServlet {
 		try { get(request, response); }
 		catch (FatalException e) {
 			System.err.println(e.toString());
-			redirectToLogin(request, response);
+			Json json = Json.build(null).add("errorMessage", e.getMessage());
+			sendResult(response, json);
 		}
 	}
     
@@ -77,7 +79,8 @@ public abstract class BaseServlet extends HttpServlet {
 		try { post(request, response); }
 		catch (FatalException e) {
 			System.err.println(e.toString());
-			redirectToLogin(request, response);
+			Json json = Json.build(null).add("errorMessage", e.getMessage());
+			sendResult(response, json);
 		}
 	}
 	
