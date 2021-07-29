@@ -11,15 +11,15 @@ function httpRequest(method, url, form, callback, reset) {
 
     if (form == null) request.send();
     else if (form instanceof HTMLFormElement) {
-        if (form == null) request.send();
-        else request.send(new FormData(form));
-
-        if (form !== null && reset === true)
-            form.reset();
+        request.send(new FormData(form));
+        if (reset === true) form.reset();
     }
-    else
-    {
-        request.send(JSON.stringify(form));
+    else {
+        let formData = new FormData();
+        Object.keys(form).forEach(key => {
+            formData.append(key, form[key]);
+        });
+        request.send(formData);
     }
 }
 

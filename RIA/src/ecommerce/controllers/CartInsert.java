@@ -44,7 +44,7 @@ public class CartInsert extends AuthenticatedServlet {
 
 	@Override
 	public void Post(HttpServletRequest request, HttpServletResponse response, int user) throws ServletException, IOException, FatalException {
-		String result = null;
+		String errorString = null;
 		int articleId = -1, sellerId = -1, quantity = -1;
 		float price = -1;
 		try {
@@ -54,7 +54,7 @@ public class CartInsert extends AuthenticatedServlet {
 			quantity = Integer.parseInt(request.getParameter("quantity"));
 		} catch (NumberFormatException e) {
 			//throw new FatalException("Valori passati non corretti");
-			result = "Valori passati non corretti";
+			errorString = "Valori passati non corretti";
 		}
 		
 		if (quantity <= 0) throw new FatalException("Quantità non corretta");
@@ -63,10 +63,10 @@ public class CartInsert extends AuthenticatedServlet {
 		if (elements == null) throw new FatalException("Articolo e/o Seller non trovati nel DB");
 		Cart cart = SessionContext.getInstance(super.getUserId(request)).getCart();
 		cart.add(SessionContext.getInstance(user), elements.second, elements.first, quantity, price);
-		result = cart.toString();
 		
-		Json json = Json.build(ClientPages.Carrello)
-				.add("result", result);
+		Json json = Json.build(ClientPages.Carrello);
+		if (errorString != null) json.add("error", errorString);
+		else json.add("cart", cart);
 			
 		super.sendResult(response, json);
 	}
