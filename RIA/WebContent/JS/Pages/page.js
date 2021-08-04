@@ -1,16 +1,23 @@
-var Page = new function(name, htmlObject) {
-    this.name = name;
-    this.htmlObject = htmlObject;
+class Page
+{
+    constructor(name, htmlObject)
+    {
+        this.name = name;
+        this.htmlObject = htmlObject;
+    }
 
-    show = function() {
+    show()
+    {
         document.getElementById(this.htmlObject).style.display = 'block';
     }
 
-    hide = function() {
+    hide()
+    {
         document.getElementById(this.htmlObject).style.display = 'none';
     }
 
-    load = function(data) {
+    load(data)
+    {
         // specified on each page
     }
 }

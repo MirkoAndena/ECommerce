@@ -1,10 +1,7 @@
 package ecommerce.controllers;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.ServletException;
@@ -21,8 +18,6 @@ import ecommerce.frontendDto.ExposedArticle;
 import ecommerce.utils.ClientPages;
 import ecommerce.utils.FileReader;
 import ecommerce.utils.Json;
-import ecommerce.utils.JsonResponse;
-import ecommerce.utils.JsonResponse.Pages;
 
 @WebServlet("/Home")
 @MultipartConfig

@@ -1,20 +1,25 @@
-var TemplateManager = function() {
+class TemplateManager
+{
+    constructor()
+    {
+        this.templates = undefined;
+        this.containers = undefined;
+        this.domElementIds = undefined;
+        this.contents = undefined;
+        this.action = function(contents, indexes, node) { };
+    }
 
-    this.templates = undefined;
-    this.containers = undefined;
-    this.domElementIds = undefined;
-    this.contents = undefined;
-    this.action = function(contents, indexes, node) { };
-
-    this.buildPage = function() {
+    buildPage()
+    {
         let indexes = [];
         this.loadTemplate(document, this.contents, 0, indexes);
     }
-
-    this.loadTemplate = function(node, contents, depth, indexes) {
+    
+    loadTemplate(node, contents, depth, indexes)
+    {
         let templateDocument = this.createDocument(depth);
         let instances = [];
-
+    
         if (contents && contents.length > 0)
             contents.forEach((content, index, array) => {
                 var clone = templateDocument.content.cloneNode(true);
@@ -27,14 +32,16 @@ var TemplateManager = function() {
     
         instances.forEach(instance => node.getElementById(this.containers[depth]).appendChild(instance));
     }
-
-    this.createDocument = function(depth) {
+    
+    createDocument(depth)
+    {
         let templateDocument = document.implementation.createHTMLDocument("templateDocument");
         templateDocument.body.innerHTML = this.templates[depth];
         return templateDocument.getElementsByTagName("template")[0];
     }
-
-    this.fillTemplateWithValues = function(clone, content, depth, indexes, i) {
+    
+    fillTemplateWithValues(clone, content, depth, indexes, i)
+    {
         Object.keys(content).forEach(key => {
             let link = this.domElementIds[depth][key];
             if (Array.isArray(content[key]))
@@ -43,8 +50,9 @@ var TemplateManager = function() {
                 this.setValueToDomElement(clone.getElementById(link['id']), content[key], link['formatter']);
         });
     }
-
-    this.setValueToDomElement = function(element, value, formatter) {
+    
+    setValueToDomElement(element, value, formatter)
+    {
         if (!element) return;
         if (element instanceof HTMLImageElement) element.src = value;
         else if (formatter) element.innerHTML = formatter(value);
