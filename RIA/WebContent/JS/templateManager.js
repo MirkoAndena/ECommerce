@@ -6,22 +6,27 @@ class TemplateManager
         this.containers = undefined;
         this.domElementIds = undefined;
         this.contents = undefined;
-        this.action = function(contents, indexes, node) { };
+
+        // callback per la definizione di comportamenti su oggetti come bottoni
+        // vengono passati: collezione di oggetti, indici del template, documento del template
+        this.action = () => {};
     }
 
-    buildPage()
+    loadTemplate()
     {
         let indexes = [];
-        this.loadTemplate(document, this.contents, 0, indexes);
+        this._loadTemplate(document, this.contents, 0, indexes);
     }
     
-    loadTemplate(node, contents, depth, indexes)
+    _loadTemplate(node, contents, depth, indexes)
     {
+        // Creazione del documento dai template passati (depth è l'indice)
         let templateDocument = this.createDocument(depth);
         let instances = [];
     
+        // Inserimento dei dati nel template (ripetuto il template se collezione di oggetti)
         if (contents && contents.length > 0)
-            contents.forEach((content, index, array) => {
+            contents.forEach((content, index) => {
                 var clone = templateDocument.content.cloneNode(true);
                 let indexes_clone = [...indexes];
                 indexes_clone.push(index);
@@ -30,6 +35,7 @@ class TemplateManager
                 instances.push(clone);
             });
     
+        // iniezione dei template creati (e con dati) nel contenitore definito 
         instances.forEach(instance => node.getElementById(this.containers[depth]).appendChild(instance));
     }
     
@@ -44,10 +50,9 @@ class TemplateManager
     {
         Object.keys(content).forEach(key => {
             let link = this.domElementIds[depth][key];
-            if (Array.isArray(content[key]))
-                this.loadTemplate(clone, content[key], depth + 1, indexes, i);
-            else
-                this.setValueToDomElement(clone.getElementById(link['id']), content[key], link['formatter']);
+            let isSubTemplate = content[key] && Array.isArray(content[key]);
+            if (isSubTemplate) this.loadTemplate(clone, content[key], depth + 1, indexes, i);
+            else this.setValueToDomElement(clone.getElementById(link.id), content[key], link.formatter);
         });
     }
     

@@ -30,8 +30,3 @@ function httpGetRequest(url, form, callback, reset = true) {
 function httpPostRequest(url, form, callback, reset = true) {
     return httpRequest("POST", url, form, callback, reset);
 }
-
-function notEmpty(text) {
-    if (text) return text.trim().length > 0;
-    return false;
-}

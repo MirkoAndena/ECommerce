@@ -7,6 +7,12 @@ class Home extends Page
 
     load(data)
     {
+        /*
+        Link:
+            id: id del componente html in cui inserire il valore (div)
+            formatter: funzione che modifica il valore da visualizzare ad esempio aggiungendo il simbolo del euro
+        */
+
         let articleLinks = {
             'id': {'id': 'articleId'},
             'name': {'id': 'articleName'},
@@ -29,17 +35,19 @@ class Home extends Page
     
         let initButtonClick = function(content, indexes, node) {
             if (indexes.length != 2) return;
+            let articleIndex = indexes[0];
+            let sellerIndex = indexes[1];
     
-            let article = content[indexes[0]].id;
-            let seller = content[indexes[0]].sellers[indexes[1]].id;
-            let price = content[indexes[0]].sellers[indexes[1]].price;
+            let article = content[articleIndex].id;
+            let seller = content[articleIndex].sellers[sellerIndex].id;
+            let price = content[articleIndex].sellers[sellerIndex].price;
              
             // Rename fields
             node.getElementById('quantity').id = `quantity${seller}${article}`;
             node.getElementById(sellerLinks['articlesAddedToCart'].id).id = `articlesAddedToCart_${seller}_${article}`;
             node.getElementById(sellerLinks['totalValue'].id).id = `totalValue_${seller}_${article}`;
 
-            // Define click action
+            // Define add to cart button click action
             node.getElementById('addToCart').onclick = () => {
                 let quantity = parseInt(document.getElementById(`quantity${seller}${article}`).value);
                 cart.add(seller, article, quantity, price);
@@ -55,12 +63,13 @@ class Home extends Page
             };
         }
     
+        // Run template with values
         let templateManager = new TemplateManager();
-        templateManager.templates = [ data['articleTemplate'], data['sellerTemplate']];
+        templateManager.templates = [ data.articleTemplate, data.sellerTemplate];
         templateManager.domElementIds = [ articleLinks, sellerLinks];
         templateManager.containers = ['homeContainer', 'sellerContainer'];
-        templateManager.contents = data['content']
+        templateManager.contents = data.content;
         templateManager.action = initButtonClick;
-        templateManager.buildPage();
+        templateManager.loadTemplate();
     }
 }

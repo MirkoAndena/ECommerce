@@ -1,4 +1,4 @@
-class PageHandler
+class WebSite
 {
     constructor()
     {
@@ -14,26 +14,22 @@ class PageHandler
 
     requestForPage(page)
     {
-        httpRequest("GET", page, null, result => this.handleResponse(result));
+        httpGetRequest(page, null, result => this.handleResponse(result));
     }
     
     handleResponse(result)
     {
-        this.currentState = result['page'];
-        let page = this.enablePage(this.currentState);
+        this.currentState = result.page
+        let page = this.pages.filter(page => page.name == requestedPage);
+        this.enablePage(page);
         page.load(result);
     }
     
-    enablePage(pageToEnable)
+    enablePage(requestedPage)
     {
-        let found = null;
         this.pages.forEach(page => {
-            if (page.name == pageToEnable) {
-                found = page;
-                page.show();
-            }
+            if (page === requestedPage) page.show();
             else page.hide();
         });
-        return found;
     }
 }
