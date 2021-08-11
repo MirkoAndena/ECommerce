@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 public class FileReader {
 	
 	public static String read(HttpServlet servlet, String filename) {
-		String path = servlet.getServletContext().getRealPath("/WEB-INF/" + filename);      
+		String path = servlet.getServletContext().getRealPath("/WEB-INF/templates/" + filename);      
 		return read(path);
 	}
 	

@@ -43,7 +43,7 @@ public class Home extends AuthenticatedServlet {
 		List<ExposedArticle> defaultArticles = articleDao.getSalesArticles(sellerDao, user);
 		
 		if (exposedArticles.size() + defaultArticles.size() < 5)
-			throw new FatalException("Da specifica devono esserci almeno 5 elementi");
+			throw new FatalException(ClientPages.Home, "Da specifica devono esserci almeno 5 elementi");
 		
 		if (exposedArticles.size() < 5) {
 			// Remove articles duplicated from default list

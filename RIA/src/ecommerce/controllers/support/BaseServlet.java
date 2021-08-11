@@ -66,7 +66,7 @@ public abstract class BaseServlet extends HttpServlet {
 		try { get(request, response); }
 		catch (FatalException e) {
 			System.err.println(e.toString());
-			Json json = Json.build(null).add("errorMessage", e.msg);
+			Json json = Json.build(e.page).add("errorMessage", e.message);
 			sendResult(response, json);
 		}
 	}
@@ -79,7 +79,7 @@ public abstract class BaseServlet extends HttpServlet {
 		try { post(request, response); }
 		catch (FatalException e) {
 			System.err.println(e.toString());
-			Json json = Json.build(null).add("errorMessage", e.msg);
+			Json json = Json.build(e.page).add("errorMessage", e.message);
 			sendResult(response, json);
 		}
 	}

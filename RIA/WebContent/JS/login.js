@@ -17,7 +17,7 @@ function login(form) {
             if (response.logged == true) window.location.href = "Index";
             else onNotLogged("Credenziali non valide");
         };
-        httpPostRequest('Login', form, callback, onNotLogged);
+        HTTP.post('Login', form, callback, onNotLogged);
     }
     else onNotLogged("Username o password mancante");
 }

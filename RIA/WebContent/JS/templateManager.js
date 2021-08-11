@@ -51,7 +51,7 @@ class TemplateManager
         Object.keys(content).forEach(key => {
             let link = this.domElementIds[depth][key];
             let isSubTemplate = content[key] && Array.isArray(content[key]);
-            if (isSubTemplate) this.loadTemplate(clone, content[key], depth + 1, indexes, i);
+            if (isSubTemplate) this._loadTemplate(clone, content[key], depth + 1, indexes, i);
             else this.setValueToDomElement(clone.getElementById(link.id), content[key], link.formatter);
         });
     }
@@ -59,8 +59,10 @@ class TemplateManager
     setValueToDomElement(element, value, formatter)
     {
         if (!element) return;
+        if (formatter) value = formatter(value);
+
         if (element instanceof HTMLImageElement) element.src = value;
-        else if (formatter) element.innerHTML = formatter(value);
+        else if (element instanceof HTMLButtonElement) element.innerText = value;
         else element.innerHTML = value;
     }
 }

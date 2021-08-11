@@ -6,6 +6,8 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import ecommerce.Config;
+
 public class Json {
 	
 	public static Json build(ClientPages page) {
@@ -18,7 +20,7 @@ public class Json {
 	
 	private Json(ClientPages page) {
 		gsonBuilder = new GsonBuilder();
-		gson = gsonBuilder.create();
+		gson = Config.ReadableJson ? gsonBuilder.setPrettyPrinting().create() : gsonBuilder.create();
 		map = new HashMap<String, Object>();
 		this.add("page", page.servlet);
 	}

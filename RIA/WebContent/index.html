@@ -8,11 +8,12 @@
 	<link rel="stylesheet" href="CSS/home_style.css">
 
 	<!-- JAVASCRIPT -->
-	<script src="JS/utils.js" charset="utf-8" defer></script>
+	<script src="JS/http.js" charset="utf-8" defer></script>
 	<script src="JS/templateManager.js" charset="utf-8" defer></script>
 	<script src="JS/Pages/page.js" charset="utf-8" defer></script>
 	<script src="JS/Pages/home.js" charset="utf-8" defer></script>
-	<script src="JS/pageHandler.js" charset="utf-8" defer></script>
+	<script src="JS/Pages/results.js" charset="utf-8" defer></script>
+	<script src="JS/website.js" charset="utf-8" defer></script>
 	<script src="JS/cart.js" charset="utf-8" defer></script>
 	<script src="JS/main.js" charset="utf-8" defer></script>
 </head>
@@ -27,7 +28,7 @@
 	<div id="CartPage"></div>
 
 	<!-- RISULTATI -->       
-	<div id="ResultPage"></div>
+	<div id="ResultPage" th:insert="@{WEB-INF/results.html}"></div>
 
 	<!-- ORDINI -->       
 	<div id="OrderPage"></div>

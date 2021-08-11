@@ -1,9 +1,11 @@
 package ecommerce.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,8 +16,12 @@ import ecommerce.database.dao.ArticleDao;
 import ecommerce.database.dao.SellerDao;
 import ecommerce.frontendDto.ArticleFound;
 import ecommerce.frontendDto.ExposedArticle;
+import ecommerce.utils.ClientPages;
+import ecommerce.utils.FileReader;
+import ecommerce.utils.Json;
 
 @WebServlet("/Search")
+@MultipartConfig
 public class Search extends AuthenticatedServlet {
 	private static final long serialVersionUID = 1L;
 	private ArticleDao articleDao;
@@ -37,11 +43,10 @@ public class Search extends AuthenticatedServlet {
 		// Search articles
 		String searched = request.getParameter("search_string");
 		
-		if (searched == null || searched.trim().isEmpty()) {
-			throw new FatalException("Stringa di ricerca non valida");
+		List<ArticleFound> articlesFound = new ArrayList<ArticleFound>();
+		if (searched != null && !searched.isEmpty()) {
+			articlesFound = articleDao.searchInNameAndDescription(searched);
 		}
-		
-		List<ArticleFound> articlesFound = articleDao.searchInNameAndDescription(searched);
 		
 		// Selected article
 		ExposedArticle selectedArticle = null;
@@ -49,7 +54,7 @@ public class Search extends AuthenticatedServlet {
 		if (selected != null) {
 			int id = -1;
 			try { id = Integer.parseInt(selected); }
-			catch (NumberFormatException e) { throw new FatalException("Non è stato passato un valore corrispondente ad un id"); }
+			catch (NumberFormatException e) { throw new FatalException(ClientPages.Risultati, "Non è stato passato un valore corrispondente ad un id"); }
 			selectedArticle = articleDao.getArticleById(sellerDao, id, user); // Null gestito dalla pagina html
 		}
 		
@@ -60,11 +65,14 @@ public class Search extends AuthenticatedServlet {
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
 		
-		super.getThymeleaf().init(request, response)
-		.setVariable("articlesFound", articlesFound)
-		.setVariable("selected", selectedArticle)
-		.setVariable("searched", searched)
-		.process("/results.html");
+		Json json = Json.build(ClientPages.Risultati)
+				.add("articleItemListTemplate", FileReader.read(this, "article_itemlist_template.html"))
+				.add("articleTemplate", FileReader.read(this, "article_template.html"))
+				.add("sellerTemplate", FileReader.read(this, "seller_template.html"))
+				.add("articles", articlesFound)
+				.add("selected", selectedArticle);
+			
+		super.sendResult(response, json);
 	}
 
 	@Override
