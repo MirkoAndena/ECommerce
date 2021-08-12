@@ -11,3 +11,11 @@
 	max-width: 90%;
     height: auto;
 }
+
+.quantityField {
+	min-width: 70px;
+}
+
+.columnMinWidth {
+	min-width: 500px;
+}

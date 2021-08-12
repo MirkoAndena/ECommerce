@@ -25,18 +25,29 @@ class TemplateManager
         let instances = [];
     
         // Inserimento dei dati nel template (ripetuto il template se collezione di oggetti)
-        if (contents && contents.length > 0)
-            contents.forEach((content, index) => {
-                var clone = templateDocument.content.cloneNode(true);
-                let indexes_clone = [...indexes];
-                indexes_clone.push(index);
-                this.fillTemplateWithValues(clone, content, depth, indexes_clone);
-                this.action(this.contents, indexes_clone, clone);
-                instances.push(clone);
-            });
+        if (contents) {
+            if (contents instanceof Array) {
+                contents.forEach((content, index) => {
+                    let instance = this.createAndFillWithContent(content, index, templateDocument, indexes, depth);
+                    instances.push(instance);
+                });
+            } else {
+                let instance = this.createAndFillWithContent(contents, 0, templateDocument, indexes, depth);
+                instances.push(instance);
+            }
+        }
     
         // iniezione dei template creati (e con dati) nel contenitore definito 
         instances.forEach(instance => node.getElementById(this.containers[depth]).appendChild(instance));
+    }
+
+    createAndFillWithContent(content, index, templateDocument, indexes, depth) {
+        var clone = templateDocument.content.cloneNode(true);
+        let indexes_clone = [...indexes];
+        indexes_clone.push(index);
+        this.fillTemplateWithValues(clone, content, depth, indexes_clone);
+        this.action(this.contents, indexes_clone, clone);
+        return clone;
     }
     
     createDocument(depth)
