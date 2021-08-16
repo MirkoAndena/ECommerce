@@ -1,4 +1,4 @@
-class Home extends Page
+class HomePage extends Page
 {
     constructor(name, htmlObject)
     {
@@ -38,26 +38,26 @@ class Home extends Page
             let articleIndex = indexes[0];
             let sellerIndex = indexes[1];
     
-            let article = content[articleIndex].id;
-            let seller = content[articleIndex].sellers[sellerIndex].id;
+            let article = content[articleIndex];
+            let seller = content[articleIndex].sellers[sellerIndex];
             let price = content[articleIndex].sellers[sellerIndex].price;
              
             // Rename fields
-            node.getElementById('quantity').id = `quantity${seller}${article}`;
-            node.getElementById(sellerLinks['articlesAddedToCart'].id).id = `articlesAddedToCart_${seller}_${article}`;
-            node.getElementById(sellerLinks['totalValue'].id).id = `totalValue_${seller}_${article}`;
+            node.getElementById('quantity').id = `quantity${seller.id}${article.id}`;
+            node.getElementById(sellerLinks['articlesAddedToCart'].id).id = `articlesAddedToCart_${seller.id}_${article.id}`;
+            node.getElementById(sellerLinks['totalValue'].id).id = `totalValue_${seller.id}_${article.id}`;
 
             // Define add to cart button click action
             node.getElementById('addToCart').onclick = () => {
-                let quantity = parseInt(document.getElementById(`quantity${seller}${article}`).value);
+                let quantity = parseInt(document.getElementById(`quantity${seller.id}${article.id}`).value);
                 cart.add(seller, article, quantity, price);
 
                 // Upload articles added to cart of every card of this seller
-                let articlesAddedToCartQuery = `[id^='articlesAddedToCart_${seller}']`;
+                let articlesAddedToCartQuery = `[id^='articlesAddedToCart_${seller.id}']`;
                 let articlesAddedToCartElements = document.querySelectorAll(articlesAddedToCartQuery);
                 articlesAddedToCartElements.forEach(element => element.innerHTML = cart.getCountOf(seller));
 
-                let totalValueQuery = `[id^='totalValue_${seller}']`;
+                let totalValueQuery = `[id^='totalValue_${seller.id}']`;
                 let totalValueElements = document.querySelectorAll(totalValueQuery);
                 totalValueElements.forEach(element => element.innerHTML = sellerLinks['totalValue'].formatter(cart.getTotalPriceOf(seller)));
             };

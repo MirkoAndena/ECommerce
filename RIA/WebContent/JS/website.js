@@ -8,9 +8,10 @@ class WebSite
 
     createPages()
     {
-        let home = new Home('Home', 'HomePage');
-        let results = new Results('Search', 'ResultPage');
-        return [ home, results ]; 
+        let home = new HomePage('Home', 'HomePage');
+        let results = new ResultsPage('Search', 'ResultPage');
+        let cart = new CartPage('Cart', 'CartPage');
+        return [ home, results, cart ]; 
     }
 
     requestForPage(page, data)

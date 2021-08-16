@@ -1,4 +1,4 @@
-class Results extends Page
+class ResultsPage extends Page
 {
     constructor(name, htmlObject)
     {
@@ -47,30 +47,30 @@ class Results extends Page
                         'totalValue': {'id': 'sellerTotalValue', 'formatter': value => value.toFixed(2) + " €"}
                     };
                 
-                    let initButtonClick = function(content, indexes, node) {debugger;
+                    let initButtonClick = function(content, indexes, node) {
                         if (indexes.length != 2) return;
                         let sellerIndex = indexes[1];
                 
-                        let article = content.id;
-                        let seller = content.sellers[sellerIndex].id;
+                        let article = content;
+                        let seller = content.sellers[sellerIndex];
                         let price = content.sellers[sellerIndex].price;
                          
                         // Rename fields
-                        node.getElementById('quantity').id = `quantity${seller}${article}`;
-                        node.getElementById(sellerLinks['articlesAddedToCart'].id).id = `articlesAddedToCart_${seller}_${article}`;
-                        node.getElementById(sellerLinks['totalValue'].id).id = `totalValue_${seller}_${article}`;
+                        node.getElementById('quantity').id = `quantity${seller.id}${article.id}`;
+                        node.getElementById(sellerLinks['articlesAddedToCart'].id).id = `articlesAddedToCart_${seller.id}_${article.id}`;
+                        node.getElementById(sellerLinks['totalValue'].id).id = `totalValue_${seller.id}_${article.id}`;
             
                         // Define add to cart button click action
                         node.getElementById('addToCart').onclick = () => {
-                            let quantity = parseInt(document.getElementById(`quantity${seller}${article}`).value);
+                            let quantity = parseInt(document.getElementById(`quantity${seller.id}${article.id}`).value);
                             cart.add(seller, article, quantity, price);
             
                             // Upload articles added to cart of every card of this seller
-                            let articlesAddedToCartQuery = `[id^='articlesAddedToCart_${seller}']`;
+                            let articlesAddedToCartQuery = `[id^='articlesAddedToCart_${seller.id}']`;
                             let articlesAddedToCartElements = document.querySelectorAll(articlesAddedToCartQuery);
                             articlesAddedToCartElements.forEach(element => element.innerHTML = cart.getCountOf(seller));
             
-                            let totalValueQuery = `[id^='totalValue_${seller}']`;
+                            let totalValueQuery = `[id^='totalValue_${seller.id}']`;
                             let totalValueElements = document.querySelectorAll(totalValueQuery);
                             totalValueElements.forEach(element => element.innerHTML = sellerLinks['totalValue'].formatter(cart.getTotalPriceOf(seller)));
                         };

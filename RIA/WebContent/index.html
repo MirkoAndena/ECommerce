@@ -11,8 +11,9 @@
 	<script src="JS/http.js" charset="utf-8" defer></script>
 	<script src="JS/templateManager.js" charset="utf-8" defer></script>
 	<script src="JS/Pages/page.js" charset="utf-8" defer></script>
-	<script src="JS/Pages/home.js" charset="utf-8" defer></script>
-	<script src="JS/Pages/results.js" charset="utf-8" defer></script>
+	<script src="JS/Pages/homePage.js" charset="utf-8" defer></script>
+	<script src="JS/Pages/resultsPage.js" charset="utf-8" defer></script>
+	<script src="JS/Pages/cartPage.js" charset="utf-8" defer></script>
 	<script src="JS/website.js" charset="utf-8" defer></script>
 	<script src="JS/cart.js" charset="utf-8" defer></script>
 	<script src="JS/main.js" charset="utf-8" defer></script>
@@ -25,7 +26,7 @@
 	<div id="HomePage" th:insert="@{WEB-INF/home.html}"></div>
 
 	<!-- CARRELLO -->       
-	<div id="CartPage"></div>
+	<div id="CartPage" th:insert="@{WEB-INF/cart.html}"></div>
 
 	<!-- RISULTATI -->       
 	<div id="ResultPage" th:insert="@{WEB-INF/results.html}"></div>
