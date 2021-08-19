@@ -18,7 +18,7 @@ function main() {
 
     // Search    
     document.getElementById("btnSearch").addEventListener('click', () => { search(); });
-    document.getElementById('searchField').addEventListener('onkeydown', e => { if (e.key == 'Enter') { search(); e.preventDefault(); } });
+    document.getElementById('searchField').addEventListener('keydown', e => { if (e.key == 'Enter') { e.preventDefault(); search(); } });
 }
 
 function search() {

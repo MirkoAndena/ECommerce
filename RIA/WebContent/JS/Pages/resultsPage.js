@@ -10,6 +10,7 @@ class ResultsPage extends Page
         let searched = document.getElementById('searchField').value;
         document.getElementById('resultText').innerHTML = data.articles.length ? `Risultati per '${searched}'` : 'Nessun articolo trovato';
         if (!data.articles.length) document.getElementById('resultsContainer').innerHTML = '';
+        document.getElementById('selectedContainer').innerHTML = '';
     
         let foundLinks = {
             'id': {'id': 'articleId'},
