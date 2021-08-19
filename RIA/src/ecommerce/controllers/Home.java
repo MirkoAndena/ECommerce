@@ -62,7 +62,7 @@ public class Home extends AuthenticatedServlet {
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
 		
-		Json json = Json.build(ClientPages.Home)
+		Json json = Json.build()
 			.add("articleTemplate", FileReader.read(this, "article_template.html"))
 			.add("sellerTemplate", FileReader.read(this, "seller_template.html"))
 			.add("content", exposedArticles);

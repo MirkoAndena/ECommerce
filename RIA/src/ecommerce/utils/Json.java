@@ -10,19 +10,18 @@ import ecommerce.Config;
 
 public class Json {
 	
-	public static Json build(ClientPages page) {
-		return new Json(page);
+	public static Json build() {
+		return new Json();
 	}
 	
 	private GsonBuilder gsonBuilder;
 	private Gson gson;
 	private Map<String, Object> map;
 	
-	private Json(ClientPages page) {
+	private Json() {
 		gsonBuilder = new GsonBuilder();
 		gson = Config.ReadableJson ? gsonBuilder.setPrettyPrinting().create() : gsonBuilder.create();
 		map = new HashMap<String, Object>();
-		this.add("page", page.servlet);
 	}
 	
 	public Json add(String key, Object value) {

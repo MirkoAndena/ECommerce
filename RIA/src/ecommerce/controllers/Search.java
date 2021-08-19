@@ -65,7 +65,7 @@ public class Search extends AuthenticatedServlet {
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
 		
-		Json json = Json.build(ClientPages.Risultati)
+		Json json = Json.build()
 				.add("articleItemListTemplate", FileReader.read(this, "article_itemlist_template.html"))
 				.add("articleTemplate", FileReader.read(this, "article_template.html"))
 				.add("sellerTemplate", FileReader.read(this, "seller_template.html"))

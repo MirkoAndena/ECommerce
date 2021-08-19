@@ -43,7 +43,7 @@ public class Login extends BaseServlet {
 	public void get(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FatalException {
 		if (super.getUserId(request) != null) {
 			// Utente già autenticato
-			response.sendRedirect(getServletContext().getContextPath() + "/Home");
+			response.sendRedirect(getServletContext().getContextPath() + "/Index");
     	}
 		else
 			request.getRequestDispatcher("/login.html").forward(request, response);
@@ -61,7 +61,7 @@ public class Login extends BaseServlet {
 			session.setAttribute(SessionKeys.User.toString(), userId);
 		} 
 		
-		Json json = Json.build(ClientPages.Login).add("logged", userId != null);
+		Json json = Json.build().add("logged", userId != null);
 		super.sendResult(response, json);
 	}
 }

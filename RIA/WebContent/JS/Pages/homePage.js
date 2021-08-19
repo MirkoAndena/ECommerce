@@ -60,6 +60,8 @@ class HomePage extends Page
                 let totalValueQuery = `[id^='totalValue_${seller.id}']`;
                 let totalValueElements = document.querySelectorAll(totalValueQuery);
                 totalValueElements.forEach(element => element.innerHTML = sellerLinks['totalValue'].formatter(cart.getTotalPriceOf(seller)));
+
+                website.requestForPage('Cart');
             };
         }
     

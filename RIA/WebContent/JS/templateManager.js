@@ -59,12 +59,16 @@ class TemplateManager
     
     fillTemplateWithValues(clone, content, depth, indexes, i)
     {
-        Object.keys(content).forEach(key => {
-            let link = this.domElementIds[depth][key];
-            let isSubTemplate = content[key] && Array.isArray(content[key]);
-            if (isSubTemplate) this._loadTemplate(clone, content[key], depth + 1, indexes, i);
-            else this.setValueToDomElement(clone.getElementById(link.id), content[key], link.formatter);
-        });
+        let links = this.domElementIds[depth];
+        // se c'è un link con chiave null, passo tutto l'oggetto nel formatter
+        if (links[null]) 
+            this.setValueToDomElement(clone.getElementById(links[null].id), content, links[null].formatter);
+        else
+            Object.keys(content).forEach(key => {
+                let isSubTemplate = content[key] && Array.isArray(content[key]);
+                if (isSubTemplate) this._loadTemplate(clone, content[key], depth + 1, indexes, i);
+                else this.setValueToDomElement(clone.getElementById(links[key].id), content[key], links[key].formatter);
+            });
     }
     
     setValueToDomElement(element, value, formatter)

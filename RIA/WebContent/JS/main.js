@@ -5,7 +5,7 @@ var cart = undefined;
 
 function main() {
 
-    cart = getCartOrCreate();
+    cart = Cart.getSessionCartOrCreate();
 
     // Load Home
     if (website.currentState == undefined)
@@ -23,9 +23,9 @@ function main() {
 
 function search() {
     let searched = document.getElementById('searchField').value;
-    website.requestForPage('Search', {search_string: searched});
+    website.requestForPage('Search', {'search_string': searched});
 }
 
-function getCartOrCreate() {
-    return window.sessionStorage.getItem('cart') ?? new Cart();
+function round(value) {
+    return Math.round((value + Number.EPSILON) * 100) / 100;
 }

@@ -17,13 +17,24 @@ class Purchase
     {
         return seller == this.seller && article == this.article && price == this.price;
     }
+
+    toString() {
+        return `${this.article.name} ${round(this.price)} € per ${this.quantity} = ${round(this.price * this.quantity)} €`;
+    }
 }
 
 class Cart
 {
-    constructor()
+    constructor(purchases)
     {
         this.purchases = [];
+        for (let i in purchases)
+            this.purchases.push(Object.assign(new Purchase(), purchases[i]));
+    }
+
+    static getSessionCartOrCreate() {
+        let saved = window.sessionStorage.getItem('cart');
+        return new Cart(saved && JSON.parse(saved));
     }
 
     add(seller, article, quantity, price)
@@ -43,7 +54,7 @@ class Cart
         }
 
         // Save in session storage
-        window.sessionStorage.setItem('cart', this);
+        window.sessionStorage.setItem('cart', JSON.stringify(this.purchases));
     }
 
     // Return list of articles
@@ -64,32 +75,31 @@ class Cart
         if (this.purchases.length == 0) return null;
 
         let sellerCarts = [];
-        for (let purchase in this.purchases)
-            this.addOrCreateSellerCart(sellerCarts, purchase);
-
-        for (let sellerCart in sellerCarts)
-            this.updateShipmentPrice(sellerCart);
+        this.purchases.forEach(purchase => this.addOrCreateSellerCart(sellerCarts, purchase));
+        sellerCarts.forEach(sellerCart => this.updateShipmentPrice(sellerCart));
 
         return sellerCarts;
     }
 
-    addOrCreateSellerCart(sellerCarts, purchase) {
+    addOrCreateSellerCart(sellerCarts, purchaseToAdd) {
         
-        // Search for sellerCart of this seller
-        let sellerCart = null;
-        for (let cart in sellerCarts)
-            if (cart.seller === purchase.seller) {
-                sellerCart = cart;
-                break;
-            }
+        // Search for sellerCart of this seller        
+        let sellerCart = sellerCarts.find(cart => cart.seller == purchaseToAdd.seller.name);
 
-        if (!sellerCart)
-            sellerCarts.push({'name': purchase.seller.name, 'price': [0, 0], 'purchases': []});
-        sellerCart.purchases.push({'purchase': purchase});
-        sellerCart.price[0] += purchase.quantity * purchase.price;
+        if (!sellerCart) {
+            sellerCart = {'seller': purchaseToAdd.seller.name, 'price': {total: 0, shipment: 0}, 'purchases': []};
+            sellerCarts.push(sellerCart);
+        }
+
+        // Check if there is another purchase of the same article
+        let purchase = sellerCart.purchases.find(element => element.article.id === purchaseToAdd.article.id && element.price === purchaseToAdd.price);
+        if (purchase) purchase.quantity += purchaseToAdd.quantity;
+        else sellerCart.purchases.push(purchaseToAdd);
+        sellerCart.price.total += purchaseToAdd.quantity * purchaseToAdd.price;
     }
 
     updateShipmentPrice(sellerCart) {
         // TODO
+        sellerCart.price.shipment = 9.99;
     }
 }

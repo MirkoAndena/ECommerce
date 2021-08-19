@@ -40,7 +40,7 @@ public class Cart extends AuthenticatedServlet {
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
 		
-		Json json = Json.build(ClientPages.Risultati)
+		Json json = Json.build()
 				.add("cartTemplate", FileReader.read(this, "sellercart_template.html"))
 				.add("purchaseTemplate", FileReader.read(this, "cart_purchase_template.html"));
 			

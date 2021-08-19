@@ -7,16 +7,24 @@ class CartPage extends Page
 
     load(data)
     {
+        let sellersCarts = cart.getSellerCarts();
+        if (sellersCarts.length > 0) document.getElementById('cartMessage').style.display = 'none';
+        document.getElementById('sellerCartContainer').innerHTML = '';
+
+        let round = function(value) {
+            return Math.round((value + Number.EPSILON) * 100) / 100;
+        }
+        
         // value => 0: totale carrello, 1: spese di spedizione
         let sellerCartLinks = {
-            'name': {'id': 'sellerName'},
-            'price': {'id': 'cartPrice', 'formatter': value => `Totale: ${value[0] + value[1]} € (${value[0]} € + spedizione ${value[1]} €)` },
+            'seller': {'id': 'sellerName'},
+            'price': {'id': 'cartPrice', 'formatter': value => `Totale: ${round(value.total) + round(value.shipment)} € (${round(value.total)} € + spedizione ${round(value.shipment)} €)` },
             'purchases': {'id': 'purchaseContainer'}
         };
     
         // value => 0: nome articolo, 1: prezzo articolo, 2: quantità
         let purchaseLinks = {
-            'purchase': {'id': 'purchase', 'formatter': value => `${value[0]} ${value[1]} € per ${value[2]} = ${value[1] * value[2]} €`}
+            null: {'id': 'purchase', 'formatter': value => value.toString()}
         };
     
         let initButtonClick = function(content, indexes, node) {
@@ -28,7 +36,7 @@ class CartPage extends Page
         templateManager.templates = [ data.cartTemplate, data.purchaseTemplate];
         templateManager.domElementIds = [ sellerCartLinks, purchaseLinks];
         templateManager.containers = ['sellerCartContainer', 'purchaseContainer'];
-        templateManager.contents = cart.getSellerCarts();
+        templateManager.contents = sellersCarts;
         templateManager.action = initButtonClick;
         templateManager.loadTemplate();
     }

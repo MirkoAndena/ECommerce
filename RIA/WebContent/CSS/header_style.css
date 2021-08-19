@@ -15,3 +15,7 @@ a:hover {
     border-radius: 0;
     padding-top: 0px !important;
 }
+
+.fullheight {
+    height: 50px;
+}

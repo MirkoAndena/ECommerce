@@ -16,13 +16,13 @@ class WebSite
 
     requestForPage(page, data)
     {
-        HTTP.get(page, data, result => this.handleResponse(result));
+        HTTP.get(page, data, result => this.handleResponse(page, result));
     }
     
-    handleResponse(result)
+    handleResponse(requestedPage, result)
     {
-        this.currentState = result.page
-        let matches = this.pages.filter(page => page.name == result.page);
+        this.currentState = requestedPage
+        let matches = this.pages.filter(page => page.name == requestedPage);
         if (matches.length > 0) {
             let page = matches[0];
             this.enablePage(page);
