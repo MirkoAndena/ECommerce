@@ -7,6 +7,8 @@ class HomePage extends Page
 
     load(data)
     {
+        document.getElementById('homeContainer').innerHTML = '';
+
         /*
         Link:
             id: id del componente html in cui inserire il valore (div)

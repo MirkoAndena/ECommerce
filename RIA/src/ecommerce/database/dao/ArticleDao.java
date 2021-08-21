@@ -107,27 +107,37 @@ public class ArticleDao {
 	public List<ExposedArticle> getLastSeen(SellerDao sellerDao, int user) {
 		List<ExposedArticle> articles = new ArrayList<ExposedArticle>();
 		String query = """
-		    SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
+		    SELECT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
 			FROM `article` a
 			INNER JOIN `seller_articles` sa ON a.id = sa.article
 			INNER JOIN `seller` s ON s.id = sa.seller
 			INNER JOIN `category` c ON a.category = c.id
 			INNER JOIN `articles_seen` ase ON ase.article = a.id
 			WHERE ase.`user` = ?
-			ORDER BY `datetime` DESC, sa.`price` LIMIT 5
+			ORDER BY `datetime` DESC, sa.`price`
 			""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, user);
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return articles;
-				while (set.next()) {
-					buildArticle(sellerDao.build(set, "seller_id", "seller"), articles, user, set);
+				int differentArticles = 0;
+				while (set.next() && differentArticles < 5) {
+					if (!articlePresent(set.getInt("id"), articles)) {
+						buildArticle(sellerDao.build(set, "seller_id", "seller"), articles, user, set);
+						differentArticles++;
+					}
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return articles;
+	}
+	
+	private boolean articlePresent(int article, List<ExposedArticle> articles) {
+		for (ExposedArticle exposedArticle : articles)
+			if (exposedArticle.id == article) return true;
+		return false;
 	}
 	
 	// Articoli nella categoria default
