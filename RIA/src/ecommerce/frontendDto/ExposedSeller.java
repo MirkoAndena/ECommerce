@@ -1,6 +1,5 @@
 package ecommerce.frontendDto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ecommerce.database.dto.Cart;
@@ -13,7 +12,8 @@ public class ExposedSeller {
 	public String name;
 	public int rating;
 	public float freeShippingThreshold;
-	public String shipmentRanges;
+	public List<Range> shipmentRanges;
+	public String shipmentRangesStringValue;
 	public float price;
 	public int articlesAddedToCart;
 	public float totalValue;
@@ -23,7 +23,8 @@ public class ExposedSeller {
 		this.name = seller.name;
 		this.rating = seller.rating;
 		this.freeShippingThreshold = seller.freeShippingThreshold;
-		this.shipmentRanges = seller.getVerboseShippingRanges();
+		this.shipmentRangesStringValue = seller.getVerboseShippingRanges();
+		this.shipmentRanges = seller.shipmentRanges;
 		this.price = price;
 	}
 	

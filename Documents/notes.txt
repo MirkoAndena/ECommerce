@@ -6,3 +6,5 @@ l'indirizzo di spedizione può essere cambiato ma deve rimanere quello utilizzat
 
 redirect: dico al client di richiedere un altra pagina
 forward: la servlet inoltra la richiesta del client ad un altro componente
+
+Non posso fare subquery sul DB quindi devo trovare una soluzione da codice per prendere gli ultimi articoli visualizzati

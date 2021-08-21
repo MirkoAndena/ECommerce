@@ -107,14 +107,13 @@ public class ArticleDao {
 	public List<ExposedArticle> getLastSeen(SellerDao sellerDao, int user) {
 		List<ExposedArticle> articles = new ArrayList<ExposedArticle>();
 		String query = """
-		    SELECT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
+		    SELECT a.`id`, a.`name`, a.`description`, a.`image`, c.`name` as 'category'
 			FROM `article` a
 			INNER JOIN `seller_articles` sa ON a.id = sa.article
-			INNER JOIN `seller` s ON s.id = sa.seller
 			INNER JOIN `category` c ON a.category = c.id
 			INNER JOIN `articles_seen` ase ON ase.article = a.id
 			WHERE ase.`user` = ?
-			ORDER BY `datetime` DESC, sa.`price`
+			ORDER BY `datetime` DESC
 			""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, user);
@@ -123,7 +122,9 @@ public class ArticleDao {
 				int differentArticles = 0;
 				while (set.next() && differentArticles < 5) {
 					if (!articlePresent(set.getInt("id"), articles)) {
-						buildArticle(sellerDao.build(set, "seller_id", "seller"), articles, user, set);
+						Article article = build(set);
+						List<ExposedSeller> sellers = sellerDao.getSellersOfArticle(user, article.id);
+						for (ExposedSeller seller : sellers) ExposedArticle.addSellerToArticleList(articles, article, seller);
 						differentArticles++;
 					}
 				}

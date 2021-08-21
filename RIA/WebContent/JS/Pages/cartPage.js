@@ -37,6 +37,7 @@ class CartPage extends Page
         templateManager.domElementIds = [ sellerCartLinks, purchaseLinks];
         templateManager.containers = ['sellerCartContainer', 'purchaseContainer'];
         templateManager.contents = sellersCarts;
+        templateManager.contentElementToExpand = ['purchases'];
         templateManager.action = initButtonClick;
         templateManager.loadTemplate();
     }

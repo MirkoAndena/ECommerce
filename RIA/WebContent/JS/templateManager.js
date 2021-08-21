@@ -6,6 +6,7 @@ class TemplateManager
         this.containers = undefined;
         this.domElementIds = undefined;
         this.contents = undefined;
+        this.contentElementToExpand = undefined;
 
         // callback per la definizione di comportamenti su oggetti come bottoni
         // vengono passati: collezione di oggetti, indici del template, documento del template
@@ -65,10 +66,17 @@ class TemplateManager
             this.setValueToDomElement(clone.getElementById(links[null].id), content, links[null].formatter);
         else
             Object.keys(content).forEach(key => {
-                let isSubTemplate = content[key] && Array.isArray(content[key]);
-                if (isSubTemplate) this._loadTemplate(clone, content[key], depth + 1, indexes, i);
-                else this.setValueToDomElement(clone.getElementById(links[key].id), content[key], links[key].formatter);
+                if (links[key]) {
+                    if (this.isSubTemplate(key)) this._loadTemplate(clone, content[key], depth + 1, indexes, i);
+                    else this.setValueToDomElement(clone.getElementById(links[key].id), content[key], links[key].formatter);
+                }
             });
+    }
+
+    isSubTemplate(contentKey) {
+        for (let i in this.contentElementToExpand)
+            if (contentKey == this.contentElementToExpand[i]) return true;
+        return false;
     }
     
     setValueToDomElement(element, value, formatter)

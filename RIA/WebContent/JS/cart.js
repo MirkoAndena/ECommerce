@@ -99,7 +99,6 @@ class Cart
     }
 
     updateShipmentPrice(sellerCart) {
-        // TODO
-        sellerCart.price.shipment = 9.99;
+        debugger;
     }
 }

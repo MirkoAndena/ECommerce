@@ -42,7 +42,7 @@ class ResultsPage extends Page
                         'name': {'id': 'sellerName'},
                         'rating': {'id': 'sellerRating', 'formatter': value => value + " su 5"},
                         'freeShippingThreshold': {'id': 'sellerFreeShippingThreshold', 'formatter': value => value == 0 ? 'gratuita' : 'gratuita con spesa superiore a ' + value.toFixed(2) + ' €'},
-                        'shipmentRanges': {'id': 'sellerShipmentRanges'},
+                        'shipmentRangesStringValue': {'id': 'sellerShipmentRanges'},
                         'price': {'id': 'sellerPrice', 'formatter': value => value.toFixed(2) + " €"},
                         'articlesAddedToCart': {'id': 'sellerArticlesAddedToCart'},
                         'totalValue': {'id': 'sellerTotalValue', 'formatter': value => value.toFixed(2) + " €"}
@@ -84,6 +84,7 @@ class ResultsPage extends Page
                     selectedTemplateManager.domElementIds = [ articleLinks, sellerLinks];
                     selectedTemplateManager.containers = ['selectedContainer', 'sellerContainer'];
                     selectedTemplateManager.contents = data.selected;
+                    selectedTemplateManager.contentElementToExpand = ['sellers'];
                     selectedTemplateManager.action = initButtonClick;
                     selectedTemplateManager.loadTemplate();
 
