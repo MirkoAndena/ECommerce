@@ -19,7 +19,7 @@ class Purchase
     }
 
     toString() {
-        return `${this.article.name} ${round(this.price)} € per ${this.quantity} = ${round(this.price * this.quantity)} €`;
+        return `${this.article.name} ${this.price.toFixed(2)} € per ${this.quantity} = ${(this.price * this.quantity).toFixed(2)} €`;
     }
 }
 
@@ -99,6 +99,25 @@ class Cart
     }
 
     updateShipmentPrice(sellerCart) {
-        debugger;
+        if (this.isShipmentFree(sellerCart)) return;
+        sellerCart.price.shipment = this.shipmentPriceFromRanges(sellerCart);
+    }
+
+    isShipmentFree(sellerCart) {
+        let total = sellerCart.price.total;
+        let freeShippingThreshold = sellerCart.purchases[0].seller.freeShippingThreshold;
+        return freeShippingThreshold == 0 || total >= freeShippingThreshold;
+    }
+
+    shipmentPriceFromRanges(sellerCart) {
+        let articleCount = sellerCart.purchases.reduce((sum, value) => sum += value.quantity, 0);
+        let ranges = sellerCart.purchases[0].seller.shipmentRanges;
+
+        let endPrice = undefined;
+        for (let i in ranges) {
+            if (ranges[i].end == null) endPrice = ranges[i].price;
+            else if (articleCount > ranges[i].start && articleCount <= ranges[i].end) return ranges[i].price;
+        }
+        return endPrice;
     }
 }

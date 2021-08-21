@@ -10,15 +10,11 @@ class CartPage extends Page
         let sellersCarts = cart.getSellerCarts();
         if (sellersCarts.length > 0) document.getElementById('cartMessage').style.display = 'none';
         document.getElementById('sellerCartContainer').innerHTML = '';
-
-        let round = function(value) {
-            return Math.round((value + Number.EPSILON) * 100) / 100;
-        }
         
         // value => 0: totale carrello, 1: spese di spedizione
         let sellerCartLinks = {
             'seller': {'id': 'sellerName'},
-            'price': {'id': 'cartPrice', 'formatter': value => `Totale: ${round(value.total) + round(value.shipment)} € (${round(value.total)} € + spedizione ${round(value.shipment)} €)` },
+            'price': {'id': 'cartPrice', 'formatter': value => `Totale: ${value.total.toFixed(2) + value.shipment.toFixed(2)} € (${value.total.toFixed(2)} € + spedizione ${value.shipment.toFixed(2)} €)` },
             'purchases': {'id': 'purchaseContainer'}
         };
     
