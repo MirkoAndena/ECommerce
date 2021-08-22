@@ -14,7 +14,7 @@ class CartPage extends Page
         // value => 0: totale carrello, 1: spese di spedizione
         let sellerCartLinks = {
             'seller': {'id': 'sellerName'},
-            'price': {'id': 'cartPrice', 'formatter': value => `Totale: ${value.total.toFixed(2) + value.shipment.toFixed(2)} € (${value.total.toFixed(2)} € + spedizione ${value.shipment.toFixed(2)} €)` },
+            'price': {'id': 'cartPrice', 'formatter': value => `Totale: ${super.priceFormatter(value.total + value.shipment)} (${super.priceFormatter(value.total)} + spedizione ${super.priceFormatter(value.shipment)}` },
             'purchases': {'id': 'purchaseContainer'}
         };
     
@@ -24,7 +24,7 @@ class CartPage extends Page
         };
     
         let initButtonClick = function(content, indexes, node) {
-            
+            // TODO invio ordine
         }
     
         // Run template with values

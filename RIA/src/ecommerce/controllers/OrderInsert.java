@@ -2,6 +2,7 @@ package ecommerce.controllers;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,10 +15,10 @@ import ecommerce.database.dao.OrderDao;
 import ecommerce.database.dto.Order;
 import ecommerce.database.dto.User;
 import ecommerce.frontendDto.SellerCart;
-import ecommerce.utils.ClientPages;
 import ecommerce.utils.ListUtils;
 
 @WebServlet("/OrderInsert")
+@MultipartConfig
 public class OrderInsert extends AuthenticatedServlet {
 	private static final long serialVersionUID = 1L;
 	private UserDao userDao;
@@ -48,7 +49,7 @@ public class OrderInsert extends AuthenticatedServlet {
 		SellerCart sellerCart = ListUtils.find(SessionContext.getInstance(user).getCart().sellerCarts, cart -> cart.id == cartId);
 		User userDto = userDao.getUserById(user);
 		
-		if (userDto == null) throw new FatalException(ClientPages.Ordini, "Nessun utente trovato con id " + user);
+		if (userDto == null) throw new FatalException("Nessun utente trovato con id " + user);
 		
 		// Creazione ordine
 		Order order = new Order(userDto, sellerCart);
@@ -56,7 +57,7 @@ public class OrderInsert extends AuthenticatedServlet {
 		
 		// Eliminazione dal carrello
 		if (stored) SessionContext.getInstance(user).getCart().sellerCarts.remove(sellerCart);
-		else throw new FatalException(ClientPages.Ordini, "Impossibile salvare l'ordine");
+		else throw new FatalException("Impossibile salvare l'ordine");
 		
 		// REDIRECT TO CART PAGE
 		response.sendRedirect(getServletContext().getContextPath() + "/Cart");
@@ -67,7 +68,7 @@ public class OrderInsert extends AuthenticatedServlet {
 		try {
 			cartId = Integer.parseInt(request.getParameter("cartId"));
 		} catch (NumberFormatException e) {
-			throw new FatalException(ClientPages.Ordini, "Non è stato passato un valore corrispondente ad un id");
+			throw new FatalException("Non è stato passato un valore corrispondente ad un id");
 		}
 		return cartId;
 	}

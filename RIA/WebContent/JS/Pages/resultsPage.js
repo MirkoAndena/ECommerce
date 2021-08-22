@@ -15,10 +15,11 @@ class ResultsPage extends Page
         let foundLinks = {
             'id': {'id': 'articleId'},
             'name': {'id': 'buttonSelect'},
-            'minPrice': {'id': 'articlePrice'},
+            'minPrice': {'id': 'articlePrice', 'formatter': super.priceFormatter },
             'sellerCount': {'id': 'sellerCount'}
         };
 
+        let priceFormatter = super.priceFormatter;
         let selectArticle = function(content, indexes, node) {
             let entry = content[indexes[0]];
             node.getElementById('buttonSelect').onclick = () => {
@@ -41,11 +42,11 @@ class ResultsPage extends Page
                         'id': {'id': 'sellerId'},
                         'name': {'id': 'sellerName'},
                         'rating': {'id': 'sellerRating', 'formatter': value => value + " su 5"},
-                        'freeShippingThreshold': {'id': 'sellerFreeShippingThreshold', 'formatter': value => value == 0 ? 'gratuita' : 'gratuita con spesa superiore a ' + value.toFixed(2) + ' €'},
+                        'freeShippingThreshold': {'id': 'sellerFreeShippingThreshold', 'formatter': value => value == 0 ? 'gratuita' : `gratuita con spesa superiore a ${priceFormatter(value)}`},
                         'shipmentRangesStringValue': {'id': 'sellerShipmentRanges'},
-                        'price': {'id': 'sellerPrice', 'formatter': value => value.toFixed(2) + " €"},
+                        'price': {'id': 'sellerPrice', 'formatter': priceFormatter},
                         'articlesAddedToCart': {'id': 'sellerArticlesAddedToCart'},
-                        'totalValue': {'id': 'sellerTotalValue', 'formatter': value => value.toFixed(2) + " €"}
+                        'totalValue': {'id': 'sellerTotalValue', 'formatter': priceFormatter}
                     };
                 
                     let initButtonClick = function(content, indexes, node) {

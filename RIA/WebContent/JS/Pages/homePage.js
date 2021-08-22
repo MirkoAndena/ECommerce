@@ -30,9 +30,9 @@ class HomePage extends Page
             'rating': {'id': 'sellerRating', 'formatter': value => value + " su 5"},
             'freeShippingThreshold': {'id': 'sellerFreeShippingThreshold', 'formatter': value => value == 0 ? 'gratuita' : 'gratuita con spesa superiore a ' + value.toFixed(2) + ' €'},
             'shipmentRangesStringValue': {'id': 'sellerShipmentRanges'},
-            'price': {'id': 'sellerPrice', 'formatter': value => value.toFixed(2) + " €"},
+            'price': {'id': 'sellerPrice', 'formatter': super.priceFormatter},
             'articlesAddedToCart': {'id': 'sellerArticlesAddedToCart'},
-            'totalValue': {'id': 'sellerTotalValue', 'formatter': value => value.toFixed(2) + " €"}
+            'totalValue': {'id': 'sellerTotalValue', 'formatter': super.priceFormatter}
         };
     
         let initButtonClick = function(content, indexes, node) {

@@ -20,4 +20,8 @@ class Page
     {
         // specified on each page
     }
+
+    priceFormatter(price) {
+    	return `${price.toFixed(2)} €`;
+	}
 }

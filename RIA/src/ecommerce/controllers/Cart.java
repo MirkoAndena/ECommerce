@@ -1,9 +1,6 @@
 package ecommerce.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -12,11 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import ecommerce.controllers.support.AuthenticatedServlet;
 import ecommerce.controllers.support.FatalException;
-import ecommerce.database.dao.ArticleDao;
-import ecommerce.database.dao.SellerDao;
-import ecommerce.frontendDto.ArticleFound;
-import ecommerce.frontendDto.ExposedArticle;
-import ecommerce.utils.ClientPages;
 import ecommerce.utils.FileReader;
 import ecommerce.utils.Json;
 

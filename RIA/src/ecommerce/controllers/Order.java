@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +17,11 @@ import ecommerce.database.dao.SellerDao;
 import ecommerce.database.dao.UserDao;
 import ecommerce.database.dto.User;
 import ecommerce.frontendDto.ExposedOrder;
+import ecommerce.utils.FileReader;
+import ecommerce.utils.Json;
 
 @WebServlet("/Order")
+@MultipartConfig
 public class Order extends AuthenticatedServlet {
 	private static final long serialVersionUID = 1L;
 	private OrderDao orderDao;
@@ -48,9 +52,12 @@ public class Order extends AuthenticatedServlet {
 		// Visualizzazione del carattere euro (€)
 		response.setCharacterEncoding("UTF-8");
 		
-		super.getThymeleaf().init(request, response)
-		.setVariable("orders", orderList)
-		.process("/orders.html");
+		Json json = Json.build()
+				.add("orders", orderList)
+				.add("ordersTemplate", FileReader.read(this, "order_template.html"))
+				.add("order_purchase_template", FileReader.read(this, "order_purchase_template.html"));
+			
+		super.sendResult(response, json);
 	}
 
 	@Override

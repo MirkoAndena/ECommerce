@@ -15,13 +15,9 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import com.google.gson.Gson;
-
 import ecommerce.SessionKeys;
 import ecommerce.database.ConnectionBuilder;
-import ecommerce.utils.ClientPages;
 import ecommerce.utils.Json;
-import ecommerce.utils.JsonResponse;
 
 public abstract class BaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -120,12 +116,6 @@ public abstract class BaseServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json.toString());
 		System.out.println("<results:" + System.lineSeparator() + json.toString() + System.lineSeparator() + ">");
-    }
-    
-    protected void sendResult(HttpServletResponse response, JsonResponse json) throws IOException {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(json.toString());
     }
     
     private void displayParameters(HttpServletRequest request) {

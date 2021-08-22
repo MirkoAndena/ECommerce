@@ -14,7 +14,7 @@ function main() {
     // Links
     document.getElementById('homelink').addEventListener('click', () => { website.requestForPage('Home'); });
     document.getElementById('cartlink').addEventListener('click', () => { website.requestForPage('Cart'); });
-    document.getElementById('orderlink').addEventListener('click', () => { website.requestForPage('Orders'); });
+    document.getElementById('orderlink').addEventListener('click', () => { website.requestForPage('Order'); });
 
     // Search    
     document.getElementById("btnSearch").addEventListener('click', () => { search(); });

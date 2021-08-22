@@ -16,7 +16,6 @@ import ecommerce.database.dao.ArticleDao;
 import ecommerce.database.dao.SellerDao;
 import ecommerce.frontendDto.ArticleFound;
 import ecommerce.frontendDto.ExposedArticle;
-import ecommerce.utils.ClientPages;
 import ecommerce.utils.FileReader;
 import ecommerce.utils.Json;
 
@@ -54,7 +53,7 @@ public class Search extends AuthenticatedServlet {
 		if (selected != null) {
 			int id = -1;
 			try { id = Integer.parseInt(selected); }
-			catch (NumberFormatException e) { throw new FatalException(ClientPages.Risultati, "Non è stato passato un valore corrispondente ad un id"); }
+			catch (NumberFormatException e) { throw new FatalException("Non è stato passato un valore corrispondente ad un id"); }
 			selectedArticle = articleDao.getArticleById(sellerDao, id, user); // Null gestito dalla pagina html
 		}
 		

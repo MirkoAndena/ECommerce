@@ -14,7 +14,6 @@ import ecommerce.controllers.support.BaseServlet;
 import ecommerce.controllers.support.FatalException;
 import ecommerce.database.dao.UserDao;
 import ecommerce.hashing.SHA;
-import ecommerce.utils.ClientPages;
 import ecommerce.utils.Json;
 
 @WebServlet("/Login")
