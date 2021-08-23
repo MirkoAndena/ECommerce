@@ -4,6 +4,7 @@ class HTTP {
         request.onreadystatechange = function() {
             if (request.readyState == XMLHttpRequest.DONE) {
                 let object = JSON.parse(request.response);
+                if (object.errorMessage) console.error(`Server error: ${object.errorMessage}`);
                 callback(object);
             }
         };
@@ -35,7 +36,7 @@ class HTTP {
         else {
             let formData = new FormData();
             Object.keys(form).forEach(key => {
-                formData.append(key, form[key]);
+                formData.append(key, JSON.stringify(form[key]));
             });
             request.send(formData);
         }

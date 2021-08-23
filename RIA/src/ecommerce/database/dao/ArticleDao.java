@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 import ecommerce.Config;
-import ecommerce.SessionContext;
 import ecommerce.database.dto.Article;
 import ecommerce.database.dto.Seller;
 import ecommerce.frontendDto.ArticleFound;
@@ -37,7 +36,6 @@ public class ArticleDao {
 	private void buildArticle(Seller seller, List<ExposedArticle> articles, int user, ResultSet set) throws SQLException {
 		Article article = build(set);		
 		ExposedSeller exposedSeller = new ExposedSeller(seller, set.getFloat("price"));
-		exposedSeller.setTotalOfCart(SessionContext.getInstance(user).getCart());
 		ExposedArticle.addSellerToArticleList(articles, article, exposedSeller);
 	}
 	

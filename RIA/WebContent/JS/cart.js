@@ -1,7 +1,8 @@
 class Purchase
 {
-    constructor(seller, article, quantity, price)
+    constructor(id, seller, article, quantity, price)
     {
+        this.id = id;
         this.seller = seller;
         this.article = article;
         this.quantity = quantity;
@@ -36,6 +37,12 @@ class Cart
         let saved = window.sessionStorage.getItem('cart');
         return new Cart(saved && JSON.parse(saved));
     }
+    
+    getNewIndex() {
+    	let index = window.sessionStorage.getItem('cart_index') || 0;
+    	window.sessionStorage.setItem('cart_index', index + 1);
+    	return index;
+    }
 
     add(seller, article, quantity, price)
     {
@@ -49,7 +56,7 @@ class Cart
         if (found) found.add(quantity);
         else
         {
-            let purchase = new Purchase(seller, article, quantity, price);
+            let purchase = new Purchase(this.getNewIndex(), seller, article, quantity, price);
             this.purchases.push(purchase);
         }
 
@@ -119,5 +126,13 @@ class Cart
             else if (articleCount > ranges[i].start && articleCount <= ranges[i].end) return ranges[i].price;
         }
         return endPrice;
+    }
+
+    remove(sellerCart) {
+        let ids = sellerCart.purchases.map(purchase => purchase.id);debugger;
+        this.purchases = this.purchases.filter(purchase => purchase.id != ids.find(id => id == purchase.id));
+
+        // Save in session storage
+        window.sessionStorage.setItem('cart', JSON.stringify(this.purchases));
     }
 }

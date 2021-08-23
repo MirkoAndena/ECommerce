@@ -14,7 +14,7 @@ class CartPage extends Page
         // value => 0: totale carrello, 1: spese di spedizione
         let sellerCartLinks = {
             'seller': {'id': 'sellerName'},
-            'price': {'id': 'cartPrice', 'formatter': value => `Totale: ${super.priceFormatter(value.total + value.shipment)} (${super.priceFormatter(value.total)} + spedizione ${super.priceFormatter(value.shipment)}` },
+            'price': {'id': 'cartPrice', 'formatter': value => `Totale: ${super.priceFormatter(value.total + value.shipment)} (${super.priceFormatter(value.total)} + spedizione ${super.priceFormatter(value.shipment)})` },
             'purchases': {'id': 'purchaseContainer'}
         };
     
@@ -24,7 +24,24 @@ class CartPage extends Page
         };
     
         let initButtonClick = function(content, indexes, node) {
-            // TODO invio ordine
+            
+            let currentCart = content[indexes[0]];
+            let sellerCart = {
+                seller: currentCart.purchases[0].seller,
+                purchases: currentCart.purchases
+            };
+
+            let orderButton = node.getElementById('orderButton');
+            if (orderButton) {
+                orderButton.onclick = () => {
+                    HTTP.post('OrderInsert', { 'sellerCart': sellerCart }, response => {
+                        if (response.stored) {
+                            cart.remove(currentCart);
+                            website.requestForPage('Order');
+                        }
+                    })
+                }
+            }
         }
     
         // Run template with values

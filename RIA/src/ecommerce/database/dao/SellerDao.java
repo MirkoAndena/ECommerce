@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ecommerce.SessionContext;
 import ecommerce.database.dto.Range;
 import ecommerce.database.dto.Seller;
 import ecommerce.frontendDto.ExposedSeller;
@@ -100,7 +99,6 @@ public class SellerDao {
 				if (!set.isBeforeFirst()) return sellers;
 				while (set.next()) {
 					ExposedSeller exposedSeller = new ExposedSeller(build(set), set.getFloat("price"));
-					exposedSeller.setTotalOfCart(SessionContext.getInstance(user).getCart());
 					sellers.add(exposedSeller);
 				}
 			}

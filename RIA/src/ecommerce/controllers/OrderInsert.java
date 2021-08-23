@@ -7,7 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ecommerce.SessionContext;
+import com.google.gson.Gson;
+
 import ecommerce.controllers.support.AuthenticatedServlet;
 import ecommerce.controllers.support.FatalException;
 import ecommerce.database.dao.UserDao;
@@ -15,7 +16,7 @@ import ecommerce.database.dao.OrderDao;
 import ecommerce.database.dto.Order;
 import ecommerce.database.dto.User;
 import ecommerce.frontendDto.SellerCart;
-import ecommerce.utils.ListUtils;
+import ecommerce.utils.Json;
 
 @WebServlet("/OrderInsert")
 @MultipartConfig
@@ -40,14 +41,12 @@ public class OrderInsert extends AuthenticatedServlet {
 	}
 
 	@Override
-	public void Post(HttpServletRequest request, HttpServletResponse response, int user) throws ServletException, IOException, FatalException {
+	public void Post(HttpServletRequest request, HttpServletResponse response, int user) throws ServletException, IOException, FatalException {	
 		
-		// Ottenimento id del carrello ordinato
-		int cartId = getCartId(request);		
+		User userDto = userDao.getUserById(user);
 		
 		// Recupero dei dati del carrello ordinato
-		SellerCart sellerCart = ListUtils.find(SessionContext.getInstance(user).getCart().sellerCarts, cart -> cart.id == cartId);
-		User userDto = userDao.getUserById(user);
+		SellerCart sellerCart = buildSellerCartFromRequest(request);
 		
 		if (userDto == null) throw new FatalException("Nessun utente trovato con id " + user);
 		
@@ -55,21 +54,15 @@ public class OrderInsert extends AuthenticatedServlet {
 		Order order = new Order(userDto, sellerCart);
 		boolean stored = orderDao.storeOrder(order, sellerCart.purchases);
 		
-		// Eliminazione dal carrello
-		if (stored) SessionContext.getInstance(user).getCart().sellerCarts.remove(sellerCart);
-		else throw new FatalException("Impossibile salvare l'ordine");
-		
-		// REDIRECT TO CART PAGE
-		response.sendRedirect(getServletContext().getContextPath() + "/Cart");
+		Json json = Json.build()
+				.add("stored", stored);
+			
+		super.sendResult(response, json);
 	}
 	
-	private int getCartId(HttpServletRequest request) throws FatalException {
-		int cartId = -1;
-		try {
-			cartId = Integer.parseInt(request.getParameter("cartId"));
-		} catch (NumberFormatException e) {
-			throw new FatalException("Non è stato passato un valore corrispondente ad un id");
-		}
-		return cartId;
+	private SellerCart buildSellerCartFromRequest(HttpServletRequest request) throws FatalException {
+		String json = request.getParameter("sellerCart");
+		Gson gson = new Gson();
+		return gson.fromJson(json, SellerCart.class);
 	}
 }

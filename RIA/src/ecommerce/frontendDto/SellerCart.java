@@ -8,12 +8,10 @@ import ecommerce.database.dto.Range;
 import ecommerce.database.dto.Seller;
 
 public class SellerCart {
-	public int id;
 	public Seller seller;
 	public List<Purchase> purchases;
 	
-	public SellerCart(int id, Seller seller) {
-		this.id = id;
+	public SellerCart(Seller seller) {
 		this.seller = seller;
 		this.purchases = new ArrayList<Purchase>();
 	}

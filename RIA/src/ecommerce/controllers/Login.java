@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import ecommerce.SessionContext;
 import ecommerce.SessionKeys;
 import ecommerce.controllers.support.BaseServlet;
 import ecommerce.controllers.support.FatalException;
@@ -55,7 +54,6 @@ public class Login extends BaseServlet {
 		Integer userId = authenticate(username, password);
 	
 		if (userId != null) {
-			SessionContext.removeSessionContext(userId);
 			HttpSession session = request.getSession(true);
 			session.setAttribute(SessionKeys.User.toString(), userId);
 		} 
