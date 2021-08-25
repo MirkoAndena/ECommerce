@@ -7,10 +7,12 @@ class ResultsPage extends Page
 
     load(data)
     {
-        let searched = document.getElementById('searchField').value;
-        document.getElementById('resultText').innerHTML = data.articles.length ? `Risultati per '${searched}'` : 'Nessun articolo trovato';
-        if (!data.articles.length) document.getElementById('resultsContainer').innerHTML = '';
-        document.getElementById('selectedContainer').innerHTML = '';
+        let searchField = document.getElementById('searchField');
+        document.getElementById('resultText').innerHTML = data.articles.length ? `Risultati per '${searchField.value}'` : 'Nessun articolo trovato';
+        searchField.value = '';
+
+        // Rimozione contenuto precedente
+        document.getElementById('resultsContainer').innerHTML = '';
     
         let foundLinks = {
             'id': {'id': 'articleId'},
@@ -67,14 +69,8 @@ class ResultsPage extends Page
                             let quantity = parseInt(document.getElementById(`quantity${seller.id}${article.id}`).value);
                             cart.add(seller, article, quantity, price);
             
-                            // Upload articles added to cart of every card of this seller
-                            let articlesAddedToCartQuery = `[id^='articlesAddedToCart_${seller.id}']`;
-                            let articlesAddedToCartElements = document.querySelectorAll(articlesAddedToCartQuery);
-                            articlesAddedToCartElements.forEach(element => element.innerHTML = cart.getCountOf(seller));
-            
-                            let totalValueQuery = `[id^='totalValue_${seller.id}']`;
-                            let totalValueElements = document.querySelectorAll(totalValueQuery);
-                            totalValueElements.forEach(element => element.innerHTML = sellerLinks['totalValue'].formatter(cart.getTotalPriceOf(seller)));
+                            // Update articles added to cart of every card of this seller
+                            updateElementsWithCartItemsOfSeller(seller, sellerLinks);
 
                             website.requestForPage('Cart');
                         };
@@ -89,6 +85,7 @@ class ResultsPage extends Page
                     selectedTemplateManager.action = initButtonClick;
                     selectedTemplateManager.loadTemplate();
 
+                    updateElementsWithCartItems(sellerLinks);
                 });
             };
         }

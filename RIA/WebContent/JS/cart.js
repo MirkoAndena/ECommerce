@@ -39,7 +39,7 @@ class Cart
     }
     
     getNewIndex() {
-    	let index = window.sessionStorage.getItem('cart_index') || 0;
+    	let index = Number(window.sessionStorage.getItem('cart_index')) || 0;
     	window.sessionStorage.setItem('cart_index', index + 1);
     	return index;
     }
@@ -101,7 +101,7 @@ class Cart
         // Check if there is another purchase of the same article
         let purchase = sellerCart.purchases.find(element => element.article.id === purchaseToAdd.article.id && element.price === purchaseToAdd.price);
         if (purchase) purchase.quantity += purchaseToAdd.quantity;
-        else sellerCart.purchases.push(purchaseToAdd);
+        else sellerCart.purchases.push(Object.assign(Object.create(Object.getPrototypeOf(purchaseToAdd)), purchaseToAdd));
         sellerCart.price.total += purchaseToAdd.quantity * purchaseToAdd.price;
     }
 
@@ -129,7 +129,7 @@ class Cart
     }
 
     remove(sellerCart) {
-        let ids = sellerCart.purchases.map(purchase => purchase.id);debugger;
+        let ids = sellerCart.purchases.map(purchase => purchase.id);
         this.purchases = this.purchases.filter(purchase => purchase.id != ids.find(id => id == purchase.id));
 
         // Save in session storage

@@ -54,14 +54,8 @@ class HomePage extends Page
                 let quantity = parseInt(document.getElementById(`quantity${seller.id}${article.id}`).value);
                 cart.add(seller, article, quantity, price);
 
-                // Upload articles added to cart of every card of this seller
-                let articlesAddedToCartQuery = `[id^='articlesAddedToCart_${seller.id}']`;
-                let articlesAddedToCartElements = document.querySelectorAll(articlesAddedToCartQuery);
-                articlesAddedToCartElements.forEach(element => element.innerHTML = cart.getCountOf(seller));
-
-                let totalValueQuery = `[id^='totalValue_${seller.id}']`;
-                let totalValueElements = document.querySelectorAll(totalValueQuery);
-                totalValueElements.forEach(element => element.innerHTML = sellerLinks['totalValue'].formatter(cart.getTotalPriceOf(seller)));
+                // Update articles added to cart of every card of this seller
+                updateElementsWithCartItemsOfSeller(seller, sellerLinks);
 
                 website.requestForPage('Cart');
             };
@@ -76,5 +70,7 @@ class HomePage extends Page
         templateManager.contentElementToExpand = ['sellers'];
         templateManager.action = initButtonClick;
         templateManager.loadTemplate();
+        
+        updateElementsWithCartItems(sellerLinks);
     }
 }
