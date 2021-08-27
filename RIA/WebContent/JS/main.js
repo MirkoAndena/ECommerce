@@ -19,6 +19,11 @@ function main() {
     // Search    
     document.getElementById("btnSearch").addEventListener('click', () => { search(); });
     document.getElementById('searchField').addEventListener('keydown', e => { if (e.key == 'Enter') { e.preventDefault(); search(); } });
+
+    // Abilitazione del popper tramite JQuery
+    $('[data-toggle="popover"').popover({container: 'body'});
+    $('[data-toggle="popover"').mouseover(() => $('[data-toggle="popover"').popover('show'));
+    $('[data-toggle="popover"').mouseout(() => $('[data-toggle="popover"').popover('hide'));
 }
 
 function search() {
