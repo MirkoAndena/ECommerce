@@ -10,6 +10,7 @@
     width: 16px;
 }
 
-.fullheight {
-    height: 50px;
+.whiteField {
+    border: 0px !important;
+    background-color: #f8f9fa;
 }
