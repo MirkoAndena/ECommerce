@@ -49,6 +49,9 @@ class HomePage extends Page
             node.getElementById(sellerLinks['articlesAddedToCart'].id).id = `articlesAddedToCart_${seller.id}_${article.id}`;
             node.getElementById(sellerLinks['totalValue'].id).id = `totalValue_${seller.id}_${article.id}`;
 
+            // Init poppers with cart articles
+            initPopper(node, seller);
+
             // Define add to cart button click action
             node.getElementById('addToCart').onclick = () => {
                 let quantity = parseInt(document.getElementById(`quantity${seller.id}${article.id}`).value);

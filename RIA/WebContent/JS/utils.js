@@ -17,3 +17,22 @@ var updateElements = function(query, value) {
     let elements = document.querySelectorAll(query);
     elements.forEach(element => element.innerHTML = value);
 }
+
+var initPopper = function(node, seller) {
+    const popperTemplate = 
+    '<div class="popover" role="tooltip">\
+        <div class="popover-arrow"></div>\
+        <div class="popover-body"></div>\
+    </div>';
+
+    let popoverTrigger = node.querySelector('[data-bs-toggle="popover"]');
+    let popover = new bootstrap.Popover(popoverTrigger, { template: popperTemplate });
+    popoverTrigger.addEventListener('mouseover', () => popover.show());
+    popoverTrigger.addEventListener('mouseout', () => popover.hide());
+
+    let templateManager = new TemplateManager();
+    templateManager.templates = [ data.articleTemplate ];
+    templateManager.domElementIds = [ articleLinks ];
+    templateManager.contents = data.content;
+    templateManager.loadTemplate();
+}

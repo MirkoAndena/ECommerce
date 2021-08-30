@@ -63,6 +63,9 @@ class ResultsPage extends Page
                         node.getElementById('quantity').id = `quantity${seller.id}${article.id}`;
                         node.getElementById(sellerLinks['articlesAddedToCart'].id).id = `articlesAddedToCart_${seller.id}_${article.id}`;
                         node.getElementById(sellerLinks['totalValue'].id).id = `totalValue_${seller.id}_${article.id}`;
+
+                        // Init poppers with cart articles
+                        initPopper(node, seller);
             
                         // Define add to cart button click action
                         node.getElementById('addToCart').onclick = () => {
