@@ -48,12 +48,13 @@ class HomePage extends Page
             node.getElementById('quantity').id = `quantity${seller.id}${article.id}`;
             node.getElementById(sellerLinks['articlesAddedToCart'].id).id = `articlesAddedToCart_${seller.id}_${article.id}`;
             node.getElementById(sellerLinks['totalValue'].id).id = `totalValue_${seller.id}_${article.id}`;
+            node.getElementById('addToCart').id = `addtocart_${seller.id}_${article.id}`;
 
             // Init poppers with cart articles
             initPopper(node, seller, data.articlePopperTemplate);
 
             // Define add to cart button click action
-            node.getElementById('addToCart').onclick = () => {
+            node.getElementById(`addtocart_${seller.id}_${article.id}`).onclick = () => {
                 let quantity = parseInt(document.getElementById(`quantity${seller.id}${article.id}`).value);
                 cart.add(seller, article, quantity, price);
 

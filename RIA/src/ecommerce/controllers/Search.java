@@ -68,6 +68,7 @@ public class Search extends AuthenticatedServlet {
 				.add("articleItemListTemplate", FileReader.read(this, "article_itemlist_template.html"))
 				.add("articleTemplate", FileReader.read(this, "article_template.html"))
 				.add("sellerTemplate", FileReader.read(this, "seller_template.html"))
+				.add("articlePopperTemplate", FileReader.read(this, "article_popper.html"))
 				.add("articles", articlesFound)
 				.add("selected", selectedArticle);
 			

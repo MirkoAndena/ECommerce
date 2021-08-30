@@ -31,7 +31,9 @@ class CartPage extends Page
                 purchases: currentCart.purchases
             };
 
-            let orderButton = node.getElementById('orderButton');
+            node.getElementById('orderbutton').id = `orderbutton${seller.id}`;
+
+            let orderButton = node.getElementById(`orderbutton${seller.id}`);
             if (orderButton) {
                 orderButton.onclick = () => {
                     HTTP.post('OrderInsert', { 'sellerCart': sellerCart }, response => {
@@ -39,7 +41,7 @@ class CartPage extends Page
                             cart.remove(currentCart);
                             website.requestForPage('Order');
                         }
-                    })
+                    });
                 }
             }
         }
