@@ -50,7 +50,7 @@ class HomePage extends Page
             node.getElementById(sellerLinks['totalValue'].id).id = `totalValue_${seller.id}_${article.id}`;
 
             // Init poppers with cart articles
-            initPopper(node, seller);
+            initPopper(node, seller, data.articlePopperTemplate);
 
             // Define add to cart button click action
             node.getElementById('addToCart').onclick = () => {

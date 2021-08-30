@@ -13,9 +13,13 @@
 }
 
 .quantityField {
-	min-width: 70px;
+	width: 70px;
 }
 
 .columnMinWidth {
 	min-width: 500px;
+}
+
+.addToCart {
+	height: 46px;
 }

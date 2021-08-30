@@ -64,6 +64,7 @@ public class Home extends AuthenticatedServlet {
 		Json json = Json.build()
 			.add("articleTemplate", FileReader.read(this, "article_template.html"))
 			.add("sellerTemplate", FileReader.read(this, "seller_template.html"))
+			.add("articlePopperTemplate", FileReader.read(this, "article_popper.html"))
 			.add("content", exposedArticles);
 		
 		super.sendResult(response, json);

@@ -18,21 +18,22 @@ var updateElements = function(query, value) {
     elements.forEach(element => element.innerHTML = value);
 }
 
-var initPopper = function(node, seller) {
-    const popperTemplate = 
-    '<div class="popover" role="tooltip">\
-        <div class="popover-arrow"></div>\
-        <div class="popover-body"></div>\
-    </div>';
+var initPopper = function(node, seller, articleTemplate) {
+    let articles = cart.getArticlesOfSellerWithQuantity(seller);
+    if (articles.length == 0) return;
 
-    let popoverTrigger = node.querySelector('[data-bs-toggle="popover"]');
-    let popover = new bootstrap.Popover(popoverTrigger, { template: popperTemplate });
-    popoverTrigger.addEventListener('mouseover', () => popover.show());
-    popoverTrigger.addEventListener('mouseout', () => popover.hide());
+    let articleLinks = {
+        null: {'id': 'articleName'}
+    };
 
     let templateManager = new TemplateManager();
-    templateManager.templates = [ data.articleTemplate ];
+    templateManager.templates = [ articleTemplate ];
     templateManager.domElementIds = [ articleLinks ];
-    templateManager.contents = data.content;
-    templateManager.loadTemplate();
+    templateManager.contents = articles;
+    let contentHtml = templateManager.createTemplate();
+
+    let popoverTrigger = node.querySelector('[data-bs-toggle="popover"]');
+    let popover = new bootstrap.Popover(popoverTrigger, { html: true, content: contentHtml});
+    popoverTrigger.onmouseover = () => popover.show();
+    popoverTrigger.onmouseout = () => popover.hide();
 }

@@ -16,7 +16,7 @@ class Purchase
 
     equals(seller, article, price)
     {
-        return seller == this.seller && article == this.article && price == this.price;
+        return seller.id == this.seller.id && article.id == this.article.id && price == this.price;
     }
 
     toString() {
@@ -75,6 +75,13 @@ class Cart
     {
         let articles = this.purchases.filter(purchase => purchase.seller.id === seller.id);
         return articles.reduce((accumulator, currentValue) => accumulator + currentValue.quantity * currentValue.price, 0);
+    }
+
+    getArticlesOfSellerWithQuantity(seller) 
+    {
+        return this.purchases
+        .filter(purchase => purchase.seller.id == seller.id)
+        .map(purchase => `${purchase.article.name} x${purchase.quantity}`);
     }
 
     // Can return null

@@ -13,6 +13,15 @@ class TemplateManager
         this.action = () => {};
     }
 
+    createTemplate()
+    {
+        this.containers = ['container'];
+        let templateDocument = this.createDocument(`<template><ul class="list-group" id="container"></ul></template>`);
+        let indexes = [];
+        this._loadTemplate(templateDocument.content, this.contents, 0, indexes);
+        return templateDocument.innerHTML;
+    }
+
     loadTemplate()
     {
         let indexes = [];
@@ -22,24 +31,28 @@ class TemplateManager
     _loadTemplate(node, contents, depth, indexes)
     {
         // Creazione del documento dai template passati (depth è l'indice)
-        let templateDocument = this.createDocument(depth);
+        let templateDocument = this.createDocument(this.templates[depth]);
         let instances = [];
     
         // Inserimento dei dati nel template (ripetuto il template se collezione di oggetti)
         if (contents) {
-            if (contents instanceof Array) {
-                contents.forEach((content, index) => {
-                    let instance = this.createAndFillWithContent(content, index, templateDocument, indexes, depth);
-                    instances.push(instance);
-                });
-            } else {
-                let instance = this.createAndFillWithContent(contents, 0, templateDocument, indexes, depth);
-                instances.push(instance);
-            }
+            instances = contents instanceof Array ? 
+                        this.createChildrenElements(contents, templateDocument, indexes, depth) :
+                        this.createChildElement(contents, templateDocument, indexes, depth);
         }
     
         // iniezione dei template creati (e con dati) nel contenitore definito 
         instances.forEach(instance => node.getElementById(this.containers[depth]).appendChild(instance));
+    }
+
+    createChildElement(contents, templateDocument, indexes, depth) {
+        let instance = this.createAndFillWithContent(contents, 0, templateDocument, indexes, depth);
+        return [ instance ];
+    }
+
+    createChildrenElements(contents, templateDocument, indexes, depth)
+    {
+        return contents.map((content, index) => this.createAndFillWithContent(content, index, templateDocument, indexes, depth));
     }
 
     createAndFillWithContent(content, index, templateDocument, indexes, depth) {
@@ -51,10 +64,10 @@ class TemplateManager
         return clone;
     }
     
-    createDocument(depth)
+    createDocument(html)
     {
         let templateDocument = document.implementation.createHTMLDocument("templateDocument");
-        templateDocument.body.innerHTML = this.templates[depth];
+        templateDocument.body.innerHTML = html;
         return templateDocument.getElementsByTagName("template")[0];
     }
     
