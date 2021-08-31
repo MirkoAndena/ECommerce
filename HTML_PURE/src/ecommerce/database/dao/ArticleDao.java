@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 import ecommerce.Config;
-import ecommerce.SessionContext;
 import ecommerce.database.dto.Article;
 import ecommerce.database.dto.Seller;
 import ecommerce.frontendDto.ArticleFound;
@@ -37,7 +36,6 @@ public class ArticleDao {
 	private void buildArticle(Seller seller, List<ExposedArticle> articles, int user, ResultSet set) throws SQLException {
 		Article article = build(set);		
 		ExposedSeller exposedSeller = new ExposedSeller(seller, set.getFloat("price"));
-		exposedSeller.setTotalOfCart(SessionContext.getInstance(user).getCart());
 		ExposedArticle.addSellerToArticleList(articles, article, exposedSeller);
 	}
 	
@@ -107,27 +105,38 @@ public class ArticleDao {
 	public List<ExposedArticle> getLastSeen(SellerDao sellerDao, int user) {
 		List<ExposedArticle> articles = new ArrayList<ExposedArticle>();
 		String query = """
-		    SELECT DISTINCT a.`id`, a.`name`, a.`description`, a.`image`, s.`name` as 'seller', s.`id` as seller_id, s.`rating`, s.`free_shipping_threshold`, sa.`price`, c.`name` as 'category'
+		    SELECT a.`id`, a.`name`, a.`description`, a.`image`, c.`name` as 'category'
 			FROM `article` a
 			INNER JOIN `seller_articles` sa ON a.id = sa.article
-			INNER JOIN `seller` s ON s.id = sa.seller
 			INNER JOIN `category` c ON a.category = c.id
 			INNER JOIN `articles_seen` ase ON ase.article = a.id
 			WHERE ase.`user` = ?
-			ORDER BY `datetime` DESC, sa.`price` LIMIT 5
+			ORDER BY `datetime` DESC
 			""";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, user);
 			try (ResultSet set = statement.executeQuery()) {
 				if (!set.isBeforeFirst()) return articles;
-				while (set.next()) {
-					buildArticle(sellerDao.build(set, "seller_id", "seller"), articles, user, set);
+				int differentArticles = 0;
+				while (set.next() && differentArticles < 5) {
+					if (!articlePresent(set.getInt("id"), articles)) {
+						Article article = build(set);
+						List<ExposedSeller> sellers = sellerDao.getSellersOfArticle(user, article.id);
+						for (ExposedSeller seller : sellers) ExposedArticle.addSellerToArticleList(articles, article, seller);
+						differentArticles++;
+					}
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return articles;
+	}
+	
+	private boolean articlePresent(int article, List<ExposedArticle> articles) {
+		for (ExposedArticle exposedArticle : articles)
+			if (exposedArticle.article.id == article) return true;
+		return false;
 	}
 	
 	// Articoli nella categoria default

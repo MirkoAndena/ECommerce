@@ -13,6 +13,7 @@ class ResultsPage extends Page
 
         // Rimozione contenuto precedente
         document.getElementById('resultsContainer').innerHTML = '';
+        document.getElementById('selectedContainer').innerHTML = '';
     
         let foundLinks = {
             'id': {'id': 'articleId'},
@@ -24,7 +25,8 @@ class ResultsPage extends Page
         let priceFormatter = super.priceFormatter;
         let selectArticle = function(content, indexes, node) {
             let entry = content[indexes[0]];
-            node.getElementById('buttonSelect').onclick = () => {
+            node.getElementById('buttonSelect').id = `buttonSelect${entry.id}`;
+            node.getElementById(`buttonSelect${entry.id}`).onclick = () => {
                 HTTP.get('Search', {selected_article: entry.id}, data => { 
                     
                     // Remove current content

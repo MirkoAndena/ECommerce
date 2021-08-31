@@ -30,11 +30,10 @@ class CartPage extends Page
                 seller: currentCart.purchases[0].seller,
                 purchases: currentCart.purchases
             };
-
-            node.getElementById('orderbutton').id = `orderbutton${seller.id}`;
-
-            let orderButton = node.getElementById(`orderbutton${seller.id}`);
-            if (orderButton) {
+            
+            if (node.getElementById('orderbutton')) {
+            	node.getElementById('orderbutton').id = `orderbutton${sellerCart.seller.id}`;
+            	let orderButton = node.getElementById(`orderbutton${sellerCart.seller.id}`);
                 orderButton.onclick = () => {
                     HTTP.post('OrderInsert', { 'sellerCart': sellerCart }, response => {
                         if (response.stored) {

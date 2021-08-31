@@ -9,6 +9,7 @@ import java.util.List;
 
 import ecommerce.database.dto.Range;
 import ecommerce.database.dto.Seller;
+import ecommerce.frontendDto.ExposedSeller;
 
 public class SellerDao {
 	
@@ -82,5 +83,28 @@ public class SellerDao {
 			return null;
 		}
 		return ranges;
+	}
+	
+	public List<ExposedSeller> getSellersOfArticle(int user, int article) {
+		List<ExposedSeller> sellers = new ArrayList<ExposedSeller>();
+		String query = """
+			SELECT s.`name`, s.`id`, s.`rating`, s.`free_shipping_threshold`, sa.`price`
+			FROM `seller` s
+			INNER JOIN `seller_articles` sa ON sa.article = ? AND sa.seller = s.id
+			ORDER BY sa.`price`
+				""";
+		try (PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setInt(1, article);
+			try (ResultSet set = statement.executeQuery()) {
+				if (!set.isBeforeFirst()) return sellers;
+				while (set.next()) {
+					ExposedSeller exposedSeller = new ExposedSeller(build(set), set.getFloat("price"));
+					sellers.add(exposedSeller);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return sellers;
 	}
 }
