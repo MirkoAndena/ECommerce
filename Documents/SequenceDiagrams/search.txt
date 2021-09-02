@@ -1,0 +1,13 @@
+Client->Search (servlet):Get /Search [search_string]
+database ArticleDao
+Search (servlet)->ArticleDao:searchInNameAndDescription(search_string)
+ArticleDao->Search (servlet):articlesFound
+Search (servlet)->Client: pagina HTML
+
+Client->Search (servlet):Get /Search [selected_article]
+alt selected_article is valid int
+Search (servlet)->ArticleDao:getArticleById(id)
+ArticleDao->Search (servlet):selectedArticle
+Search (servlet)->ArticleDao:setArticleSeen(id)
+end
+Search (servlet)->Client: pagina HTML

@@ -1,0 +1,13 @@
+Client->Home (servlet):Get /Home
+database ArticleDao
+Home (servlet)->ArticleDao:getLastSeen()
+note over ArticleDao: ritorna gli ultimi 5\nelementi ordinati per\ndatetime
+ArticleDao->Home (servlet):seenArticles
+Home (servlet)->ArticleDao:getDefaultArticles()
+ArticleDao->Home (servlet):defaultArticles
+alt seenArticles < 5
+Home (servlet)->Home (servlet):rimozione elementi duplicati
+note over Home (servlet):alcuni elementi visualizzati\ndi recente potrebbero essere\nnella lista di default
+Home (servlet)->Home (servlet):completamento di seenArticles\ncon defaultArticles fino ad arrivare a 5
+end
+Home (servlet)->Client: pagina HTML
