@@ -1,0 +1,23 @@
+participant Client
+participant Cart (servlet)
+database ArticleDao
+participant SessionContext
+participant Cart
+
+Client->Cart (servlet):Post /CartInsert [articleId,sellerId,price,quantity]
+activate Cart (servlet)
+activate ArticleDao
+alt values are valid int and quantity > 0
+Cart (servlet)->ArticleDao:getArticleAndSellerById(articleId, sellerId)
+Cart (servlet)<--ArticleDao:<article, seller>
+Cart (servlet)->SessionContext:getCart(user)
+Cart (servlet)<--SessionContext:cart
+Cart (servlet)->Cart:add(seller, article, price, quantity)
+alt the sellerCart doesn't exists
+Cart->Cart: create new sellerCart for this seller
+end
+Cart->Cart: add purchase to sellerCart
+end
+Client<--Cart (servlet):pagina HTML (Carrello)
+deactivate Cart (servlet)
+deactivate ArticleDao

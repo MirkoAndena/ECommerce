@@ -1,13 +1,20 @@
-Client->Home (servlet):Get /Home
+participant Client
+participant "Home (servlet)" as H
 database ArticleDao
-Home (servlet)->ArticleDao:getLastSeen()
+
+Client->H:Get /Home
+activate H
+activate ArticleDao
+H->ArticleDao:getLastSeen()
 note over ArticleDao: ritorna gli ultimi 5\nelementi ordinati per\ndatetime
-ArticleDao->Home (servlet):seenArticles
-Home (servlet)->ArticleDao:getDefaultArticles()
-ArticleDao->Home (servlet):defaultArticles
+H<--ArticleDao:seenArticles
+H->ArticleDao:getDefaultArticles()
+H<--ArticleDao:defaultArticles
 alt seenArticles < 5
-Home (servlet)->Home (servlet):rimozione elementi duplicati
-note over Home (servlet):alcuni elementi visualizzati\ndi recente potrebbero essere\nnella lista di default
-Home (servlet)->Home (servlet):completamento di seenArticles\ncon defaultArticles fino ad arrivare a 5
+H->H:rimozione elementi duplicati
+note over H:alcuni elementi visualizzati\ndi recente potrebbero essere\nnella lista di default
+H->H:completamento di seenArticles\ncon defaultArticles fino ad arrivare a 5
 end
-Home (servlet)->Client: pagina HTML
+Client<--H: pagina HTML
+deactivate H
+deactivate ArticleDao

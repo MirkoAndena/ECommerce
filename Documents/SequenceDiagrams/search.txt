@@ -1,13 +1,26 @@
-Client->Search (servlet):Get /Search [search_string]
+participant Client
+participant "Search (servlet)" as S
 database ArticleDao
-Search (servlet)->ArticleDao:searchInNameAndDescription(search_string)
-ArticleDao->Search (servlet):articlesFound
-Search (servlet)->Client: pagina HTML
 
-Client->Search (servlet):Get /Search [selected_article]
+Client->S:Get /Search [search_string]
+activate S
+activate ArticleDao
+S->ArticleDao:searchInNameAndDescription(search_string)
+S<--ArticleDao:articlesFound
+Client<--S: pagina HTML
+deactivate S
+deactivate ArticleDao
+
+space 6
+
+Client->S:Get /Search [selected_article]
+activate S
+activate ArticleDao
 alt selected_article is valid int
-Search (servlet)->ArticleDao:getArticleById(id)
-ArticleDao->Search (servlet):selectedArticle
-Search (servlet)->ArticleDao:setArticleSeen(id)
+S->ArticleDao:getArticleById(id)
+S<--ArticleDao:selectedArticle
+S->ArticleDao:setArticleSeen(id)
 end
-Search (servlet)->Client: pagina HTML
+Client<--S: pagina HTML
+deactivate S
+deactivate ArticleDao
