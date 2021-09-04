@@ -1,4 +1,4 @@
-package ecommerce.database.dao;
+package ecommerce_ria.database.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,11 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ecommerce.SessionContext;
-import ecommerce.database.dto.Cart;
-import ecommerce.database.dto.Range;
-import ecommerce.database.dto.Seller;
-import ecommerce.frontendDto.ExposedSeller;
+import ecommerce_ria.database.dto.Range;
+import ecommerce_ria.database.dto.Seller;
+import ecommerce_ria.frontendDto.ExposedSeller;
 
 public class SellerDao {
 	
@@ -34,7 +32,7 @@ public class SellerDao {
 		
 		// Setting shipment range
 		List<Range> ranges = getShipmentRange(seller.id);
-		if (ranges != null && seller.freeShippingThreshold > 0) seller.setShipmentRange(ranges);		
+		if (ranges != null && seller.freeShippingThreshold > 0) seller.setShipmentRange(ranges);
 		
 		return seller;
 	}
@@ -101,7 +99,6 @@ public class SellerDao {
 				if (!set.isBeforeFirst()) return sellers;
 				while (set.next()) {
 					ExposedSeller exposedSeller = new ExposedSeller(build(set), set.getFloat("price"));
-					exposedSeller.setTotalOfCart(SessionContext.getInstance(user).getCart());
 					sellers.add(exposedSeller);
 				}
 			}

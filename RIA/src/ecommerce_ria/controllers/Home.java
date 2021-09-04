@@ -1,22 +1,25 @@
-package ecommerce.controllers;
+package ecommerce_ria.controllers;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ecommerce.SessionContext;
-import ecommerce.controllers.support.AuthenticatedServlet;
-import ecommerce.controllers.support.FatalException;
-import ecommerce.database.dao.ArticleDao;
-import ecommerce.database.dao.SellerDao;
-import ecommerce.frontendDto.ExposedArticle;
+import ecommerce_ria.controllers.support.AuthenticatedServlet;
+import ecommerce_ria.controllers.support.FatalException;
+import ecommerce_ria.database.dao.ArticleDao;
+import ecommerce_ria.database.dao.SellerDao;
+import ecommerce_ria.frontendDto.ExposedArticle;
+import ecommerce_ria.utils.FileReader;
+import ecommerce_ria.utils.Json;
 
 @WebServlet("/Home")
+@MultipartConfig
 public class Home extends AuthenticatedServlet {
 	private static final long serialVersionUID = 1L;
 	private ArticleDao articleDao;
@@ -44,7 +47,7 @@ public class Home extends AuthenticatedServlet {
 		if (exposedArticles.size() < 5) {
 			// Remove articles duplicated from default list
 			for (ExposedArticle a : exposedArticles)
-				defaultArticles.removeIf(b -> b.article.id == a.article.id);
+				defaultArticles.removeIf(b -> b.id == a.id);
 			
 			// Adding casual elements from default
 			Random random = new Random();
@@ -55,12 +58,16 @@ public class Home extends AuthenticatedServlet {
 			}
 		}
 		
-		// Visualizzazione del carattere euro (€)
+		// Visualizzazione del carattere euro (ï¿½)
 		response.setCharacterEncoding("UTF-8");
 		
-		super.getThymeleaf().init(request, response)
-		.setVariable("exposedArticles", exposedArticles)
-		.process("/home.html");
+		Json json = Json.build()
+			.add("articleTemplate", FileReader.read(this, "article_template.html"))
+			.add("sellerTemplate", FileReader.read(this, "seller_template.html"))
+			.add("articlePopperTemplate", FileReader.read(this, "article_popper.html"))
+			.add("content", exposedArticles);
+		
+		super.sendResult(response, json);
 	}
 
 	@Override

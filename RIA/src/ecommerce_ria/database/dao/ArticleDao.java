@@ -1,4 +1,4 @@
-package ecommerce.database.dao;
+package ecommerce_ria.database.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,15 +8,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ecommerce.Config;
-import ecommerce.SessionContext;
-import ecommerce.database.dto.Article;
-import ecommerce.database.dto.Cart;
-import ecommerce.database.dto.Seller;
-import ecommerce.frontendDto.ArticleFound;
-import ecommerce.frontendDto.ExposedArticle;
-import ecommerce.frontendDto.ExposedSeller;
-import ecommerce.utils.Pair;
+import ecommerce_ria.Config;
+import ecommerce_ria.database.dto.Article;
+import ecommerce_ria.database.dto.Seller;
+import ecommerce_ria.frontendDto.ArticleFound;
+import ecommerce_ria.frontendDto.ExposedArticle;
+import ecommerce_ria.frontendDto.ExposedSeller;
+import ecommerce_ria.utils.Pair;
 
 public class ArticleDao {
 	
@@ -38,7 +36,6 @@ public class ArticleDao {
 	private void buildArticle(Seller seller, List<ExposedArticle> articles, int user, ResultSet set) throws SQLException {
 		Article article = build(set);		
 		ExposedSeller exposedSeller = new ExposedSeller(seller, set.getFloat("price"));
-		exposedSeller.setTotalOfCart(SessionContext.getInstance(user).getCart());
 		ExposedArticle.addSellerToArticleList(articles, article, exposedSeller);
 	}
 	
@@ -138,7 +135,7 @@ public class ArticleDao {
 	
 	private boolean articlePresent(int article, List<ExposedArticle> articles) {
 		for (ExposedArticle exposedArticle : articles)
-			if (exposedArticle.article.id == article) return true;
+			if (exposedArticle.id == article) return true;
 		return false;
 	}
 	
