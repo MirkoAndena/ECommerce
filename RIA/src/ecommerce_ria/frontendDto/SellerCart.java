@@ -70,7 +70,7 @@ public class SellerCart {
 	public String getStringPrice() {
 		float total = calculatePurchaseTotal();
 		float shipment = calculateShippingPrice(total);
-		String shipmentString = shipment == 0 ? "gratuita" : String.format("%.2f �", shipment);
-		return String.format("Totale: %.2f � (%.2f � + spedizione %s)", (total + shipment), total, shipmentString);
+		String shipmentString = shipment == 0 ? "gratuita" : String.format("%.2f €", shipment);
+		return String.format("Totale: %.2f € (%.2f € + spedizione %s)", (total + shipment), total, shipmentString);
 	}
 }

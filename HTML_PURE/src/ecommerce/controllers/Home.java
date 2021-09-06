@@ -9,7 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ecommerce.SessionContext;
 import ecommerce.controllers.support.AuthenticatedServlet;
 import ecommerce.controllers.support.FatalException;
 import ecommerce.database.dao.ArticleDao;
@@ -55,7 +54,7 @@ public class Home extends AuthenticatedServlet {
 			}
 		}
 		
-		// Visualizzazione del carattere euro (€)
+		// Visualizzazione del carattere euro (ï¿½)
 		response.setCharacterEncoding("UTF-8");
 		
 		super.getThymeleaf().init(request, response)

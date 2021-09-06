@@ -17,6 +17,6 @@ public class Purchase {
 	
 	@Override
 	public String toString() {
-		return String.format("%s %.2f € per %d = %.2f €", article, price, quantity, price*quantity);
+		return String.format("%s %.2f â‚¬ per %d = %.2f â‚¬", article, price, quantity, price*quantity);
 	}
 }

@@ -14,8 +14,8 @@ public class Range {
 	@Override
 	public String toString() { 
 		if (end != null)
-			return String.format("da %d a %d articoli %.2f €", start, end, price);
+			return String.format("da %d a %d articoli %.2f â‚¬", start, end, price);
 		else
-			return String.format("da %d in su %.2f €", start, price);
+			return String.format("da %d in su %.2f â‚¬", start, price);
 	}
 }

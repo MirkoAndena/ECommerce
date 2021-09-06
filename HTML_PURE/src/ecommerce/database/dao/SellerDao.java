@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ecommerce.SessionContext;
-import ecommerce.database.dto.Cart;
 import ecommerce.database.dto.Range;
 import ecommerce.database.dto.Seller;
 import ecommerce.frontendDto.ExposedSeller;

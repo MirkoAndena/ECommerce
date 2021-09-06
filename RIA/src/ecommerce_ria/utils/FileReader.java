@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 
 public class FileReader {

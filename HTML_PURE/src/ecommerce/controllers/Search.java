@@ -49,7 +49,7 @@ public class Search extends AuthenticatedServlet {
 		if (selected != null) {
 			int id = -1;
 			try { id = Integer.parseInt(selected); }
-			catch (NumberFormatException e) { throw new FatalException("Non è stato passato un valore corrispondente ad un id"); }
+			catch (NumberFormatException e) { throw new FatalException("Non Ã¨ stato passato un valore corrispondente ad un id"); }
 			selectedArticle = articleDao.getArticleById(sellerDao, id, user); // Null gestito dalla pagina html
 		}
 		
@@ -57,7 +57,7 @@ public class Search extends AuthenticatedServlet {
 		if (selectedArticle != null)
 			articleDao.setArticleSeen(selectedArticle.article.id, user);
 		
-		// Visualizzazione del carattere euro (€)
+		// Visualizzazione del carattere euro (â‚¬)
 		response.setCharacterEncoding("UTF-8");
 		
 		super.getThymeleaf().init(request, response)

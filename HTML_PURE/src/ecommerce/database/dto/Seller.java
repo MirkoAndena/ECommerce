@@ -30,7 +30,7 @@ public class Seller {
 		
 		// Un solo elemento senza il massimo => spedizione fissa
 		if (shipmentRanges.size() == 1 && shipmentRanges.get(0).end == null)
-			return "€" + shipmentRanges.get(0).price;
+			return "â‚¬" + shipmentRanges.get(0).price;
 		
 		// Ranges
 		List<String> list = new ArrayList<String>();

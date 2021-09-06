@@ -18,7 +18,7 @@ public class ExposedOrder {
 		this.seller = order.seller.name;
 		this.userAddress = order.userAddress;
 		this.shipmentDate = order.getShipmentDate();
-		this.total = String.format("%.2f �", order.total);
+		this.total = String.format("%.2f €", order.total);
 		this.purchases = purchases;
 	}
 }

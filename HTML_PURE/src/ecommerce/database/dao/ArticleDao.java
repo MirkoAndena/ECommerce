@@ -11,7 +11,6 @@ import java.util.List;
 import ecommerce.Config;
 import ecommerce.SessionContext;
 import ecommerce.database.dto.Article;
-import ecommerce.database.dto.Cart;
 import ecommerce.database.dto.Seller;
 import ecommerce.frontendDto.ArticleFound;
 import ecommerce.frontendDto.ExposedArticle;
